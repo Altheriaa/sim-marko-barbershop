@@ -1,109 +1,146 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Admin\BarberController;
+use App\Http\Controllers\Admin\LayananController;
+use App\Http\Controllers\Admin\JadwalBarberController;
+use App\Http\Controllers\Admin\BookingController as AdminBookingController;
+use App\Http\Controllers\Admin\QrCodeController;
+use App\Http\Controllers\Admin\TransaksiController;
+use App\Http\Controllers\Owner\LaporanController;
+use App\Http\Controllers\Pelanggan\BookingController as PelangganBookingController;
 
-Route::get('/login', function () {
-    return view('pages.auth.signin', ['title' => 'Login']);
-})->name('login');
+/*
+|--------------------------------------------------------------------------
+| Authentication Routes
+|--------------------------------------------------------------------------
+*/
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [LoginController::class, 'login']);
+    Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+    Route::post('/register', [RegisterController::class, 'register']);
+});
 
-// dashboard pages
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
+
+/*
+|--------------------------------------------------------------------------
+| Dashboard Redirect (root)
+|--------------------------------------------------------------------------
+*/
 Route::get('/', function () {
-    return view('pages.dashboard.ecommerce', ['title' => 'E-commerce Dashboard']);
-})->name('dashboard');
+    if (!auth()->check()) {
+        return redirect()->route('login');
+    }
 
-// calender pages
-Route::get('/calendar', function () {
-    return view('pages.calender', ['title' => 'Calendar']);
-})->name('calendar');
+    return match (auth()->user()->role) {
+        'admin' => redirect()->route('admin.dashboard'),
+        'owner' => redirect()->route('owner.dashboard'),
+        default => redirect()->route('pelanggan.dashboard'),
+    };
+})->name('home');
 
-// profile pages
-Route::get('/profile', function () {
-    return view('pages.profile', ['title' => 'Profile']);
-})->name('profile');
+/*
+|--------------------------------------------------------------------------
+| Admin Routes
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    // Dashboard
+    Route::get('/dashboard', function () {
+        $todayBookings = \App\Models\Booking::whereDate('created_at', today())->count();
+        $checkedIn = \App\Models\Booking::where('status', 'checked-in')->count();
+        $totalBarbers = \App\Models\Barber::where('status', true)->count();
+        $totalLayanan = \App\Models\Layanan::count();
+        $recentBookings = \App\Models\Booking::with(['user', 'barber', 'layanan'])
+            ->latest()->take(5)->get();
 
-// form pages
-Route::get('/form-elements', function () {
-    return view('pages.form.form-elements', ['title' => 'Form Elements']);
-})->name('form-elements');
+        return view('admin.dashboard', compact(
+            'todayBookings', 'checkedIn', 'totalBarbers', 'totalLayanan', 'recentBookings'
+        ), ['title' => 'Dashboard Admin']);
+    })->name('dashboard');
 
-// tables pages
-Route::get('/basic-tables', function () {
-    return view('pages.tables.basic-tables', ['title' => 'Basic Tables']);
-})->name('basic-tables');
+    // Barber CRUD
+    Route::resource('barbers', BarberController::class);
+    Route::patch('barbers/{barber}/toggle-status', [BarberController::class, 'toggleStatus'])->name('barbers.toggle-status');
 
-// pages
-Route::get('/blank', function () {
-    return view('pages.blank', ['title' => 'Blank']);
-})->name('blank');
+    // Layanan CRUD
+    Route::resource('layanan', LayananController::class);
 
-// error pages
-Route::get('/error-404', function () {
-    return view('pages.errors.error-404', ['title' => 'Error 404']);
-})->name('error-404');
+    // Jadwal Barber CRUD
+    Route::resource('jadwal', JadwalBarberController::class);
 
-// chart pages
-Route::get('/line-chart', function () {
-    return view('pages.chart.line-chart', ['title' => 'Line Chart']);
-})->name('line-chart');
+    // Booking Management
+    Route::get('booking', [AdminBookingController::class, 'index'])->name('booking.index');
+    Route::get('booking/create', [AdminBookingController::class, 'create'])->name('booking.create');
+    Route::post('booking', [AdminBookingController::class, 'store'])->name('booking.store');
 
-Route::get('/bar-chart', function () {
-    return view('pages.chart.bar-chart', ['title' => 'Bar Chart']);
-})->name('bar-chart');
+    // QR Code Scanner
+    Route::get('booking/scan', [QrCodeController::class, 'scanForm'])->name('booking.scan');
+    Route::post('booking/checkin', [QrCodeController::class, 'checkIn'])->name('booking.checkin');
+    Route::post('booking/{booking}/checkout', [QrCodeController::class, 'checkOut'])->name('booking.checkout');
 
+    // Transaksi
+    Route::get('transaksi', [TransaksiController::class, 'index'])->name('transaksi.index');
+    Route::get('transaksi/{booking}/create', [TransaksiController::class, 'create'])->name('transaksi.create');
+    Route::post('transaksi/{booking}', [TransaksiController::class, 'store'])->name('transaksi.store');
+});
 
-// authentication pages
-Route::get('/signin', function () {
-    return view('pages.auth.signin', ['title' => 'Sign In']);
-})->name('signin');
+/*
+|--------------------------------------------------------------------------
+| Owner Routes
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'role:owner'])->prefix('owner')->name('owner.')->group(function () {
+    // Dashboard
+    Route::get('/dashboard', function () {
+        $totalPendapatan = \App\Models\Transaksi::where('status_pembayaran', 'lunas')->sum('total_harga');
+        $pendapatanBulanIni = \App\Models\Transaksi::where('status_pembayaran', 'lunas')
+            ->whereMonth('tanggal_bayar', now()->month)
+            ->whereYear('tanggal_bayar', now()->year)
+            ->sum('total_harga');
+        $totalBooking = \App\Models\Booking::count();
+        $bookingBulanIni = \App\Models\Booking::whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->count();
 
-Route::get('/signup', function () {
-    return view('pages.auth.signup', ['title' => 'Sign Up']);
-})->name('signup');
+        return view('owner.dashboard', compact(
+            'totalPendapatan', 'pendapatanBulanIni', 'totalBooking', 'bookingBulanIni'
+        ), ['title' => 'Dashboard Owner']);
+    })->name('dashboard');
 
-// ui elements pages
-Route::get('/alerts', function () {
-    return view('pages.ui-elements.alerts', ['title' => 'Alerts']);
-})->name('alerts');
+    // Laporan
+    Route::get('laporan', [LaporanController::class, 'index'])->name('laporan');
+    Route::get('laporan/export', [LaporanController::class, 'export'])->name('laporan.export');
+});
 
-Route::get('/avatars', function () {
-    return view('pages.ui-elements.avatars', ['title' => 'Avatars']);
-})->name('avatars');
+/*
+|--------------------------------------------------------------------------
+| Pelanggan Routes
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'role:pelanggan'])->prefix('pelanggan')->name('pelanggan.')->group(function () {
+    // Dashboard
+    Route::get('/dashboard', function () {
+        $totalBooking = \App\Models\Booking::where('user_id', auth()->id())->count();
+        $bookingAktif = \App\Models\Booking::where('user_id', auth()->id())
+            ->whereIn('status', ['pending', 'checked-in'])
+            ->count();
+        $recentBookings = \App\Models\Booking::with(['barber', 'layanan', 'jadwal'])
+            ->where('user_id', auth()->id())
+            ->latest()->take(5)->get();
 
-Route::get('/badge', function () {
-    return view('pages.ui-elements.badges', ['title' => 'Badges']);
-})->name('badges');
+        return view('pelanggan.dashboard', compact(
+            'totalBooking', 'bookingAktif', 'recentBookings'
+        ), ['title' => 'Dashboard']);
+    })->name('dashboard');
 
-Route::get('/buttons', function () {
-    return view('pages.ui-elements.buttons', ['title' => 'Buttons']);
-})->name('buttons');
-
-Route::get('/image', function () {
-    return view('pages.ui-elements.images', ['title' => 'Images']);
-})->name('images');
-
-Route::get('/videos', function () {
-    return view('pages.ui-elements.videos', ['title' => 'Videos']);
-})->name('videos');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // Booking
+    Route::get('booking/create', [PelangganBookingController::class, 'create'])->name('booking.create');
+    Route::post('booking', [PelangganBookingController::class, 'store'])->name('booking.store');
+    Route::get('booking/{booking}/qr', [PelangganBookingController::class, 'showQr'])->name('booking.qr');
+    Route::get('booking/riwayat', [PelangganBookingController::class, 'riwayat'])->name('booking.riwayat');
+});

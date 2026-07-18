@@ -13,11 +13,11 @@
         @click.prevent="toggleDropdown()"
         type="button"
     >
-        <span class="mr-3 overflow-hidden rounded-full h-11 w-11">
-            <img src="/images/user/owner.png" alt="User" />
+        <span class="mr-3 flex items-center justify-center overflow-hidden rounded-full h-11 w-11 bg-brand-100 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 font-semibold text-sm">
+            {{ strtoupper(substr(auth()->user()->name ?? 'U', 0, 1)) }}
         </span>
 
-       <span class="block mr-1 font-medium text-theme-sm">Musharof</span>
+       <span class="block mr-1 font-medium text-theme-sm">{{ auth()->user()->name ?? 'User' }}</span>
 
         <!-- Chevron Icon -->
         <svg
@@ -45,8 +45,9 @@
     >
         <!-- User Info -->
         <div>
-            <span class="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">Musharof Chowdhury</span>
-            <span class="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">randomuser@pimjo.com</span>
+            <span class="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">{{ auth()->user()->name ?? 'User' }}</span>
+            <span class="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">{{ auth()->user()->email ?? '' }}</span>
+            <span class="mt-0.5 block text-theme-xs text-brand-500">{{ ucfirst(auth()->user()->role ?? '') }}</span>
         </div>
 
         <!-- Menu Items -->
@@ -108,10 +109,9 @@
         </ul>
 
         <!-- Sign Out -->
-        {{-- <form method="POST" action="#">
-            @csrf --}}
-            <a
-                href="/signin"
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit"
                 class="flex items-center w-full gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                 @click="closeDropdown()"
             >
@@ -120,9 +120,9 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                     </svg>
                 </span>
-                Sign out
-            </a>
-        {{-- </form> --}}
+                Keluar
+            </button>
+        </form>
     </div>
     <!-- Dropdown End -->
 </div>
