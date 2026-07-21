@@ -11,6 +11,9 @@ use App\Http\Controllers\Admin\QrCodeController;
 use App\Http\Controllers\Admin\TransaksiController;
 use App\Http\Controllers\Owner\LaporanController;
 use App\Http\Controllers\Pelanggan\BookingController as PelangganBookingController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Owner\DashboardController as OwnerDashboardController;
+use App\Http\Controllers\Pelanggan\DashboardController as PelangganDashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,18 +53,7 @@ Route::get('/', function () {
 */
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     // Dashboard
-    Route::get('/dashboard', function () {
-        $todayBookings = \App\Models\Booking::whereDate('created_at', today())->count();
-        $checkedIn = \App\Models\Booking::where('status', 'checked-in')->count();
-        $totalBarbers = \App\Models\Barber::where('status', true)->count();
-        $totalLayanan = \App\Models\Layanan::count();
-        $recentBookings = \App\Models\Booking::with(['user', 'barber', 'layanan'])
-            ->latest()->take(5)->get();
-
-        return view('admin.dashboard', compact(
-            'todayBookings', 'checkedIn', 'totalBarbers', 'totalLayanan', 'recentBookings'
-        ), ['title' => 'Dashboard Admin']);
-    })->name('dashboard');
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
     // Barber CRUD
     Route::resource('barbers', BarberController::class);
@@ -96,21 +88,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 */
 Route::middleware(['auth', 'role:owner'])->prefix('owner')->name('owner.')->group(function () {
     // Dashboard
-    Route::get('/dashboard', function () {
-        $totalPendapatan = \App\Models\Transaksi::where('status_pembayaran', 'lunas')->sum('total_harga');
-        $pendapatanBulanIni = \App\Models\Transaksi::where('status_pembayaran', 'lunas')
-            ->whereMonth('tanggal_bayar', now()->month)
-            ->whereYear('tanggal_bayar', now()->year)
-            ->sum('total_harga');
-        $totalBooking = \App\Models\Booking::count();
-        $bookingBulanIni = \App\Models\Booking::whereMonth('created_at', now()->month)
-            ->whereYear('created_at', now()->year)
-            ->count();
-
-        return view('owner.dashboard', compact(
-            'totalPendapatan', 'pendapatanBulanIni', 'totalBooking', 'bookingBulanIni'
-        ), ['title' => 'Dashboard Owner']);
-    })->name('dashboard');
+    Route::get('/dashboard', [OwnerDashboardController::class, 'index'])->name('dashboard');
 
     // Laporan
     Route::get('laporan', [LaporanController::class, 'index'])->name('laporan');
@@ -124,19 +102,7 @@ Route::middleware(['auth', 'role:owner'])->prefix('owner')->name('owner.')->grou
 */
 Route::middleware(['auth', 'role:pelanggan'])->prefix('pelanggan')->name('pelanggan.')->group(function () {
     // Dashboard
-    Route::get('/dashboard', function () {
-        $totalBooking = \App\Models\Booking::where('user_id', auth()->id())->count();
-        $bookingAktif = \App\Models\Booking::where('user_id', auth()->id())
-            ->whereIn('status', ['pending', 'checked-in'])
-            ->count();
-        $recentBookings = \App\Models\Booking::with(['barber', 'layanan', 'jadwal'])
-            ->where('user_id', auth()->id())
-            ->latest()->take(5)->get();
-
-        return view('pelanggan.dashboard', compact(
-            'totalBooking', 'bookingAktif', 'recentBookings'
-        ), ['title' => 'Dashboard']);
-    })->name('dashboard');
+    Route::get('/dashboard', [PelangganDashboardController::class, 'index'])->name('dashboard');
 
     // Booking
     Route::get('booking/create', [PelangganBookingController::class, 'create'])->name('booking.create');

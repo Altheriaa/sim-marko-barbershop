@@ -62,6 +62,13 @@ class BarberController extends Controller
 
     public function destroy(Barber $barber)
     {
+        if ($barber->bookings()->exists()) {
+            return redirect()->route('admin.barbers.index')->with('error', 'Barber tidak bisa dihapus karena memiliki riwayat booking. Silakan nonaktifkan status barber sebagai gantinya.');
+        }
+
+        // Hapus jadwal terkait jika ada
+        $barber->jadwal()->delete();
+        
         $barber->delete();
         return redirect()->route('admin.barbers.index')->with('success', 'Barber berhasil dihapus.');
     }

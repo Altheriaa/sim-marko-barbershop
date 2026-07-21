@@ -111,6 +111,8 @@
     <x-common.preloader/>
     {{-- preloader end --}}
 
+    <x-common.toast/>
+
     <div class="min-h-screen xl:flex">
         @include('layouts.backdrop')
         @include('layouts.sidebar')

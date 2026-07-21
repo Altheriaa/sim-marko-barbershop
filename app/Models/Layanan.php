@@ -19,4 +19,9 @@ class Layanan extends Model
     {
         return $this->hasMany(Booking::class);
     }
+
+    public function subLayanan()
+    {
+        return $this->hasMany(SubLayanan::class);
+    }
 }
