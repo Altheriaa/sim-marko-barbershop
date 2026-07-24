@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Barber;
 use App\Models\JadwalBarber;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class JadwalBarberController extends Controller
 {
@@ -30,7 +31,29 @@ class JadwalBarberController extends Controller
             'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
         ]);
 
-        JadwalBarber::create($validated);
+        // Cek apakah jadwal dengan barber, tanggal, dan jam yang sama sudah ada
+        $duplikat = JadwalBarber::where('barber_id', $validated['barber_id'])
+            ->where('tanggal', $validated['tanggal'])
+            ->where(function ($query) use ($validated) {
+                $query->whereBetween('jam_mulai', [$validated['jam_mulai'], $validated['jam_selesai']])
+                      ->orWhereBetween('jam_selesai', [$validated['jam_mulai'], $validated['jam_selesai']])
+                      ->orWhere(function ($q) use ($validated) {
+                          $q->where('jam_mulai', '<=', $validated['jam_mulai'])
+                            ->where('jam_selesai', '>=', $validated['jam_selesai']);
+                      });
+            })
+            ->exists();
+
+        if ($duplikat) {
+            return back()->withInput()->withErrors([
+                'jam_mulai' => 'Jadwal barber ini sudah ada pada waktu tersebut. Pilih waktu yang berbeda.',
+            ]);
+        }
+
+        JadwalBarber::create([
+            ...$validated,
+            'status' => 'tersedia',
+        ]);
 
         return redirect()->route('admin.jadwal.index')->with('success', 'Jadwal berhasil ditambahkan.');
     }

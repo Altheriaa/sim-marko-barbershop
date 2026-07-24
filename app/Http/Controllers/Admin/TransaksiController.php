@@ -20,12 +20,20 @@ class TransaksiController extends Controller
 
     public function create(Booking $booking)
     {
+        if ($booking->transaksi) {
+            return redirect()->route('admin.transaksi.index')->with('info', 'Pembayaran untuk booking ini sudah tercatat sebelumnya.');
+        }
+
         $booking->load('user', 'barber', 'layanan');
         return view('admin.transaksi.create', compact('booking'), ['title' => 'Catat Pembayaran']);
     }
 
     public function store(Request $request, Booking $booking)
     {
+        if ($booking->transaksi) {
+            return redirect()->route('admin.transaksi.index')->with('error', 'Pembayaran untuk booking ini sudah tercatat sebelumnya.');
+        }
+
         $validated = $request->validate([
             'metode_pembayaran' => 'required|in:tunai,EDC,transfer',
         ]);

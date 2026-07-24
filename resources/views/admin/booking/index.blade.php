@@ -17,6 +17,7 @@
                 <th class="px-5 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">Kode QR</th>
                 <th class="px-5 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">Pelanggan</th>
                 <th class="px-5 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">Barber</th>
+                <th class="px-5 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">Jadwal</th>
                 <th class="px-5 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">Layanan</th>
                 <th class="px-5 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">Sumber</th>
                 <th class="px-5 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">Status</th>
@@ -29,6 +30,14 @@
                     <td class="px-5 py-4 text-sm font-mono text-gray-800 dark:text-white/90">{{ $booking->qr_code }}</td>
                     <td class="px-5 py-4 text-sm text-gray-600 dark:text-gray-400">{{ $booking->user->name ?? 'Walk-in' }}</td>
                     <td class="px-5 py-4 text-sm text-gray-600 dark:text-gray-400">{{ $booking->barber->name }}</td>
+                    <td class="px-5 py-4 text-sm text-gray-600 dark:text-gray-400">
+                        @if($booking->jadwal)
+                            <span class="font-medium text-gray-800 dark:text-white/90">{{ $booking->jadwal->tanggal->format('d/m/Y') }}</span>
+                            <span class="block text-xs text-gray-500">{{ $booking->jadwal->jam_mulai }} - {{ $booking->jadwal->jam_selesai }}</span>
+                        @else
+                            -
+                        @endif
+                    </td>
                     <td class="px-5 py-4 text-sm text-gray-600 dark:text-gray-400">{{ $booking->layanan->nama_layanan }}</td>
                     <td class="px-5 py-4"><span class="inline-flex rounded-full px-2 py-1 text-xs font-semibold {{ $booking->sumber === 'online' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400' : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400' }}">{{ ucfirst($booking->sumber) }}</span></td>
                     <td class="px-5 py-4"><span class="inline-flex rounded-full px-2 py-1 text-xs font-semibold
@@ -49,7 +58,7 @@
                     </td>
                 </tr>
                 @empty
-                <tr><td colspan="8" class="px-5 py-8 text-center text-sm text-gray-500 dark:text-gray-400">Belum ada booking.</td></tr>
+                <tr><td colspan="9" class="px-5 py-8 text-center text-sm text-gray-500 dark:text-gray-400">Belum ada booking.</td></tr>
                 @endforelse
             </tbody>
         </table>

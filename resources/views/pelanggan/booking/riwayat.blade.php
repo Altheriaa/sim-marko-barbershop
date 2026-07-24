@@ -24,7 +24,13 @@
                     <td class="px-5 py-4 text-sm font-mono text-gray-800 dark:text-white/90">{{ $booking->qr_code }}</td>
                     <td class="px-5 py-4 text-sm text-gray-600 dark:text-gray-400">{{ $booking->barber->name }}</td>
                     <td class="px-5 py-4 text-sm text-gray-600 dark:text-gray-400">{{ $booking->layanan->nama_layanan }}</td>
-                    <td class="px-5 py-4 text-sm text-gray-600 dark:text-gray-400">{{ $booking->jadwal->tanggal->format('d/m/Y') }} {{ $booking->jadwal->jam_mulai }}</td>
+                    <td class="px-5 py-4 text-sm text-gray-600 dark:text-gray-400">
+                        @if($booking->jadwal)
+                            {{ $booking->jadwal->tanggal->format('d/m/Y') }} ({{ $booking->jadwal->jam_mulai }} - {{ $booking->jadwal->jam_selesai }})
+                        @else
+                            -
+                        @endif
+                    </td>
                     <td class="px-5 py-4"><span class="inline-flex rounded-full px-2 py-1 text-xs font-semibold
                         @if($booking->status === 'pending') bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400
                         @elseif($booking->status === 'checked-in') bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400
