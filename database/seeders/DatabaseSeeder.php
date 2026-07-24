@@ -36,21 +36,30 @@ class DatabaseSeeder extends Seeder
 
         // ============ BARBERS ============
         Barber::create([
-            'name' => 'Rizky',
+            'name' => 'Karina',
             'phone' => '081111111111',
             'status' => true,
         ]);
 
         Barber::create([
-            'name' => 'Dimas',
+            'name' => 'Ningning',
             'phone' => '081222222222',
             'status' => true,
         ]);
 
         Barber::create([
-            'name' => 'Fajar',
+            'name' => 'Winter',
             'phone' => '081333333333',
             'status' => true,
         ]);
+
+        Barber::create([
+            'name' => 'Giselle',
+            'phone' => '081333333334',
+            'status' => true,
+        ]);
+
+        // ============ LAYANAN & PAKET ============
+        $this->call(LayananSeeder::class);
     }
 }

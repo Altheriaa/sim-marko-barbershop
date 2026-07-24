@@ -47,6 +47,12 @@ class TransaksiController extends Controller
             'tanggal_bayar' => now(),
         ]);
 
-        return redirect()->route('admin.booking.index')->with('success', 'Pembayaran tercatat.');
+        return redirect()->route('admin.transaksi.index')->with('success', 'Pembayaran tercatat.');
+    }
+
+    public function invoice(Transaksi $transaksi)
+    {
+        $transaksi->load(['booking.layanan', 'booking.barber', 'booking.user']);
+        return view('admin.transaksi.invoice', compact('transaksi'), ['title' => 'Invoice Pembayaran']);
     }
 }

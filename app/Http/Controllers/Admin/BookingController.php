@@ -22,19 +22,67 @@ class BookingController extends Controller
         ['mulai' => '18:00', 'selesai' => '19:30', 'label' => 'istirahat maghrib (18:00–19:30)'],
     ];
 
-    public function index()
+    public function index(Request $request)
     {
-        $bookings = Booking::with(['user', 'barber', 'layanan', 'jadwal'])
-            ->latest()
-            ->paginate(10);
+        $periode = $request->input('periode', 'today'); // 'today', 'all'
+        $barberId = $request->input('barber_id');
+        $statusFilter = $request->input('status');
 
-        return view('admin.booking.index', compact('bookings'), ['title' => 'Daftar Booking']);
+        $barbers = Barber::where('status', true)->get();
+
+        $query = Booking::with(['user', 'barber', 'layanan', 'jadwal', 'transaksi']);
+
+        if ($periode === 'today') {
+            $query->whereHas('jadwal', function ($q) {
+                $q->whereDate('tanggal', now()->toDateString());
+            });
+        }
+
+        if ($barberId) {
+            $query->where('barber_id', $barberId);
+        }
+
+        if ($statusFilter) {
+            $query->where('status', $statusFilter);
+        }
+
+        // Calculation metric cards
+        $metricQuery = Booking::with(['layanan', 'jadwal']);
+        if ($periode === 'today') {
+            $metricQuery->whereHas('jadwal', function ($q) {
+                $q->whereDate('tanggal', now()->toDateString());
+            });
+        }
+        if ($barberId) {
+            $metricQuery->where('barber_id', $barberId);
+        }
+
+        $allMetricBookings = $metricQuery->get();
+
+        $totalPemesanan = $allMetricBookings->count();
+        $dalamAntrean   = $allMetricBookings->whereIn('status', ['pending', 'checked-in'])->count();
+        $selesai        = $allMetricBookings->where('status', 'completed')->count();
+        $estimasiPendapatan = $allMetricBookings->sum(fn($b) => $b->layanan?->harga ?? 0);
+
+        $bookings = $query->latest()->paginate(15)->withQueryString();
+
+        return view('admin.booking.index', compact(
+            'bookings',
+            'barbers',
+            'periode',
+            'barberId',
+            'statusFilter',
+            'totalPemesanan',
+            'dalamAntrean',
+            'selesai',
+            'estimasiPendapatan'
+        ), ['title' => 'Manajemen Reservasi']);
     }
 
     public function create()
     {
         $barbers = Barber::where('status', true)->get();
-        $layanan = Layanan::all();
+        $layanan = Layanan::with('subLayanan')->get();
 
         return view('admin.booking.create', compact('barbers', 'layanan'), ['title' => 'Booking Walk-in']);
     }

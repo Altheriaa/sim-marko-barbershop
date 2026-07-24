@@ -23,6 +23,10 @@
                 class="h-10 inline-flex items-center rounded-lg border border-gray-300 px-5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 transition">
                 Reset
             </a>
+            <a href="{{ route('admin.laporan.cetak', ['start_date' => $startDate, 'end_date' => $endDate]) }}" target="_blank"
+                class="h-10 inline-flex items-center gap-2 rounded-lg bg-gray-900 px-5 text-sm font-medium text-white hover:bg-black transition ml-auto">
+                <i class="fa-solid fa-print"></i> Cetak Laporan
+            </a>
         </form>
     </div>
 

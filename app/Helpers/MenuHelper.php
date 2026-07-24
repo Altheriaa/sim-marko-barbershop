@@ -16,6 +16,11 @@ class MenuHelper
             ],
             [
                 'icon' => 'user-profile',
+                'name' => 'Kelola User',
+                'path' => '/admin/users',
+            ],
+            [
+                'icon' => 'user-profile',
                 'name' => 'Barber',
                 'subItems' => [
                     ['name' => 'Daftar Barber', 'path' => '/admin/barbers'],

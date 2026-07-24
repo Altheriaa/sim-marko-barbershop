@@ -91,4 +91,19 @@ class LaporanController extends Controller
             'startDate', 'endDate'
         ), ['title' => 'Laporan & Statistik']);
     }
+
+    public function cetak(Request $request)
+    {
+        $startDate = $request->input('start_date', now()->startOfMonth()->toDateString());
+        $endDate   = $request->input('end_date', now()->toDateString());
+
+        $transaksi = Transaksi::with(['booking.layanan', 'booking.barber', 'booking.user'])
+            ->where('status_pembayaran', 'lunas')
+            ->whereDate('tanggal_bayar', '>=', $startDate)
+            ->whereDate('tanggal_bayar', '<=', $endDate)
+            ->oldest('tanggal_bayar')
+            ->get();
+
+        return view('laporan.cetak', compact('transaksi', 'startDate', 'endDate'), ['title' => 'Cetak Laporan Performa Bisnis']);
+    }
 }

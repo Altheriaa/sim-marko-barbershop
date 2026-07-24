@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\BarberController;
 use App\Http\Controllers\Admin\LayananController;
 use App\Http\Controllers\Admin\JadwalBarberController;
@@ -29,6 +30,7 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
+Route::get('/global-search', [\App\Http\Controllers\GlobalSearchController::class, 'search'])->name('global.search')->middleware('auth');
 
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +58,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     // Dashboard
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
+    // User CRUD
+    Route::resource('users', UserController::class);
+
     // Barber CRUD
     Route::resource('barbers', BarberController::class);
     Route::patch('barbers/{barber}/toggle-status', [BarberController::class, 'toggleStatus'])->name('barbers.toggle-status');
@@ -80,9 +85,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('transaksi', [TransaksiController::class, 'index'])->name('transaksi.index');
     Route::get('transaksi/{booking}/create', [TransaksiController::class, 'create'])->name('transaksi.create');
     Route::post('transaksi/{booking}', [TransaksiController::class, 'store'])->name('transaksi.store');
+    Route::get('transaksi/{transaksi}/invoice', [TransaksiController::class, 'invoice'])->name('transaksi.invoice');
 
     // Laporan
     Route::get('laporan', [AdminLaporanController::class, 'index'])->name('laporan.index');
+    Route::get('laporan/cetak', [AdminLaporanController::class, 'cetak'])->name('laporan.cetak');
 });
 
 /*
@@ -96,6 +103,7 @@ Route::middleware(['auth', 'role:owner'])->prefix('owner')->name('owner.')->grou
 
     // Laporan
     Route::get('laporan', [LaporanController::class, 'index'])->name('laporan');
+    Route::get('laporan/cetak', [LaporanController::class, 'cetak'])->name('laporan.cetak');
     Route::get('laporan/export', [LaporanController::class, 'export'])->name('laporan.export');
 });
 

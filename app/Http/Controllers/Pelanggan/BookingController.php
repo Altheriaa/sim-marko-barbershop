@@ -26,7 +26,7 @@ class BookingController extends Controller
     public function create()
     {
         $barbers = Barber::where('status', true)->get();
-        $layanan = Layanan::all();
+        $layanan = Layanan::with('subLayanan')->get();
 
         return view('pelanggan.booking.create', compact('barbers', 'layanan'), ['title' => 'Buat Booking']);
     }
