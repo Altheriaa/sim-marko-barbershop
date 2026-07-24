@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\JadwalBarberController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\QrCodeController;
 use App\Http\Controllers\Admin\TransaksiController;
+use App\Http\Controllers\Admin\LaporanController as AdminLaporanController;
 use App\Http\Controllers\Owner\LaporanController;
 use App\Http\Controllers\Pelanggan\BookingController as PelangganBookingController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
@@ -79,6 +80,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('transaksi', [TransaksiController::class, 'index'])->name('transaksi.index');
     Route::get('transaksi/{booking}/create', [TransaksiController::class, 'create'])->name('transaksi.create');
     Route::post('transaksi/{booking}', [TransaksiController::class, 'store'])->name('transaksi.store');
+
+    // Laporan
+    Route::get('laporan', [AdminLaporanController::class, 'index'])->name('laporan.index');
 });
 
 /*

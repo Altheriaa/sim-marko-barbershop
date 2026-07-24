@@ -52,6 +52,11 @@ class MenuHelper
                 'name' => 'Transaksi',
                 'path' => '/admin/transaksi',
             ],
+            [
+                'icon' => 'charts',
+                'name' => 'Laporan',
+                'path' => '/admin/laporan',
+            ],
         ];
     }
 
