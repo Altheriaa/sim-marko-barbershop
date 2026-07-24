@@ -43,7 +43,10 @@ class UserController extends Controller
 
     public function create()
     {
-        return view('admin.users.create', ['title' => 'Tambah User Baru']);
+        $hasAdmin = User::where('role', 'admin')->exists();
+        $hasOwner = User::where('role', 'owner')->exists();
+
+        return view('admin.users.create', compact('hasAdmin', 'hasOwner'), ['title' => 'Tambah User Baru']);
     }
 
     public function store(Request $request)
@@ -55,6 +58,14 @@ class UserController extends Controller
             'role'     => 'required|in:admin,owner,pelanggan',
             'password' => 'required|string|min:6|confirmed',
         ]);
+
+        if ($validated['role'] === 'admin' && User::where('role', 'admin')->exists()) {
+            return back()->withInput()->withErrors(['role' => 'Role Admin hanya diperbolehkan 1 akun saja dan akun Admin sudah ada.']);
+        }
+
+        if ($validated['role'] === 'owner' && User::where('role', 'owner')->exists()) {
+            return back()->withInput()->withErrors(['role' => 'Role Owner hanya diperbolehkan 1 akun saja dan akun Owner sudah ada.']);
+        }
 
         User::create([
             'name'     => $validated['name'],
@@ -69,7 +80,10 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        return view('admin.users.edit', compact('user'), ['title' => 'Edit User']);
+        $hasAdmin = User::where('role', 'admin')->where('id', '!=', $user->id)->exists();
+        $hasOwner = User::where('role', 'owner')->where('id', '!=', $user->id)->exists();
+
+        return view('admin.users.edit', compact('user', 'hasAdmin', 'hasOwner'), ['title' => 'Edit User']);
     }
 
     public function update(Request $request, User $user)
@@ -81,6 +95,14 @@ class UserController extends Controller
             'role'     => 'required|in:admin,owner,pelanggan',
             'password' => 'nullable|string|min:6|confirmed',
         ]);
+
+        if ($validated['role'] === 'admin' && User::where('role', 'admin')->where('id', '!=', $user->id)->exists()) {
+            return back()->withInput()->withErrors(['role' => 'Role Admin hanya diperbolehkan 1 akun saja.']);
+        }
+
+        if ($validated['role'] === 'owner' && User::where('role', 'owner')->where('id', '!=', $user->id)->exists()) {
+            return back()->withInput()->withErrors(['role' => 'Role Owner hanya diperbolehkan 1 akun saja.']);
+        }
 
         $userData = [
             'name'  => $validated['name'],

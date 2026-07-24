@@ -71,22 +71,42 @@
         <!-- Left Column (Span 2) -->
         <div class="xl:col-span-2 space-y-6">
 
-            <!-- Jadwal Hari Ini (Layout Placeholder) -->
+            <!-- Jadwal Hari Ini -->
             <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                 <div class="px-5 py-4 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center">
-                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Jadwal Hari Ini</h3>
-                    <a href="#" class="text-sm text-brand-500 hover:text-brand-600">Lihat Semua</a>
+                    <div>
+                        <h3 class="text-base font-bold text-gray-800 dark:text-white/90">Jadwal Shift Barber Hari Ini</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ now()->translatedFormat('l, d F Y') }}</p>
+                    </div>
+                    <a href="{{ route('admin.jadwal.index') }}" class="text-xs font-semibold text-brand-600 hover:text-brand-700 dark:text-brand-400 flex items-center gap-1 transition">
+                        Kelola Jadwal <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </a>
                 </div>
                 <div class="p-5">
-                    <div class="flex flex-col items-center justify-center py-8 text-gray-500 dark:text-gray-400">
-                        <!-- Placeholder for list layout -->
-                        <svg class="w-12 h-12 mb-3 text-gray-300 dark:text-gray-600" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                        <span class="text-sm">List jadwal akan ditampilkan di sini</span>
-                    </div>
+                    @forelse($todaySchedules as $schedule)
+                        <div class="flex items-center justify-between p-3 rounded-xl border border-gray-100 dark:border-gray-800/80 bg-gray-50/50 dark:bg-gray-800/30 mb-3 last:mb-0">
+                            <div class="flex items-center gap-3">
+                                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-600 font-bold text-sm dark:bg-brand-500/10 dark:text-brand-400">
+                                    {{ substr($schedule->barber->name ?? 'B', 0, 1) }}
+                                </div>
+                                <div>
+                                    <h4 class="text-xs font-bold text-gray-900 dark:text-white">{{ $schedule->barber->name ?? 'Barber' }}</h4>
+                                    <span class="text-[11px] text-gray-500 dark:text-gray-400">
+                                        <i class="fa-regular fa-clock text-[10px] mr-1"></i>{{ \Carbon\Carbon::parse($schedule->jam_mulai)->format('H:i') }} - {{ \Carbon\Carbon::parse($schedule->jam_selesai)->format('H:i') }} WIB
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider {{ $schedule->status === 'tersedia' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' }}">
+                                {{ $schedule->status }}
+                            </span>
+                        </div>
+                    @empty
+                        <div class="flex flex-col items-center justify-center py-6 text-gray-500 dark:text-gray-400">
+                            <i class="fa-regular fa-calendar-xmark text-2xl text-gray-300 dark:text-gray-600 mb-2"></i>
+                            <span class="text-xs">Belum ada jadwal shift barber yang diatur untuk hari ini.</span>
+                            <a href="{{ route('admin.jadwal.create') }}" class="mt-3 text-xs font-bold text-brand-600 hover:underline dark:text-brand-400">+ Atur Shift Baru</a>
+                        </div>
+                    @endforelse
                 </div>
             </div>
 

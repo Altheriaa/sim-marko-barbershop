@@ -24,8 +24,8 @@
                 Reset
             </a>
             <a href="{{ route('admin.laporan.cetak', ['start_date' => $startDate, 'end_date' => $endDate]) }}" target="_blank"
-                class="h-10 inline-flex items-center gap-2 rounded-lg bg-gray-900 px-5 text-sm font-medium text-white hover:bg-black transition ml-auto">
-                <i class="fa-solid fa-print"></i> Cetak Laporan
+                class="h-10 inline-flex items-center gap-2 rounded-xl border border-gray-300 bg-white px-4 text-xs font-bold text-gray-800 shadow-theme-xs hover:border-brand-500 hover:bg-brand-50 hover:text-brand-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:border-brand-500 dark:hover:bg-brand-950/40 dark:hover:text-brand-400 transition-all ml-auto">
+                <i class="fa-solid fa-print text-brand-500"></i> Cetak Laporan
             </a>
         </form>
     </div>
@@ -35,12 +35,8 @@
         {{-- Total Pendapatan --}}
         <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
             <div class="flex items-center justify-between mb-3">
-                <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-50 dark:bg-brand-500/10">
-                    <svg class="text-brand-500" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                        <path
-                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"
-                            fill="currentColor" />
-                    </svg>
+                <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
+                    <i class="fa-solid fa-money-bill-wave text-xl"></i>
                 </div>
             </div>
             <p class="text-sm text-gray-500 dark:text-gray-400">Total Pendapatan</p>
@@ -54,10 +50,8 @@
         {{-- Total Transaksi --}}
         <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
             <div class="flex items-center justify-between mb-3">
-                <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-green-50 dark:bg-green-500/10">
-                    <svg class="text-green-500" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
-                    </svg>
+                <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-green-50 text-green-600 dark:bg-green-500/10 dark:text-green-400">
+                    <i class="fa-solid fa-circle-check text-xl"></i>
                 </div>
             </div>
             <p class="text-sm text-gray-500 dark:text-gray-400">Total Transaksi Lunas</p>
@@ -68,11 +62,8 @@
         {{-- Layanan Terlaris --}}
         <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
             <div class="flex items-center justify-between mb-3">
-                <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-50 dark:bg-orange-500/10">
-                    <svg class="text-orange-500" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                        <path
-                            d="M12 1l3.09 6.26L22 8.27l-5 4.87 1.18 6.88L12 16.77l-6.18 3.25L7 13.14 2 8.27l6.91-1.01L12 1z" />
-                    </svg>
+                <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-50 text-orange-600 dark:bg-orange-500/10 dark:text-orange-400">
+                    <i class="fa-solid fa-star text-xl"></i>
                 </div>
             </div>
             <p class="text-sm text-gray-500 dark:text-gray-400">Layanan Terlaris</p>

@@ -203,7 +203,7 @@
                                         onsubmit="return confirm('Apakah Anda yakin pelayanan untuk pelanggan ini sudah SELESAI?\n\nStatus reservasi akan diubah ke Selesai dan lanjut ke catatan pembayaran.')">
                                         @csrf
                                         <button type="submit"
-                                            class="rounded-xl bg-black px-4 py-2 text-xs font-bold uppercase tracking-wider text-white shadow-md hover:bg-gray-900 dark:bg-white dark:text-black dark:hover:bg-gray-200 transition">
+                                            class="rounded-xl border border-gray-300 bg-white px-4 py-2 text-xs font-bold text-gray-800 hover:border-brand-500 hover:bg-brand-50 hover:text-brand-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 transition">
                                             Selesai & Bayar
                                         </button>
                                     </form>
@@ -213,12 +213,15 @@
                                             class="rounded-xl bg-brand-500 px-4 py-2 text-xs font-bold text-white hover:bg-brand-600 transition">
                                             <i class="fa-solid fa-credit-card mr-1.5"></i> Catat Bayar
                                         </a>
-                                    @else
-                                        <span
-                                            class="rounded-xl bg-white/80 px-4 py-2 text-xs font-bold text-gray-700 dark:bg-gray-900 dark:text-gray-300">
-                                            Dibayar Rp {{ number_format($booking->layanan->harga, 0, ',', '.') }}
-                                        </span>
                                     @endif
+                                @endif
+
+                                {{-- Tombol Cetak Struk Invoice jika transaksi sudah ada --}}
+                                @if($booking->transaksi)
+                                    <a href="{{ route('admin.transaksi.invoice', $booking->transaksi) }}" target="_blank"
+                                        class="inline-flex items-center gap-1.5 rounded-xl border border-gray-300 bg-white px-3.5 py-2 text-xs font-bold text-gray-700 hover:border-brand-500 hover:bg-brand-50 hover:text-brand-600 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 transition">
+                                        <i class="fa-solid fa-receipt text-brand-500"></i> Struk Invoice
+                                    </a>
                                 @endif
 
                             </div>

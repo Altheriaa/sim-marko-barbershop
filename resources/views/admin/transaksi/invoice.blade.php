@@ -17,9 +17,8 @@
 
     {{-- Floating Action Bar --}}
     <div class="no-print mb-6 flex items-center gap-3">
-        <button onclick="window.print()" class="inline-flex items-center gap-2 rounded-xl bg-gray-900 px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-lg hover:bg-black transition">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
-            Cetak Invoice Struk
+        <button onclick="window.print()" class="inline-flex items-center gap-2 rounded-xl border border-gray-300 bg-white px-5 py-2.5 text-xs font-bold text-gray-800 shadow-md hover:border-brand-500 hover:bg-brand-50 hover:text-brand-600 transition-all">
+            <i class="fa-solid fa-print text-brand-500"></i> Cetak Invoice Struk
         </button>
         <button onclick="window.close()" class="inline-flex items-center gap-2 rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition">
             Tutup

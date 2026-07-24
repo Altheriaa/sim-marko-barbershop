@@ -1,85 +1,78 @@
 @extends('layouts.app')
 @section('content')
-    <x-common.page-breadcrumb :pageTitle="'Tambah User Baru'" />
-
-    <div class="max-w-2xl mx-auto rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03] shadow-sm">
-        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
-            <i class="fa-solid fa-user-plus text-brand-500"></i> Form Tambah User
-        </h3>
-
-        <form method="POST" action="{{ route('admin.users.store') }}" class="space-y-5">
+<x-common.page-breadcrumb :pageTitle="'Tambah User'" />
+<div class="max-w-2xl">
+    <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+        <form action="{{ route('admin.users.store') }}" method="POST">
             @csrf
-
-            {{-- Nama --}}
-            <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">Nama Lengkap <span class="text-red-500">*</span></label>
-                <input type="text" name="name" value="{{ old('name') }}" required placeholder="Masukkan nama pengguna"
-                    class="w-full rounded-xl border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-900 focus:border-brand-500 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white" />
-                @error('name')
-                    <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span>
-                @enderror
-            </div>
-
-            {{-- Email --}}
-            <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">Alamat Email <span class="text-red-500">*</span></label>
-                <input type="email" name="email" value="{{ old('email') }}" required placeholder="contoh@email.com"
-                    class="w-full rounded-xl border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-900 focus:border-brand-500 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white" />
-                @error('email')
-                    <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span>
-                @enderror
-            </div>
-
-            {{-- Phone --}}
-            <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">Nomor Handphone / WhatsApp</label>
-                <input type="text" name="phone" value="{{ old('phone') }}" placeholder="08xxxxxxxxxx"
-                    class="w-full rounded-xl border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-900 focus:border-brand-500 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white" />
-                @error('phone')
-                    <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span>
-                @enderror
-            </div>
-
-            {{-- Role --}}
-            <div>
-                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">Role / Hak Akses <span class="text-red-500">*</span></label>
-                <select name="role" required
-                    class="w-full rounded-xl border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-900 focus:border-brand-500 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white">
-                    <option value="pelanggan" {{ old('role') === 'pelanggan' ? 'selected' : '' }}>Pelanggan</option>
-                    <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>Admin (Pengelola)</option>
-                    <option value="owner" {{ old('role') === 'owner' ? 'selected' : '' }}>Owner (Pemilik Toko)</option>
-                </select>
-                @error('role')
-                    <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span>
-                @enderror
-            </div>
-
-            {{-- Password --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="space-y-5">
+                {{-- Nama --}}
                 <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">Password <span class="text-red-500">*</span></label>
-                    <input type="password" name="password" required placeholder="Minimal 6 karakter"
-                        class="w-full rounded-xl border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-900 focus:border-brand-500 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white" />
-                    @error('password')
-                        <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span>
-                    @enderror
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Nama Lengkap <span class="text-error-500">*</span></label>
+                    <input type="text" name="name" value="{{ old('name') }}" required
+                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"
+                        placeholder="Nama pengguna" />
+                    @error('name') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
                 </div>
-                <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">Konfirmasi Password <span class="text-red-500">*</span></label>
-                    <input type="password" name="password_confirmation" required placeholder="Ulangi password"
-                        class="w-full rounded-xl border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-900 focus:border-brand-500 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white" />
-                </div>
-            </div>
 
-            {{-- Buttons --}}
-            <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-800">
-                <a href="{{ route('admin.users.index') }}" class="rounded-xl border border-gray-300 bg-white px-5 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 transition">
-                    Batal
-                </a>
-                <button type="submit" class="rounded-xl bg-brand-500 px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-brand-600 transition shadow-md">
-                    Simpan User
-                </button>
+                {{-- Email --}}
+                <div>
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Alamat Email <span class="text-error-500">*</span></label>
+                    <input type="email" name="email" value="{{ old('email') }}" required
+                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"
+                        placeholder="contoh@email.com" />
+                    @error('email') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
+                </div>
+
+                {{-- Phone --}}
+                <div>
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">No. Telepon</label>
+                    <input type="text" name="phone" value="{{ old('phone') }}"
+                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"
+                        placeholder="08xxxxxxxxxx" />
+                    @error('phone') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
+                </div>
+
+                {{-- Role --}}
+                <div>
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Role / Hak Akses <span class="text-error-500">*</span></label>
+                    <select name="role" required
+                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
+                        <option value="pelanggan" {{ old('role', 'pelanggan') === 'pelanggan' ? 'selected' : '' }}>Pelanggan</option>
+                        <option value="admin" {{ $hasAdmin ? 'disabled' : '' }} {{ old('role') === 'admin' ? 'selected' : '' }}>
+                            Admin {{ $hasAdmin ? '(Maksimal 1 Akun - Sudah Ada)' : '' }}
+                        </option>
+                        <option value="owner" {{ $hasOwner ? 'disabled' : '' }} {{ old('role') === 'owner' ? 'selected' : '' }}>
+                            Owner {{ $hasOwner ? '(Maksimal 1 Akun - Sudah Ada)' : '' }}
+                        </option>
+                    </select>
+                    @error('role') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
+                </div>
+
+                {{-- Password & Confirmation --}}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Password <span class="text-error-500">*</span></label>
+                        <input type="password" name="password" required
+                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"
+                            placeholder="Minimal 6 karakter" />
+                        @error('password') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Konfirmasi Password <span class="text-error-500">*</span></label>
+                        <input type="password" name="password_confirmation" required
+                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"
+                            placeholder="Ulangi password" />
+                    </div>
+                </div>
+
+                {{-- Action Buttons --}}
+                <div class="flex gap-3 pt-2">
+                    <button type="submit" class="rounded-lg bg-brand-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-600 transition">Simpan</button>
+                    <a href="{{ route('admin.users.index') }}" class="rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 transition">Batal</a>
+                </div>
             </div>
         </form>
     </div>
+</div>
 @endsection

@@ -3,72 +3,100 @@
 <x-common.page-breadcrumb :pageTitle="'Daftar Barber'" />
 
 @if(session('success'))
-<div class="mb-4 rounded-lg bg-green-50 p-4 text-sm text-green-600 dark:bg-green-900/20 dark:text-green-400">{{ session('success') }}</div>
+    <div class="mb-5 flex items-center gap-2 rounded-xl bg-green-50 px-4 py-3 text-sm font-semibold text-green-700 dark:bg-green-950/30 dark:text-green-400">
+        <i class="fa-solid fa-circle-check"></i> {{ session('success') }}
+    </div>
 @endif
 
-<div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-    <div class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-800">
-        <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Kelola Barber</h3>
-        <a href="{{ route('admin.barbers.create') }}" class="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white shadow-theme-xs hover:bg-brand-600 transition">
-            <i class="fa-solid fa-plus text-xs"></i>
-            <span>Tambah Barber</span>
-        </a>
-    </div>
+{{-- Filter & Action Bar --}}
+<div class="mb-5 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-white/[0.03]">
+    <h2 class="text-base font-bold text-gray-800 dark:text-white/90 flex items-center gap-2">
+        <i class="fa-solid fa-user-group text-brand-500"></i> Tim Barber
+    </h2>
+    <a href="{{ route('admin.barbers.create') }}"
+        class="inline-flex items-center gap-2 rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-800 shadow-theme-xs hover:border-brand-500 hover:bg-brand-50 hover:text-brand-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:border-brand-500 dark:hover:bg-brand-950/40 dark:hover:text-brand-400 transition-all">
+        <i class="fa-solid fa-plus text-brand-500"></i> Tambah Barber
+    </a>
+</div>
+
+{{-- Table Card --}}
+<div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] overflow-hidden">
     <div class="overflow-x-auto">
-        <table class="w-full">
+        <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="border-b border-gray-200 dark:border-gray-800">
-                    <th class="px-5 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">#</th>
-                    <th class="px-5 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">Foto</th>
-                    <th class="px-5 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">Nama</th>
-                    <th class="px-5 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">Telepon</th>
-                    <th class="px-5 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">Status</th>
-                    <th class="px-5 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">Aksi</th>
+                <tr class="border-b border-gray-200 bg-gray-50/50 dark:border-gray-800 dark:bg-gray-900/50 text-gray-600 dark:text-gray-400 font-semibold uppercase text-xs tracking-wider">
+                    <th class="py-4 px-5">#</th>
+                    <th class="py-4 px-5">Foto</th>
+                    <th class="py-4 px-5">Nama Barber</th>
+                    <th class="py-4 px-5">Telepon</th>
+                    <th class="py-4 px-5">Status</th>
+                    <th class="py-4 px-5 text-center">Aksi</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                 @forelse($barbers as $barber)
-                <tr class="border-b border-gray-100 dark:border-gray-800">
-                    <td class="px-5 py-4 text-sm text-gray-600 dark:text-gray-400">{{ $loop->iteration + ($barbers->currentPage() - 1) * $barbers->perPage() }}</td>
-                    <td class="px-5 py-4">
-                        @if($barber->photo)
-                            <img src="{{ Storage::url($barber->photo) }}" alt="{{ $barber->name }}" class="h-10 w-10 rounded-full object-cover">
-                        @else
-                            <div class="h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center text-gray-500 dark:text-gray-400">
-                                <i class="fa-solid fa-user text-base"></i>
-                            </div>
-                        @endif
-                    </td>
-                    <td class="px-5 py-4 text-sm font-medium text-gray-800 dark:text-white/90">{{ $barber->name }}</td>
-                    <td class="px-5 py-4 text-sm text-gray-600 dark:text-gray-400">{{ $barber->phone ?? '-' }}</td>
-                    <td class="px-5 py-4">
-                        <form action="{{ route('admin.barbers.toggle-status', $barber) }}" method="POST" class="inline">
-                            @csrf @method('PATCH')
-                            <button type="submit" class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold {{ $barber->status ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' }}">
-                                {{ $barber->status ? 'Aktif' : 'Nonaktif' }}
-                            </button>
-                        </form>
-                    </td>
-                    <td class="px-5 py-4">
-                        <div class="flex items-center gap-1">
-                            <a href="{{ route('admin.barbers.edit', $barber) }}" class="inline-flex items-center justify-center h-8 w-8 rounded-lg text-gray-500 hover:text-brand-600 hover:bg-brand-50 dark:text-gray-400 dark:hover:bg-brand-950/40 dark:hover:text-brand-400 transition" title="Edit Barber">
-                                <i class="fa-solid fa-pen-to-square text-sm"></i>
-                            </a>
-                            <form action="{{ route('admin.barbers.destroy', $barber) }}" method="POST" onsubmit="return confirm('Yakin hapus barber ini?')" class="inline">
-                                @csrf @method('DELETE')
-                                <button type="submit" class="inline-flex items-center justify-center h-8 w-8 rounded-lg text-gray-500 hover:text-red-600 hover:bg-red-50 dark:text-gray-400 dark:hover:bg-red-950/40 dark:hover:text-red-400 transition" title="Hapus Barber">
-                                    <i class="fa-solid fa-trash-can text-sm"></i>
+                    <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-800/40 transition">
+                        <td class="py-4 px-5 text-sm text-gray-500 dark:text-gray-400">
+                            {{ $loop->iteration + ($barbers->currentPage() - 1) * $barbers->perPage() }}
+                        </td>
+                        <td class="py-4 px-5">
+                            @if($barber->photo)
+                                <img src="{{ Storage::url($barber->photo) }}" alt="{{ $barber->name }}"
+                                    class="h-10 w-10 rounded-xl object-cover border border-gray-200 dark:border-gray-700">
+                            @else
+                                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-600 font-bold text-sm dark:bg-brand-500/10 dark:text-brand-400">
+                                    {{ substr($barber->name, 0, 1) }}
+                                </div>
+                            @endif
+                        </td>
+                        <td class="py-4 px-5 text-sm font-bold text-gray-900 dark:text-white">{{ $barber->name }}</td>
+                        <td class="py-4 px-5 text-sm text-gray-600 dark:text-gray-400">{{ $barber->phone ?? '-' }}</td>
+                        <td class="py-4 px-5">
+                            <form action="{{ route('admin.barbers.toggle-status', $barber) }}" method="POST" class="inline">
+                                @csrf @method('PATCH')
+                                <button type="submit"
+                                    class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider transition
+                                    {{ $barber->status
+                                        ? 'bg-green-100 text-green-800 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400'
+                                        : 'bg-red-100 text-red-700 hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400' }}">
+                                    <span class="h-1.5 w-1.5 rounded-full {{ $barber->status ? 'bg-green-500' : 'bg-red-500' }}"></span>
+                                    {{ $barber->status ? 'Aktif' : 'Nonaktif' }}
                                 </button>
                             </form>
-                        </div>
-                    </td>
-                </tr>
+                        </td>
+                        <td class="py-4 px-5">
+                            <div class="flex items-center justify-center gap-2">
+                                <a href="{{ route('admin.barbers.edit', $barber) }}"
+                                    class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 hover:bg-brand-50 hover:text-brand-600 hover:border-brand-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 transition" title="Edit Barber">
+                                    <i class="fa-solid fa-pen-to-square text-sm"></i>
+                                </a>
+                                <form action="{{ route('admin.barbers.destroy', $barber) }}" method="POST"
+                                    onsubmit="return confirm('Yakin hapus barber {{ $barber->name }}?')" class="inline">
+                                    @csrf @method('DELETE')
+                                    <button type="submit"
+                                        class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 dark:border-red-900/50 dark:bg-red-900/20 dark:text-red-400 transition" title="Hapus Barber">
+                                        <i class="fa-solid fa-trash-can text-sm"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
                 @empty
-                <tr><td colspan="6" class="px-5 py-8 text-center text-sm text-gray-500 dark:text-gray-400">Belum ada data barber.</td></tr>
+                    <tr>
+                        <td colspan="6" class="py-12 text-center">
+                            <div class="flex flex-col items-center gap-2 text-gray-400 dark:text-gray-600">
+                                <i class="fa-solid fa-user-slash text-3xl"></i>
+                                <span class="text-sm">Belum ada data barber.</span>
+                                <a href="{{ route('admin.barbers.create') }}" class="mt-1 text-xs font-bold text-brand-600 hover:underline dark:text-brand-400">+ Tambah Barber Baru</a>
+                            </div>
+                        </td>
+                    </tr>
                 @endforelse
             </tbody>
         </table>
     </div>
-    <div class="px-5 py-4">{{ $barbers->links() }}</div>
+    <div class="border-t border-gray-100 dark:border-gray-800 px-5 py-4">
+        {{ $barbers->links() }}
+    </div>
 </div>
 @endsection

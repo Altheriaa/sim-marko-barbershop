@@ -20,8 +20,12 @@ class DashboardController extends Controller
         $recentBookings = Booking::with(['user', 'barber', 'layanan'])
             ->latest()->take(5)->get();
 
+        $todaySchedules = \App\Models\JadwalBarber::with('barber')
+            ->whereDate('tanggal', today())
+            ->get();
+
         return view('admin.dashboard', compact(
-            'todayBookings', 'checkedIn', 'totalBarbers', 'barbers', 'totalLayanan', 'recentBookings'
+            'todayBookings', 'checkedIn', 'totalBarbers', 'barbers', 'totalLayanan', 'recentBookings', 'todaySchedules'
         ), ['title' => 'Dashboard Admin']);
     }
 }
