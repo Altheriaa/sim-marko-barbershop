@@ -49,9 +49,14 @@
             </button>
 
             <!-- Logo (mobile only) -->
-            <a href="/" class="xl:hidden">
-                <img class="dark:hidden" src="/images/logo/logo.svg" alt="Logo" />
-                <img class="hidden dark:block" src="/images/logo/logo-dark.svg" alt="Logo" />
+            <a href="/" class="xl:hidden flex items-center gap-2.5">
+                <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-500 text-white shadow-theme-xs">
+                    <i class="fa-solid fa-scissors text-base"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-sm font-bold text-gray-900 dark:text-white leading-none">Marko</span>
+                    <span class="text-[10px] font-semibold text-brand-600 dark:text-brand-400 tracking-wider uppercase">Barbershop</span>
+                </div>
             </a>
 
             <!-- Application Menu Toggle (mobile only) -->

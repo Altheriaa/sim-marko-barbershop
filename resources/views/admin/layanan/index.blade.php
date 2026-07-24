@@ -10,7 +10,10 @@
 <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
     <div class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-800">
         <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Kelola Layanan</h3>
-        <a href="{{ route('admin.layanan.create') }}" class="inline-flex items-center rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600 transition">+ Tambah Layanan</a>
+        <a href="{{ route('admin.layanan.create') }}" class="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white shadow-theme-xs hover:bg-brand-600 transition">
+            <i class="fa-solid fa-plus text-xs"></i>
+            <span>Tambah Layanan</span>
+        </a>
     </div>
     <div class="overflow-x-auto">
         <table class="w-full">
@@ -43,9 +46,16 @@
                     <td class="px-5 py-4 text-sm text-gray-600 dark:text-gray-400">Rp {{ number_format($item->harga, 0, ',', '.') }}</td>
                     <td class="px-5 py-4 text-sm text-gray-600 dark:text-gray-400">{{ $item->durasi_menit }} menit</td>
                     <td class="px-5 py-4">
-                        <div class="flex items-center gap-2">
-                            <a href="{{ route('admin.layanan.edit', $item) }}" class="text-brand-500 hover:text-brand-600 text-sm">Edit</a>
-                            <form action="{{ route('admin.layanan.destroy', $item) }}" method="POST" onsubmit="return confirm('Yakin hapus?')">@csrf @method('DELETE')<button type="submit" class="text-red-500 hover:text-red-600 text-sm">Hapus</button></form>
+                        <div class="flex items-center gap-1">
+                            <a href="{{ route('admin.layanan.edit', $item) }}" class="inline-flex items-center justify-center h-8 w-8 rounded-lg text-gray-500 hover:text-brand-600 hover:bg-brand-50 dark:text-gray-400 dark:hover:bg-brand-950/40 dark:hover:text-brand-400 transition" title="Edit Layanan">
+                                <i class="fa-solid fa-pen-to-square text-sm"></i>
+                            </a>
+                            <form action="{{ route('admin.layanan.destroy', $item) }}" method="POST" onsubmit="return confirm('Yakin hapus?')" class="inline">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="inline-flex items-center justify-center h-8 w-8 rounded-lg text-gray-500 hover:text-red-600 hover:bg-red-50 dark:text-gray-400 dark:hover:bg-red-950/40 dark:hover:text-red-400 transition" title="Hapus Layanan">
+                                    <i class="fa-solid fa-trash-can text-sm"></i>
+                                </button>
+                            </form>
                         </div>
                     </td>
                 </tr>

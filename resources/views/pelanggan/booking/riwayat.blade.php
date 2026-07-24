@@ -38,9 +38,12 @@
                         @else bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 @endif">{{ ucfirst($booking->status) }}</span></td>
                     <td class="px-5 py-4">
                         @if($booking->status === 'pending')
-                        <a href="{{ route('pelanggan.booking.qr', $booking) }}" class="text-sm text-brand-500 hover:text-brand-600">Lihat QR</a>
+                        <a href="{{ route('pelanggan.booking.qr', $booking) }}" class="inline-flex items-center gap-1.5 rounded-lg bg-brand-50 px-3 py-1.5 text-xs font-semibold text-brand-700 hover:bg-brand-100 dark:bg-brand-950/40 dark:text-brand-400 transition">
+                            <i class="fa-solid fa-qrcode"></i>
+                            <span>Lihat QR</span>
+                        </a>
                         @elseif($booking->transaksi)
-                        <span class="text-sm text-green-600">Lunas</span>
+                        <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">Lunas</span>
                         @else
                         <span class="text-sm text-gray-400">-</span>
                         @endif
