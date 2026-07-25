@@ -3,8 +3,14 @@
 <x-common.page-breadcrumb :pageTitle="'Daftar Barber'" />
 
 @if(session('success'))
-    <div class="mb-5 flex items-center gap-2 rounded-xl bg-green-50 px-4 py-3 text-sm font-semibold text-green-700 dark:bg-green-950/30 dark:text-green-400">
-        <i class="fa-solid fa-circle-check"></i> {{ session('success') }}
+    <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3500)" x-transition.opacity.duration.500ms
+        class="mb-5 flex items-center justify-between gap-2 rounded-xl bg-green-50 px-4 py-3 text-sm font-semibold text-green-700 dark:bg-green-950/30 dark:text-green-400 border border-green-200 dark:border-green-800/40 shadow-xs">
+        <div class="flex items-center gap-2">
+            <i class="fa-solid fa-circle-check"></i> {{ session('success') }}
+        </div>
+        <button @click="show = false" type="button" class="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-200 transition">
+            <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
     </div>
 @endif
 
@@ -52,17 +58,54 @@
                         <td class="py-4 px-5 text-sm font-bold text-gray-900 dark:text-white">{{ $barber->name }}</td>
                         <td class="py-4 px-5 text-sm text-gray-600 dark:text-gray-400">{{ $barber->phone ?? '-' }}</td>
                         <td class="py-4 px-5">
-                            <form action="{{ route('admin.barbers.toggle-status', $barber) }}" method="POST" class="inline">
-                                @csrf @method('PATCH')
-                                <button type="submit"
-                                    class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider transition
-                                    {{ $barber->status
-                                        ? 'bg-green-100 text-green-800 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400'
-                                        : 'bg-red-100 text-red-700 hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400' }}">
-                                    <span class="h-1.5 w-1.5 rounded-full {{ $barber->status ? 'bg-green-500' : 'bg-red-500' }}"></span>
-                                    {{ $barber->status ? 'Aktif' : 'Nonaktif' }}
-                                </button>
-                            </form>
+                            <div class="flex items-center gap-2">
+                                @if($barber->status === 'masuk')
+                                    <span class="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-1 text-xs font-bold text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                                        <span class="h-1.5 w-1.5 rounded-full bg-green-500"></span>
+                                        Masuk
+                                    </span>
+                                @elseif($barber->status === 'cuti')
+                                    <span class="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-800 dark:bg-amber-900/30 dark:text-amber-400">
+                                        <span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
+                                        Cuti
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center gap-1.5 rounded-full bg-red-100 px-3 py-1 text-xs font-bold text-red-700 dark:bg-red-900/30 dark:text-red-400">
+                                        <span class="h-1.5 w-1.5 rounded-full bg-red-500"></span>
+                                        Nonaktif
+                                    </span>
+                                @endif
+
+                                {{-- Quick Status Dropdown --}}
+                                <div class="relative inline-block text-left" x-data="{ dropdownOpen: false }">
+                                    <button @click="dropdownOpen = !dropdownOpen" type="button" class="inline-flex items-center justify-center h-7 w-7 rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 transition" title="Ubah Status">
+                                        <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                                    </button>
+                                    <div x-show="dropdownOpen" @click.outside="dropdownOpen = false" x-transition class="absolute left-0 mt-1 w-32 rounded-xl border border-gray-200 bg-white p-1 shadow-lg dark:border-gray-800 dark:bg-gray-900 z-20">
+                                        <form action="{{ route('admin.barbers.toggle-status', $barber) }}" method="POST">
+                                            @csrf @method('PATCH')
+                                            <input type="hidden" name="status" value="masuk">
+                                            <button type="submit" class="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-gray-700 hover:bg-green-50 hover:text-green-700 dark:text-gray-300 dark:hover:bg-green-950/30 dark:hover:text-green-400">
+                                                <span class="h-2 w-2 rounded-full bg-green-500"></span> Masuk
+                                            </button>
+                                        </form>
+                                        <form action="{{ route('admin.barbers.toggle-status', $barber) }}" method="POST">
+                                            @csrf @method('PATCH')
+                                            <input type="hidden" name="status" value="cuti">
+                                            <button type="submit" class="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-gray-700 hover:bg-amber-50 hover:text-amber-700 dark:text-gray-300 dark:hover:bg-amber-950/30 dark:hover:text-amber-400">
+                                                <span class="h-2 w-2 rounded-full bg-amber-500"></span> Cuti
+                                            </button>
+                                        </form>
+                                        <form action="{{ route('admin.barbers.toggle-status', $barber) }}" method="POST">
+                                            @csrf @method('PATCH')
+                                            <input type="hidden" name="status" value="nonaktif">
+                                            <button type="submit" class="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-gray-700 hover:bg-red-50 hover:text-red-700 dark:text-gray-300 dark:hover:bg-red-950/30 dark:hover:text-red-400">
+                                                <span class="h-2 w-2 rounded-full bg-red-500"></span> Nonaktif
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         </td>
                         <td class="py-4 px-5">
                             <div class="flex items-center justify-center gap-2">

@@ -43,7 +43,13 @@
                             <span>Lihat QR</span>
                         </a>
                         @elseif($booking->transaksi)
-                        <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">Lunas</span>
+                        <div class="flex items-center gap-2">
+                            <span class="inline-flex rounded-full px-2.5 py-1 text-xs font-semibold bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">Lunas</span>
+                            <a href="{{ route('pelanggan.transaksi.invoice', $booking->transaksi) }}" target="_blank" class="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:border-brand-500 hover:bg-brand-50 hover:text-brand-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-brand-500 dark:hover:bg-brand-950/40 dark:hover:text-brand-400 transition shadow-xs">
+                                <i class="fa-solid fa-receipt text-brand-500"></i>
+                                <span>Cetak Struk</span>
+                            </a>
+                        </div>
                         @else
                         <span class="text-sm text-gray-400">-</span>
                         @endif

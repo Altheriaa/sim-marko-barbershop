@@ -3,8 +3,14 @@
 <x-common.page-breadcrumb :pageTitle="'Riwayat Transaksi'" />
 
 @if(session('success'))
-    <div class="mb-5 flex items-center gap-2 rounded-xl bg-green-50 px-4 py-3 text-sm font-semibold text-green-700 dark:bg-green-950/30 dark:text-green-400">
-        <i class="fa-solid fa-circle-check"></i> {{ session('success') }}
+    <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3500)" x-transition.opacity.duration.500ms
+        class="mb-5 flex items-center justify-between gap-2 rounded-xl bg-green-50 px-4 py-3 text-sm font-semibold text-green-700 dark:bg-green-950/30 dark:text-green-400 border border-green-200 dark:border-green-800/40 shadow-xs">
+        <div class="flex items-center gap-2">
+            <i class="fa-solid fa-circle-check"></i> {{ session('success') }}
+        </div>
+        <button @click="show = false" type="button" class="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-200 transition">
+            <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
     </div>
 @endif
 
@@ -58,7 +64,7 @@
 
 {{-- Filter & Search Bar --}}
 <div class="mb-5 rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-white/[0.03]">
-    <form method="GET" action="{{ route('admin.transaksi.index') }}" class="flex flex-wrap items-center justify-between gap-3">
+    <form method="GET" action="{{ request()->url() }}" class="flex flex-wrap items-center justify-between gap-3">
         <div class="flex flex-wrap items-center gap-3">
             <div class="relative min-w-[260px]">
                 <span class="absolute -translate-y-1/2 pointer-events-none left-3.5 top-1/2 text-gray-400">
@@ -78,7 +84,7 @@
                 Filter
             </button>
             @if($search || $metode)
-                <a href="{{ route('admin.transaksi.index') }}" class="h-10 inline-flex items-center rounded-lg border border-gray-300 px-4 text-sm font-semibold text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 transition">
+                <a href="{{ request()->url() }}" class="h-10 inline-flex items-center rounded-lg border border-gray-300 px-4 text-sm font-semibold text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 transition">
                     Reset
                 </a>
             @endif
@@ -149,7 +155,7 @@
                             {{ $trx->tanggal_bayar?->translatedFormat('d M Y, H:i') ?? '-' }}
                         </td>
                         <td class="py-4 px-5 text-center">
-                            <a href="{{ route('admin.transaksi.invoice', $trx) }}" target="_blank"
+                            <a href="{{ route(auth()->user()->role === 'owner' ? 'owner.transaksi.invoice' : 'admin.transaksi.invoice', $trx) }}" target="_blank"
                                 class="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-brand-50 hover:text-brand-600 hover:border-brand-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 transition">
                                 <i class="fa-solid fa-receipt text-brand-500"></i> Struk
                             </a>

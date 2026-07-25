@@ -22,10 +22,10 @@ class BarberController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:100',
-            'phone' => 'nullable|string|max:15',
-            'photo' => 'nullable|image|max:2048',
-            'status' => 'boolean',
+            'name'   => 'required|string|max:100',
+            'phone'  => 'nullable|string|max:15',
+            'photo'  => 'nullable|image|max:2048',
+            'status' => 'required|in:masuk,cuti,nonaktif',
         ]);
 
         if ($request->hasFile('photo')) {
@@ -45,10 +45,10 @@ class BarberController extends Controller
     public function update(Request $request, Barber $barber)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:100',
-            'phone' => 'nullable|string|max:15',
-            'photo' => 'nullable|image|max:2048',
-            'status' => 'boolean',
+            'name'   => 'required|string|max:100',
+            'phone'  => 'nullable|string|max:15',
+            'photo'  => 'nullable|image|max:2048',
+            'status' => 'required|in:masuk,cuti,nonaktif',
         ]);
 
         if ($request->hasFile('photo')) {
@@ -63,7 +63,7 @@ class BarberController extends Controller
     public function destroy(Barber $barber)
     {
         if ($barber->bookings()->exists()) {
-            return redirect()->route('admin.barbers.index')->with('error', 'Barber tidak bisa dihapus karena memiliki riwayat booking. Silakan nonaktifkan status barber sebagai gantinya.');
+            return redirect()->route('admin.barbers.index')->with('error', 'Barber tidak bisa dihapus karena memiliki riwayat booking. Silakan ubah status barber sebagai gantinya.');
         }
 
         // Hapus jadwal terkait jika ada
@@ -73,9 +73,19 @@ class BarberController extends Controller
         return redirect()->route('admin.barbers.index')->with('success', 'Barber berhasil dihapus.');
     }
 
-    public function toggleStatus(Barber $barber)
+    public function toggleStatus(Request $request, Barber $barber)
     {
-        $barber->update(['status' => !$barber->status]);
-        return back()->with('success', 'Status barber berhasil diubah.');
+        if ($request->has('status') && in_array($request->status, ['masuk', 'cuti', 'nonaktif'])) {
+            $newStatus = $request->status;
+        } else {
+            $newStatus = match ($barber->status) {
+                'masuk'    => 'cuti',
+                'cuti'     => 'nonaktif',
+                default    => 'masuk',
+            };
+        }
+
+        $barber->update(['status' => $newStatus]);
+        return back()->with('success', 'Status barber ' . $barber->name . ' berhasil diubah menjadi ' . ucfirst($newStatus) . '.');
     }
 }

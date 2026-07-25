@@ -14,7 +14,7 @@ class DashboardController extends Controller
         $bookingAktif = Booking::where('user_id', auth()->id())
             ->whereIn('status', ['pending', 'checked-in'])
             ->count();
-        $recentBookings = Booking::with(['barber', 'layanan', 'jadwal'])
+        $recentBookings = Booking::with(['barber', 'layanan', 'jadwal', 'transaksi'])
             ->where('user_id', auth()->id())
             ->latest()->take(5)->get();
 

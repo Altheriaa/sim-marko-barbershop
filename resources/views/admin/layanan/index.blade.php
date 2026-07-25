@@ -3,15 +3,25 @@
     <x-common.page-breadcrumb :pageTitle="'Daftar Layanan'" />
 
     @if(session('success'))
-        <div
-            class="mb-5 flex items-center gap-2 rounded-xl bg-green-50 px-4 py-3 text-sm font-semibold text-green-700 dark:bg-green-950/30 dark:text-green-400">
-            <i class="fa-solid fa-circle-check"></i> {{ session('success') }}
+        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3500)" x-transition.opacity.duration.500ms
+            class="mb-5 flex items-center justify-between gap-2 rounded-xl bg-green-50 px-4 py-3 text-sm font-semibold text-green-700 dark:bg-green-950/30 dark:text-green-400 border border-green-200 dark:border-green-800/40 shadow-xs">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-circle-check"></i> {{ session('success') }}
+            </div>
+            <button @click="show = false" type="button" class="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-200 transition">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
         </div>
     @endif
     @if(session('error'))
-        <div
-            class="mb-5 flex items-center gap-2 rounded-xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-700 dark:bg-red-950/30 dark:text-red-400">
-            <i class="fa-solid fa-circle-xmark"></i> {{ session('error') }}
+        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3500)" x-transition.opacity.duration.500ms
+            class="mb-5 flex items-center justify-between gap-2 rounded-xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-700 dark:bg-red-950/30 dark:text-red-400 border border-red-200 dark:border-red-800/40 shadow-xs">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-circle-xmark"></i> {{ session('error') }}
+            </div>
+            <button @click="show = false" type="button" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-200 transition">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
         </div>
     @endif
 

@@ -74,6 +74,11 @@ class MenuHelper
                 'path' => '/owner/dashboard',
             ],
             [
+                'icon' => 'ecommerce',
+                'name' => 'Transaksi',
+                'path' => '/owner/transaksi',
+            ],
+            [
                 'icon' => 'charts',
                 'name' => 'Laporan',
                 'path' => '/owner/laporan',

@@ -90,6 +90,11 @@
                                     class="inline-flex items-center gap-1.5 rounded-lg bg-brand-50 px-3 py-1.5 text-xs font-semibold text-brand-700 hover:bg-brand-100 dark:bg-brand-950/40 dark:text-brand-400 transition">
                                     <i class="fa-solid fa-qrcode"></i> Lihat QR
                                 </a>
+                            @elseif($booking->transaksi)
+                                <a href="{{ route('pelanggan.transaksi.invoice', $booking->transaksi) }}" target="_blank"
+                                    class="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:border-brand-500 hover:bg-brand-50 hover:text-brand-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-brand-500 dark:hover:bg-brand-950/40 dark:hover:text-brand-400 transition">
+                                    <i class="fa-solid fa-receipt text-brand-500"></i> Cetak Struk
+                                </a>
                             @else
                                 <span class="text-gray-400">—</span>
                             @endif

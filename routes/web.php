@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\QrCodeController;
 use App\Http\Controllers\Admin\TransaksiController;
 use App\Http\Controllers\Admin\LaporanController as AdminLaporanController;
 use App\Http\Controllers\Owner\LaporanController;
+use App\Http\Controllers\Owner\TransaksiController as OwnerTransaksiController;
 use App\Http\Controllers\Pelanggan\BookingController as PelangganBookingController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Owner\DashboardController as OwnerDashboardController;
@@ -101,6 +102,10 @@ Route::middleware(['auth', 'role:owner'])->prefix('owner')->name('owner.')->grou
     // Dashboard
     Route::get('/dashboard', [OwnerDashboardController::class, 'index'])->name('dashboard');
 
+    // Transaksi
+    Route::get('transaksi', [OwnerTransaksiController::class, 'index'])->name('transaksi.index');
+    Route::get('transaksi/{transaksi}/invoice', [OwnerTransaksiController::class, 'invoice'])->name('transaksi.invoice');
+
     // Laporan
     Route::get('laporan', [LaporanController::class, 'index'])->name('laporan');
     Route::get('laporan/cetak', [LaporanController::class, 'cetak'])->name('laporan.cetak');
@@ -116,9 +121,10 @@ Route::middleware(['auth', 'role:pelanggan'])->prefix('pelanggan')->name('pelang
     // Dashboard
     Route::get('/dashboard', [PelangganDashboardController::class, 'index'])->name('dashboard');
 
-    // Booking
+    // Booking & Transaksi
     Route::get('booking/create', [PelangganBookingController::class, 'create'])->name('booking.create');
     Route::post('booking', [PelangganBookingController::class, 'store'])->name('booking.store');
     Route::get('booking/{booking}/qr', [PelangganBookingController::class, 'showQr'])->name('booking.qr');
     Route::get('booking/riwayat', [PelangganBookingController::class, 'riwayat'])->name('booking.riwayat');
+    Route::get('transaksi/{transaksi}/invoice', [PelangganBookingController::class, 'invoice'])->name('transaksi.invoice');
 });

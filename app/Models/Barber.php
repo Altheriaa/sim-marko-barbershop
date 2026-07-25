@@ -13,11 +13,24 @@ class Barber extends Model
         'status',
     ];
 
-    protected function casts(): array
+    public function isMasuk(): bool
     {
-        return [
-            'status' => 'boolean',
-        ];
+        return $this->status === 'masuk';
+    }
+
+    public function isCuti(): bool
+    {
+        return $this->status === 'cuti';
+    }
+
+    public function isNonaktif(): bool
+    {
+        return $this->status === 'nonaktif';
+    }
+
+    public function scopeMasuk($query)
+    {
+        return $query->where('status', 'masuk');
     }
 
     public function jadwal()

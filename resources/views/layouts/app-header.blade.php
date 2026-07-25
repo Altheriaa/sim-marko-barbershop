@@ -1,5 +1,4 @@
-<header
-    class="sticky top-0 flex w-full bg-white border-gray-200 z-40 dark:border-gray-800 dark:bg-gray-900 xl:border-b"
+<header class="sticky top-0 flex w-full bg-white border-gray-200 z-40 dark:border-gray-800 dark:bg-gray-900 xl:border-b"
     x-data="{
         isApplicationMenuOpen: false,
         toggleApplicationMenu() {
@@ -7,7 +6,8 @@
         }
     }">
     <div class="flex flex-col items-center justify-between grow xl:flex-row xl:px-6">
-        <div class="flex items-center justify-between w-full gap-2 px-3 py-3 border-b border-gray-200 dark:border-gray-800 sm:gap-4 xl:justify-normal xl:border-b-0 xl:px-0 lg:py-3.5">
+        <div
+            class="flex items-center justify-between w-full gap-2 px-3 py-3 border-b border-gray-200 dark:border-gray-800 sm:gap-4 xl:justify-normal xl:border-b-0 xl:px-0 lg:py-3.5">
 
             <!-- Desktop Sidebar Toggle Button (visible on xl and up) -->
             <button
@@ -58,19 +58,23 @@
                             this.loading = false;
                         });
                 }
-            }" @click.outside="open = false" @keydown.escape="open = false" @keydown.cmd.k.window.prevent="$refs.searchInput.focus()" @keydown.ctrl.k.window.prevent="$refs.searchInput.focus()">
-                <div class="relative">
-                    <span class="absolute -translate-y-1/2 pointer-events-none left-3.5 top-1/2 text-gray-400">
-                        <i class="fa-solid fa-magnifying-glass text-sm"></i>
-                    </span>
-                    <input type="text" x-ref="searchInput" x-model="query" @input.debounce.300ms="search()" @focus="if(query.length >= 2) open = true"
-                        placeholder="Cari Booking, Barber..."
-                        class="dark:bg-dark-900 h-10 w-full rounded-lg border border-gray-200 bg-transparent py-2 pl-9 pr-10 md:pr-14 text-xs md:text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-white/3 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
-                    <button type="button" @click="$refs.searchInput.focus()"
-                        class="hidden md:inline-flex absolute right-2 top-1/2 -translate-y-1/2 items-center gap-0.5 rounded-lg border border-gray-200 bg-gray-50 px-1.5 py-0.5 text-[10px] text-gray-500 dark:border-gray-800 dark:bg-white/[0.03] dark:text-gray-400">
-                        <span>⌘</span><span>K</span>
-                    </button>
-                </div>
+            }" @click.outside="open = false" @keydown.escape="open = false"
+                @keydown.cmd.k.window.prevent="$refs.searchInput.focus()"
+                @keydown.ctrl.k.window.prevent="$refs.searchInput.focus()">
+                @if (auth()->user()->role === 'admin')
+                    <div class="relative">
+                        <span class="absolute -translate-y-1/2 pointer-events-none left-3.5 top-1/2 text-gray-400">
+                            <i class="fa-solid fa-magnifying-glass text-sm"></i>
+                        </span>
+                        <input type="text" x-ref="searchInput" x-model="query" @input.debounce.300ms="search()"
+                            @focus="if(query.length >= 2) open = true" placeholder="Cari Booking, Barber..."
+                            class="dark:bg-dark-900 h-10 w-full rounded-lg border border-gray-200 bg-transparent py-2 pl-9 pr-10 md:pr-14 text-xs md:text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-white/3 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
+                        <button type="button" @click="$refs.searchInput.focus()"
+                            class="hidden md:inline-flex absolute right-2 top-1/2 -translate-y-1/2 items-center gap-0.5 rounded-lg border border-gray-200 bg-gray-50 px-1.5 py-0.5 text-[10px] text-gray-500 dark:border-gray-800 dark:bg-white/[0.03] dark:text-gray-400">
+                            <span>⌘</span><span>K</span>
+                        </button>
+                    </div>
+                @endif
 
                 {{-- Live Search Results Dropdown --}}
                 <div x-show="open" x-transition
@@ -88,16 +92,23 @@
                     <template x-if="!loading && results.length > 0">
                         <div class="divide-y divide-gray-100 dark:divide-gray-800">
                             <template x-for="item in results" :key="item.title + item.subtitle">
-                                <a :href="item.url" class="flex items-start gap-3 p-2.5 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/60 transition group">
-                                    <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
+                                <a :href="item.url"
+                                    class="flex items-start gap-3 p-2.5 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/60 transition group">
+                                    <div
+                                        class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400">
                                         <i class="fa-solid" :class="item.icon"></i>
                                     </div>
                                     <div class="flex flex-col min-w-0">
                                         <div class="flex items-center gap-2">
-                                            <span class="text-[10px] font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400" x-text="item.type"></span>
+                                            <span
+                                                class="text-[10px] font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400"
+                                                x-text="item.type"></span>
                                         </div>
-                                        <span class="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white truncate" x-text="item.title"></span>
-                                        <span class="text-[11px] text-gray-500 dark:text-gray-400 truncate" x-text="item.subtitle"></span>
+                                        <span
+                                            class="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white truncate"
+                                            x-text="item.title"></span>
+                                        <span class="text-[11px] text-gray-500 dark:text-gray-400 truncate"
+                                            x-text="item.subtitle"></span>
                                     </div>
                                 </a>
                             </template>
@@ -120,8 +131,7 @@
                 <!-- Theme Toggle Button -->
                 <button
                     class="relative flex items-center justify-center text-gray-500 transition-colors bg-white border border-gray-200 rounded-full hover:text-dark-900 h-10 w-10 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white shadow-xs"
-                    @click="$store.theme.toggle()"
-                    aria-label="Toggle Theme">
+                    @click="$store.theme.toggle()" aria-label="Toggle Theme">
                     <i x-show="$store.theme.theme === 'dark'" class="fa-solid fa-sun text-amber-400 text-base"></i>
                     <i x-show="$store.theme.theme !== 'dark'" class="fa-solid fa-moon text-gray-600 text-base"></i>
                 </button>

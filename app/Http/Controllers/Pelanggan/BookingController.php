@@ -7,6 +7,7 @@ use App\Models\Barber;
 use App\Models\Booking;
 use App\Models\JadwalBarber;
 use App\Models\Layanan;
+use App\Models\Transaksi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -25,7 +26,7 @@ class BookingController extends Controller
 
     public function create()
     {
-        $barbers = Barber::where('status', true)->get();
+        $barbers = Barber::where('status', 'masuk')->get();
         $layanan = Layanan::with('subLayanan')->get();
 
         return view('pelanggan.booking.create', compact('barbers', 'layanan'), ['title' => 'Buat Booking']);
@@ -34,7 +35,7 @@ class BookingController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'barber_id'  => ['required', Rule::exists('barbers', 'id')->where('status', true)],
+            'barber_id'  => ['required', Rule::exists('barbers', 'id')->where('status', 'masuk')],
             'layanan_id' => 'required|exists:layanan,id',
             'tanggal'    => 'required|date|after_or_equal:today',
             'jam_mulai'  => 'required|date_format:H:i',
@@ -134,5 +135,15 @@ class BookingController extends Controller
             ->paginate(10);
 
         return view('pelanggan.booking.riwayat', compact('bookings'), ['title' => 'Riwayat Booking']);
+    }
+
+    public function invoice(Transaksi $transaksi)
+    {
+        if ($transaksi->booking->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $transaksi->load(['booking.layanan', 'booking.barber', 'booking.user']);
+        return view('admin.transaksi.invoice', compact('transaksi'), ['title' => 'Invoice Pembayaran']);
     }
 }

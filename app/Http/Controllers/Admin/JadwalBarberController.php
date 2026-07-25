@@ -15,7 +15,7 @@ class JadwalBarberController extends Controller
         $tanggalInput = $request->input('tanggal', now()->toDateString());
         $tanggal = Carbon::parse($tanggalInput);
 
-        $barbers = Barber::where('status', true)->get();
+        $barbers = Barber::all();
         $selectedBarberId = $request->input('barber_id', $barbers->first()?->id);
         $selectedBarber = $barbers->firstWhere('id', $selectedBarberId) ?? $barbers->first();
 
@@ -51,7 +51,7 @@ class JadwalBarberController extends Controller
 
     public function create()
     {
-        $barbers = Barber::where('status', true)->get();
+        $barbers = Barber::where('status', 'masuk')->get();
         return view('admin.jadwal.create', compact('barbers'), ['title' => 'Tambah Jadwal']);
     }
 
@@ -96,7 +96,7 @@ class JadwalBarberController extends Controller
 
     public function edit(JadwalBarber $jadwal)
     {
-        $barbers = Barber::where('status', true)->get();
+        $barbers = Barber::all();
         return view('admin.jadwal.edit', compact('jadwal', 'barbers'), ['title' => 'Edit Jadwal']);
     }
 

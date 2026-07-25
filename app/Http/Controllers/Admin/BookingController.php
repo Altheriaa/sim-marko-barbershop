@@ -28,7 +28,7 @@ class BookingController extends Controller
         $barberId = $request->input('barber_id');
         $statusFilter = $request->input('status');
 
-        $barbers = Barber::where('status', true)->get();
+        $barbers = Barber::all();
 
         $query = Booking::with(['user', 'barber', 'layanan', 'jadwal', 'transaksi']);
 
@@ -81,7 +81,7 @@ class BookingController extends Controller
 
     public function create()
     {
-        $barbers = Barber::where('status', true)->get();
+        $barbers = Barber::where('status', 'masuk')->get();
         $layanan = Layanan::with('subLayanan')->get();
 
         return view('admin.booking.create', compact('barbers', 'layanan'), ['title' => 'Booking Walk-in']);
@@ -90,7 +90,7 @@ class BookingController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'barber_id'  => ['required', Rule::exists('barbers', 'id')->where('status', true)],
+            'barber_id'  => ['required', Rule::exists('barbers', 'id')->where('status', 'masuk')],
             'layanan_id' => 'required|exists:layanan,id',
             'tanggal'    => 'required|date|after_or_equal:today',
             'jam_mulai'  => 'required|date_format:H:i',

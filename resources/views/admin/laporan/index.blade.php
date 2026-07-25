@@ -4,7 +4,7 @@
 
     {{-- Filter Bar --}}
     <div class="mb-6 rounded-2xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-white/[0.03]">
-        <form method="GET" action="{{ route('admin.laporan.index') }}" class="flex flex-wrap items-end gap-4">
+        <form method="GET" action="{{ request()->url() }}" class="flex flex-wrap items-end gap-4">
             <div>
                 <label class="mb-1.5 block text-xs font-medium text-gray-500 dark:text-gray-400">Tanggal Mulai</label>
                 <input type="date" name="start_date" value="{{ $startDate }}"
@@ -19,11 +19,11 @@
                 class="h-10 rounded-lg bg-brand-500 px-5 text-sm font-medium text-white hover:bg-brand-600 transition">
                 Filter
             </button>
-            <a href="{{ route('admin.laporan.index') }}"
+            <a href="{{ request()->url() }}"
                 class="h-10 inline-flex items-center rounded-lg border border-gray-300 px-5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 transition">
                 Reset
             </a>
-            <a href="{{ route('admin.laporan.cetak', ['start_date' => $startDate, 'end_date' => $endDate]) }}" target="_blank"
+            <a href="{{ route(auth()->user()->role === 'owner' ? 'owner.laporan.cetak' : 'admin.laporan.cetak', ['start_date' => $startDate, 'end_date' => $endDate]) }}" target="_blank"
                 class="h-10 inline-flex items-center gap-2 rounded-xl border border-gray-300 bg-white px-4 text-xs font-bold text-gray-800 shadow-theme-xs hover:border-brand-500 hover:bg-brand-50 hover:text-brand-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:border-brand-500 dark:hover:bg-brand-950/40 dark:hover:text-brand-400 transition-all ml-auto">
                 <i class="fa-solid fa-print text-brand-500"></i> Cetak Laporan
             </a>
