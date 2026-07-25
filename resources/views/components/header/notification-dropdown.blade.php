@@ -1,21 +1,41 @@
 {{-- Notification Dropdown Component --}}
 <div class="relative" x-data="{
     dropdownOpen: false,
-    notifying: true,
+    notifying: false,
+    unreadCount: 0,
+    lastId: 0,
+    items: [],
+    init() {
+        this.fetchNotifications();
+        setInterval(() => this.fetchNotifications(), 8000);
+    },
+    async fetchNotifications() {
+        try {
+            const res = await fetch('{{ route('notifications.unread') }}');
+            if (!res.ok) return;
+            const data = await res.json();
+            
+            if (this.lastId > 0 && data.latest_id > this.lastId) {
+                this.notifying = true;
+            } else if (data.unread_count > 0 && this.lastId === 0) {
+                this.notifying = true;
+            }
+            
+            this.lastId = data.latest_id;
+            this.unreadCount = data.unread_count;
+            this.items = data.items;
+        } catch (e) {
+            console.error('Notification fetch error:', e);
+        }
+    },
     toggleDropdown() {
         this.dropdownOpen = !this.dropdownOpen;
-        this.notifying = false;
+        if (this.dropdownOpen) {
+            this.notifying = false;
+        }
     },
     closeDropdown() {
         this.dropdownOpen = false;
-    },
-    handleItemClick() {
-        console.log('Notification item clicked');
-        this.closeDropdown();
-    },
-    handleViewAllClick() {
-        console.log('View All Notifications clicked');
-        this.closeDropdown();
     }
 }" @click.away="closeDropdown()">
     <!-- Notification Button -->
@@ -26,11 +46,13 @@
     >
         <!-- Notification Badge -->
         <span
-            x-show="notifying"
-            class="absolute right-0 top-0.5 z-1 h-2 w-2 rounded-full bg-orange-400"
+            x-show="notifying || unreadCount > 0"
+            class="absolute -right-0.5 -top-0.5 z-1 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white shadow-xs"
         >
+            <span x-text="unreadCount > 9 ? '9+' : (unreadCount || '!')"></span>
             <span
-                class="absolute inline-flex w-full h-full bg-orange-400 rounded-full opacity-75 -z-1 animate-ping"
+                x-show="notifying"
+                class="absolute inline-flex w-full h-full bg-red-400 rounded-full opacity-75 -z-1 animate-ping"
             ></span>
         </span>
 
@@ -61,18 +83,23 @@
         x-transition:leave="transition ease-in duration-75"
         x-transition:leave-start="transform opacity-100 scale-100"
         x-transition:leave-end="transform opacity-0 scale-95"
-        class="absolute -right-[240px] mt-[17px] flex h-[480px] w-[350px] flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark sm:w-[361px] lg:right-0"
+        class="absolute -right-[240px] mt-[17px] flex h-[480px] w-[350px] flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark sm:w-[361px] lg:right-0 z-50"
         style="display: none;"
     >
         <!-- Dropdown Header -->
         <div class="flex items-center justify-between pb-3 mb-3 border-b border-gray-100 dark:border-gray-800">
-            <h5 class="text-lg font-semibold text-gray-800 dark:text-white/90">Notification</h5>
+            <div class="flex items-center gap-2">
+                <h5 class="text-base font-bold text-gray-900 dark:text-white">Notifikasi Live</h5>
+                <span class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400">
+                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Live
+                </span>
+            </div>
 
-            <button @click="closeDropdown()" class="text-gray-500 dark:text-gray-400" type="button">
+            <button @click="closeDropdown()" class="text-gray-500 dark:text-gray-400 hover:text-gray-700" type="button">
                 <svg
                     class="fill-current"
-                    width="24"
-                    height="24"
+                    width="20"
+                    height="20"
                     viewBox="0 0 24 24"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -87,135 +114,54 @@
             </button>
         </div>
 
-        <!-- Notification List -->
-        <ul class="flex flex-col h-auto overflow-y-auto custom-scrollbar">
-            @php
-                $notifications = [
-                    [
-                        'id' => 1,
-                        'userName' => 'Terry Franci',
-                        'userImage' => '/images/user/user-02.jpg',
-                        'action' => 'requests permission to change',
-                        'project' => 'Project - Nganter App',
-                        'type' => 'Project',
-                        'time' => '5 min ago',
-                        'status' => 'online',
-                    ],
-                    [
-                        'id' => 2,
-                        'userName' => 'Alex Johnson',
-                        'userImage' => '/images/user/user-03.jpg',
-                        'action' => 'requests permission to change',
-                        'project' => 'Project - Nganter App',
-                        'type' => 'Project',
-                        'time' => '10 min ago',
-                        'status' => 'offline',
-                    ],
-                    [
-                        'id' => 3,
-                        'userName' => 'Sarah Williams',
-                        'userImage' => '/images/user/user-04.jpg',
-                        'action' => 'requests permission to change',
-                        'project' => 'Project - Dashboard UI',
-                        'type' => 'Project',
-                        'time' => '15 min ago',
-                        'status' => 'online',
-                    ],
-                    [
-                        'id' => 4,
-                        'userName' => 'Mike Brown',
-                        'userImage' => '/images/user/user-05.jpg',
-                        'action' => 'requests permission to change',
-                        'project' => 'Project - E-commerce',
-                        'type' => 'Project',
-                        'time' => '20 min ago',
-                        'status' => 'online',
-                    ],
-                    [
-                        'id' => 5,
-                        'userName' => 'Emma Davis',
-                        'userImage' => '/images/user/user-06.jpg',
-                        'action' => 'requests permission to change',
-                        'project' => 'Project - Mobile App',
-                        'type' => 'Project',
-                        'time' => '25 min ago',
-                        'status' => 'offline',
-                    ],
-                    [
-                        'id' => 6,
-                        'userName' => 'John Smith',
-                        'userImage' => '/images/user/user-07.jpg',
-                        'action' => 'requests permission to change',
-                        'project' => 'Project - Landing Page',
-                        'type' => 'Project',
-                        'time' => '30 min ago',
-                        'status' => 'online',
-                    ],
-                    [
-                        'id' => 7,
-                        'userName' => 'Lisa Anderson',
-                        'userImage' => '/images/user/user-08.jpg',
-                        'action' => 'requests permission to change',
-                        'project' => 'Project - Blog System',
-                        'type' => 'Project',
-                        'time' => '35 min ago',
-                        'status' => 'online',
-                    ],
-                    [
-                        'id' => 8,
-                        'userName' => 'David Wilson',
-                        'userImage' => '/images/user/user-09.jpg',
-                        'action' => 'requests permission to change',
-                        'project' => 'Project - CRM Dashboard',
-                        'type' => 'Project',
-                        'time' => '40 min ago',
-                        'status' => 'online',
-                    ],
-                ];
-            @endphp
-
-            @foreach ($notifications as $notification)
-                <li @click="handleItemClick()">
+        <!-- Notification List (Dynamic Alpine x-for) -->
+        <ul class="flex flex-col h-auto overflow-y-auto custom-scrollbar flex-1">
+            <template x-for="item in items" :key="item.id">
+                <li @click="closeDropdown()">
                     <a
-                        class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
-                        href="#"
+                        class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-white/5 transition"
+                        :href="item.target_url"
                     >
-                        <span class="relative block w-full h-10 rounded-full z-1 max-w-10">
-                            <img src="{{ $notification['userImage'] }}" alt="User" class="overflow-hidden rounded-full" />
+                        <span class="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-600 font-bold text-sm dark:bg-brand-500/10 dark:text-brand-400">
+                            <span x-text="item.initial"></span>
                             <span
-                                class="absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white dark:border-gray-900 {{ $notification['status'] === 'online' ? 'bg-success-500' : 'bg-error-500' }}"
+                                class="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-[1.5px] border-white dark:border-gray-900"
+                                :class="{
+                                    'bg-amber-500': item.status === 'pending',
+                                    'bg-blue-500': item.status === 'checked-in',
+                                    'bg-green-500': item.status === 'completed',
+                                    'bg-gray-400': !['pending', 'checked-in', 'completed'].includes(item.status)
+                                }"
                             ></span>
                         </span>
 
-                        <span class="block">
-                            <span class="mb-1.5 block text-theme-sm text-gray-500 dark:text-gray-400">
-                                <span class="font-medium text-gray-800 dark:text-white/90">
-                                    {{ $notification['userName'] }}
-                                </span>
-                                {{ $notification['action'] }}
-                                <span class="font-medium text-gray-800 dark:text-white/90">
-                                    {{ $notification['project'] }}
-                                </span>
+                        <span class="block min-w-0 flex-1">
+                            <span class="mb-1 block text-xs text-gray-500 dark:text-gray-400 leading-snug">
+                                <strong class="font-bold text-gray-900 dark:text-white" x-text="item.user_name"></strong>
+                                memesan <span class="font-semibold text-brand-600 dark:text-brand-400" x-text="item.layanan"></span>
                             </span>
 
-                            <span class="flex items-center gap-2 text-gray-500 text-theme-xs dark:text-gray-400">
-                                <span>{{ $notification['type'] }}</span>
-                                <span class="w-1 h-1 bg-gray-400 rounded-full"></span>
-                                <span>{{ $notification['time'] }}</span>
+                            <span class="flex items-center gap-2 text-[11px] text-gray-400">
+                                <span>💈 <span x-text="item.barber"></span></span>
+                                <span class="w-1 h-1 bg-gray-300 rounded-full dark:bg-gray-600"></span>
+                                <span x-text="item.created_at_human"></span>
                             </span>
                         </span>
                     </a>
                 </li>
-            @endforeach
+            </template>
+
+            <template x-if="items.length === 0">
+                <li class="py-12 text-center text-xs text-gray-400">Belum ada notifikasi booking.</li>
+            </template>
         </ul>
 
         <!-- View All Button -->
         <a
-            href="#"
-            class="mt-3 flex justify-center rounded-lg border border-gray-300 bg-white p-3 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
-            @click.prevent="handleViewAllClick()"
+            href="{{ auth()->user()?->role === 'owner' ? route('owner.transaksi.index') : route('admin.booking.index') }}"
+            class="mt-3 flex justify-center rounded-lg border border-gray-300 bg-white p-2.5 text-xs font-semibold text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-white/[0.03]"
         >
-            View All Notification
+            Lihat Semua Reservasi
         </a>
     </div>
     <!-- Dropdown End -->

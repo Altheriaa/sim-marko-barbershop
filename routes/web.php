@@ -32,6 +32,7 @@ Route::middleware('guest')->group(function () {
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
 Route::get('/global-search', [\App\Http\Controllers\GlobalSearchController::class, 'search'])->name('global.search')->middleware('auth');
+Route::get('/notifications/unread', [\App\Http\Controllers\NotificationController::class, 'unread'])->name('notifications.unread')->middleware('auth');
 
 /*
 |--------------------------------------------------------------------------

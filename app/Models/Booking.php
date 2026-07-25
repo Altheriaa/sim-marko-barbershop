@@ -10,6 +10,8 @@ class Booking extends Model
 
     protected $fillable = [
         'user_id',
+        'nama_pelanggan',
+        'no_hp',
         'barber_id',
         'layanan_id',
         'jadwal_id',
@@ -20,6 +22,16 @@ class Booking extends Model
         'waktu_checkout',
         'dibuat_oleh',
     ];
+
+    public function getCustomerNameAttribute(): string
+    {
+        return $this->nama_pelanggan ?: ($this->user?->name ?? 'Walk-in');
+    }
+
+    public function getCustomerPhoneAttribute(): ?string
+    {
+        return $this->no_hp ?: $this->user?->phone;
+    }
 
     protected function casts(): array
     {

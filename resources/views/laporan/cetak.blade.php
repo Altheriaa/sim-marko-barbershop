@@ -66,7 +66,7 @@
                     @forelse($transaksi as $t)
                     <tr class="hover:bg-gray-50/80">
                         <td class="py-4 px-4 font-bold text-gray-900 font-mono">#MB-{{ $t->tanggal_bayar->format('Y') }}-{{ str_pad($t->id, 3, '0', STR_PAD_LEFT) }}</td>
-                        <td class="py-4 px-4 font-semibold text-gray-800">{{ $t->booking->user->name ?? 'Walk-in' }}</td>
+                        <td class="py-4 px-4 font-semibold text-gray-800">{{ $t->booking->customer_name }}</td>
                         <td class="py-4 px-4 text-gray-700">{{ $t->booking->layanan->nama_layanan }}</td>
                         <td class="py-4 px-4 text-gray-700">{{ $t->booking->barber->name }}</td>
                         <td class="py-4 px-4 text-right font-bold text-gray-900">Rp {{ number_format($t->total_harga, 0, ',', '.') }}</td>

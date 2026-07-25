@@ -165,9 +165,9 @@
                                 <div class="flex items-center gap-2">
                                     <div
                                         class="flex h-7 w-7 items-center justify-center rounded-full bg-brand-100 dark:bg-brand-900/30 text-xs font-bold text-brand-600 dark:text-brand-400">
-                                        {{ strtoupper(substr($trx->booking->user->name ?? 'W', 0, 1)) }}
+                                        {{ strtoupper(substr($trx->booking->customer_name, 0, 1)) }}
                                     </div>
-                                    {{ $trx->booking->user->name ?? 'Walk-in' }}
+                                    {{ $trx->booking->customer_name }}
                                 </div>
                             </td>
                             <td class="px-5 py-4 text-sm text-gray-700 dark:text-gray-300">

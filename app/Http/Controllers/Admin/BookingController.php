@@ -7,6 +7,8 @@ use App\Models\Barber;
 use App\Models\Booking;
 use App\Models\JadwalBarber;
 use App\Models\Layanan;
+use App\Models\User;
+use App\Services\WhatsAppService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -90,10 +92,12 @@ class BookingController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'barber_id'  => ['required', Rule::exists('barbers', 'id')->where('status', 'masuk')],
-            'layanan_id' => 'required|exists:layanan,id',
-            'tanggal'    => 'required|date|after_or_equal:today',
-            'jam_mulai'  => 'required|date_format:H:i',
+            'nama_pelanggan' => 'required|string|max:100',
+            'no_hp'          => 'nullable|string|max:20',
+            'barber_id'      => ['required', Rule::exists('barbers', 'id')->where('status', 'masuk')],
+            'layanan_id'     => 'required|exists:layanan,id',
+            'tanggal'        => 'required|date|after_or_equal:today',
+            'jam_mulai'      => 'required|date_format:H:i',
         ]);
 
         $layanan    = Layanan::findOrFail($validated['layanan_id']);
@@ -146,7 +150,7 @@ class BookingController extends Controller
             ]);
         }
 
-        // 5. Auto-create jadwal & booking
+        // 5. Auto-create jadwal & booking walk-in
         $jadwal = JadwalBarber::create([
             'barber_id'   => $validated['barber_id'],
             'tanggal'     => $validated['tanggal'],
@@ -158,14 +162,21 @@ class BookingController extends Controller
         $kode = 'BOOK-' . Str::upper(Str::random(8));
 
         $booking = Booking::create([
-            'barber_id'  => $validated['barber_id'],
-            'layanan_id' => $validated['layanan_id'],
-            'jadwal_id'  => $jadwal->id,
-            'sumber'     => 'walk-in',
-            'qr_code'    => $kode,
-            'status'     => 'pending',
-            'dibuat_oleh' => auth()->id(),
+            'user_id'        => null,
+            'nama_pelanggan' => $validated['nama_pelanggan'],
+            'no_hp'          => $validated['no_hp'] ?? null,
+            'barber_id'      => $validated['barber_id'],
+            'layanan_id'     => $validated['layanan_id'],
+            'jadwal_id'      => $jadwal->id,
+            'sumber'         => 'walk-in',
+            'qr_code'        => $kode,
+            'status'         => 'pending',
+            'dibuat_oleh'    => auth()->id(),
         ]);
+
+        // Kirim Notifikasi WhatsApp Webhook (Pelanggan & Admin)
+        WhatsAppService::sendBookingConfirmation($booking);
+        WhatsAppService::sendAdminBookingAlert($booking);
 
         return redirect()->route('admin.booking.index')->with('success', 'Booking walk-in berhasil dibuat. Kode: ' . $kode);
     }

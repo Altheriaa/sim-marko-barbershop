@@ -23,6 +23,26 @@
                 <form action="{{ route('admin.booking.store') }}" method="POST">@csrf
                     <div class="space-y-5">
 
+                        {{-- Nama Pelanggan --}}
+                        <div>
+                            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Nama Pelanggan
+                                <span class="text-red-500">*</span></label>
+                            <input type="text" name="nama_pelanggan" value="{{ old('nama_pelanggan') }}" required
+                                placeholder="Contoh: Ahmad / Budi"
+                                class="h-11 w-full rounded-xl border border-gray-300 bg-transparent px-4 py-2.5 text-sm font-medium text-gray-800 dark:border-gray-700 dark:bg-gray-900 dark:text-white" />
+                            @error('nama_pelanggan') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
+                        </div>
+
+                        {{-- No. WhatsApp --}}
+                        <div>
+                            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">No. WhatsApp / HP
+                                <span class="text-xs text-gray-400">(Opsional - untuk kirim bukti/struk WA)</span></label>
+                            <input type="text" name="no_hp" value="{{ old('no_hp') }}"
+                                placeholder="Contoh: 081234567890"
+                                class="h-11 w-full rounded-xl border border-gray-300 bg-transparent px-4 py-2.5 text-sm font-medium text-gray-800 dark:border-gray-700 dark:bg-gray-900 dark:text-white" />
+                            @error('no_hp') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
+                        </div>
+
                         {{-- Pilih Barber --}}
                         <div>
                             <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Pilih Barber

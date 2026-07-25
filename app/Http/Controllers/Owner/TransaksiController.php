@@ -18,6 +18,8 @@ class TransaksiController extends Controller
         if ($search) {
             $query->whereHas('booking', function ($q) use ($search) {
                 $q->where('qr_code', 'LIKE', "%{$search}%")
+                  ->orWhere('nama_pelanggan', 'LIKE', "%{$search}%")
+                  ->orWhere('no_hp', 'LIKE', "%{$search}%")
                   ->orWhereHas('user', fn($u) => $u->where('name', 'LIKE', "%{$search}%"))
                   ->orWhereHas('barber', fn($b) => $b->where('name', 'LIKE', "%{$search}%"))
                   ->orWhereHas('layanan', fn($l) => $l->where('nama_layanan', 'LIKE', "%{$search}%"));

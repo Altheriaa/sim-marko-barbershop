@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    'whatsapp' => [
+        'enabled'     => env('WA_ENABLED', true),
+        'provider'    => env('WA_PROVIDER', 'fonnte'),
+        'token'       => env('WA_TOKEN', ''),
+        'admin_phone' => env('WA_ADMIN_PHONE', ''),
+    ],
+
 ];

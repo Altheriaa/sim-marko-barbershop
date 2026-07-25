@@ -50,7 +50,7 @@
                 <span class="text-gray-600">{{ $transaksi->tanggal_bayar->format('H:i:s') }}</span>
             </div>
             <div class="flex justify-between">
-                <span class="text-gray-600">Pelanggan: <strong class="text-gray-900">{{ $transaksi->booking->user->name ?? 'Walk-in' }}</strong></span>
+                <span class="text-gray-600">Pelanggan: <strong class="text-gray-900">{{ $transaksi->booking->customer_name }}</strong></span>
                 <span class="text-gray-600 uppercase font-bold text-[10px] bg-gray-200 px-1.5 py-0.5 rounded">{{ $transaksi->metode_pembayaran }}</span>
             </div>
         </div>

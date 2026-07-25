@@ -8,6 +8,7 @@ use App\Models\Booking;
 use App\Models\JadwalBarber;
 use App\Models\Layanan;
 use App\Models\Transaksi;
+use App\Services\WhatsAppService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -111,6 +112,10 @@ class BookingController extends Controller
             'qr_code'    => $kode,
             'status'     => 'pending',
         ]);
+
+        // Kirim Notifikasi WhatsApp Webhook (Pelanggan & Admin)
+        WhatsAppService::sendBookingConfirmation($booking);
+        WhatsAppService::sendAdminBookingAlert($booking);
 
         return redirect()->route('pelanggan.booking.qr', $booking)->with('success', 'Booking berhasil! Tunjukkan QR Code saat tiba.');
     }

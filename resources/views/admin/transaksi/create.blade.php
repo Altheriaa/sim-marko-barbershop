@@ -5,7 +5,7 @@
     <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
         <div class="mb-6 space-y-2">
             <p class="text-sm text-gray-600 dark:text-gray-400"><span class="font-medium">Kode Booking:</span> {{ $booking->qr_code }}</p>
-            <p class="text-sm text-gray-600 dark:text-gray-400"><span class="font-medium">Pelanggan:</span> {{ $booking->user->name ?? 'Walk-in' }}</p>
+            <p class="text-sm text-gray-600 dark:text-gray-400"><span class="font-medium">Pelanggan:</span> {{ $booking->customer_name }}</p>
             <p class="text-sm text-gray-600 dark:text-gray-400"><span class="font-medium">Barber:</span> {{ $booking->barber->name }}</p>
             <p class="text-sm text-gray-600 dark:text-gray-400"><span class="font-medium">Layanan:</span> {{ $booking->layanan->nama_layanan }}</p>
             <p class="text-sm text-gray-800 dark:text-white/90 font-semibold text-lg">Total: Rp {{ number_format($booking->layanan->harga, 0, ',', '.') }}</p>

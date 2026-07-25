@@ -117,7 +117,7 @@
                     $jamMulai = $booking->jadwal?->jam_mulai ?? '10:00';
                     $durasi = $booking->layanan->durasi_menit ?? 30;
                     $status = $booking->status;
-                    $pelangganNama = $booking->user->name ?? 'Walk-in';
+                    $pelangganNama = $booking->customer_name;
                 @endphp
 
                 <div class="flex flex-col sm:flex-row items-start gap-4">

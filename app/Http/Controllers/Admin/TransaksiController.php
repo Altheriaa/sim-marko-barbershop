@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\Transaksi;
+use App\Services\WhatsAppService;
 use Illuminate\Http\Request;
 
 class TransaksiController extends Controller
@@ -19,6 +20,8 @@ class TransaksiController extends Controller
         if ($search) {
             $query->whereHas('booking', function ($q) use ($search) {
                 $q->where('qr_code', 'LIKE', "%{$search}%")
+                  ->orWhere('nama_pelanggan', 'LIKE', "%{$search}%")
+                  ->orWhere('no_hp', 'LIKE', "%{$search}%")
                   ->orWhereHas('user', fn($u) => $u->where('name', 'LIKE', "%{$search}%"))
                   ->orWhereHas('barber', fn($b) => $b->where('name', 'LIKE', "%{$search}%"))
                   ->orWhereHas('layanan', fn($l) => $l->where('nama_layanan', 'LIKE', "%{$search}%"));
@@ -62,14 +65,17 @@ class TransaksiController extends Controller
             'metode_pembayaran' => 'required|in:tunai,EDC,transfer',
         ]);
 
-        Transaksi::create([
+        $transaksi = Transaksi::create([
             'booking_id' => $booking->id,
-            'user_id' => $booking->user_id ?? auth()->id(),
+            'user_id'           => $booking->user_id, // null jika booking walk-in
             'total_harga' => $booking->layanan->harga,
             'metode_pembayaran' => $validated['metode_pembayaran'],
             'status_pembayaran' => 'lunas',
             'tanggal_bayar' => now(),
         ]);
+
+        // Kirim Notifikasi WhatsApp Webhook
+        WhatsAppService::sendTransactionReceipt($transaksi);
 
         return redirect()->route('admin.transaksi.index')->with('success', 'Pembayaran tercatat.');
     }
