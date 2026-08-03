@@ -81,12 +81,89 @@ class BookingController extends Controller
         ), ['title' => 'Manajemen Reservasi']);
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $barbers = Barber::where('status', 'masuk')->get();
         $layanan = Layanan::with('subLayanan')->get();
+        $tanggal = $request->input('tanggal', date('Y-m-d'));
 
-        return view('admin.booking.create', compact('barbers', 'layanan'), ['title' => 'Booking Walk-in']);
+        $jadwalList = JadwalBarber::with(['bookings.layanan', 'bookings.user'])
+            ->whereDate('tanggal', $tanggal)
+            ->orderBy('jam_mulai')
+            ->get()
+            ->groupBy('barber_id');
+
+        $initialSchedules = $barbers->map(function ($barber) use ($jadwalList) {
+            $schedules = $jadwalList->get($barber->id, collect())->map(function ($j) {
+                $booking = $j->bookings->first();
+                return [
+                    'id'          => $j->id,
+                    'jam_mulai'   => Carbon::parse($j->jam_mulai)->format('H:i'),
+                    'jam_selesai' => Carbon::parse($j->jam_selesai)->format('H:i'),
+                    'status'      => $j->status,
+                    'layanan'     => $booking?->layanan?->nama_layanan ?? 'Booked',
+                ];
+            });
+
+            return [
+                'id'            => $barber->id,
+                'name'          => $barber->name,
+                'photo_url'     => $barber->photo ? asset('storage/' . $barber->photo) : null,
+                'status'        => $barber->status,
+                'schedules'     => $schedules->values(),
+                'total_booking' => $schedules->count(),
+            ];
+        });
+
+        $formattedTanggal = Carbon::parse($tanggal)->locale('id')->translatedFormat('l, d F Y');
+
+        return view('admin.booking.create', compact('barbers', 'layanan', 'tanggal', 'initialSchedules', 'formattedTanggal'), ['title' => 'Booking Walk-in']);
+    }
+
+    public function getJadwalJson(Request $request)
+    {
+        $tanggal = $request->input('tanggal', date('Y-m-d'));
+
+        $barbers = Barber::where('status', 'masuk')->get();
+
+        $jadwalList = JadwalBarber::with(['bookings.layanan', 'bookings.user'])
+            ->whereDate('tanggal', $tanggal)
+            ->orderBy('jam_mulai')
+            ->get()
+            ->groupBy('barber_id');
+
+        $barberSchedules = $barbers->map(function ($barber) use ($jadwalList) {
+            $schedules = $jadwalList->get($barber->id, collect())->map(function ($j) {
+                $booking = $j->bookings->first();
+                return [
+                    'id'          => $j->id,
+                    'jam_mulai'   => Carbon::parse($j->jam_mulai)->format('H:i'),
+                    'jam_selesai' => Carbon::parse($j->jam_selesai)->format('H:i'),
+                    'status'      => $j->status,
+                    'layanan'     => $booking?->layanan?->nama_layanan ?? 'Booked',
+                ];
+            });
+
+            return [
+                'id'            => $barber->id,
+                'name'          => $barber->name,
+                'photo_url'     => $barber->photo ? asset('storage/' . $barber->photo) : null,
+                'status'        => $barber->status,
+                'schedules'     => $schedules->values(),
+                'total_booking' => $schedules->count(),
+            ];
+        });
+
+        return response()->json([
+            'tanggal'           => $tanggal,
+            'formatted_tanggal' => Carbon::parse($tanggal)->locale('id')->translatedFormat('l, d F Y'),
+            'barbers'           => $barberSchedules,
+            'jam_operasional'   => [
+                'buka'      => self::JAM_BUKA,
+                'tutup'     => self::JAM_TUTUP,
+                'istirahat' => self::ISTIRAHAT,
+            ]
+        ]);
     }
 
     public function store(Request $request)

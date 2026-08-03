@@ -62,6 +62,11 @@ class MenuHelper
                 'name' => 'Laporan',
                 'path' => '/admin/laporan',
             ],
+            [
+                'icon' => 'user-profile',
+                'name' => 'Profil Saya',
+                'path' => '/profile',
+            ],
         ];
     }
 
@@ -83,6 +88,11 @@ class MenuHelper
                 'name' => 'Laporan',
                 'path' => '/owner/laporan',
             ],
+            [
+                'icon' => 'user-profile',
+                'name' => 'Profil Saya',
+                'path' => '/profile',
+            ],
         ];
     }
 
@@ -101,6 +111,11 @@ class MenuHelper
                     ['name' => 'Buat Booking', 'path' => '/pelanggan/booking/create'],
                     ['name' => 'Riwayat Booking', 'path' => '/pelanggan/booking/riwayat'],
                 ],
+            ],
+            [
+                'icon' => 'user-profile',
+                'name' => 'Profil Saya',
+                'path' => '/profile',
             ],
         ];
     }

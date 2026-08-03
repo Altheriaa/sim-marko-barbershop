@@ -34,6 +34,13 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->midd
 Route::get('/global-search', [\App\Http\Controllers\GlobalSearchController::class, 'search'])->name('global.search')->middleware('auth');
 Route::get('/notifications/unread', [\App\Http\Controllers\NotificationController::class, 'unread'])->name('notifications.unread')->middleware('auth');
 
+// Profile Routes for All Roles
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
+    Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password');
+});
+
 /*
 |--------------------------------------------------------------------------
 | Dashboard Redirect (root)
@@ -76,6 +83,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     // Booking Management
     Route::get('booking', [AdminBookingController::class, 'index'])->name('booking.index');
     Route::get('booking/create', [AdminBookingController::class, 'create'])->name('booking.create');
+    Route::get('booking/jadwal-json', [AdminBookingController::class, 'getJadwalJson'])->name('booking.jadwal-json');
     Route::post('booking', [AdminBookingController::class, 'store'])->name('booking.store');
 
     // QR Code Scanner
@@ -124,6 +132,7 @@ Route::middleware(['auth', 'role:pelanggan'])->prefix('pelanggan')->name('pelang
 
     // Booking & Transaksi
     Route::get('booking/create', [PelangganBookingController::class, 'create'])->name('booking.create');
+    Route::get('booking/jadwal-json', [PelangganBookingController::class, 'getJadwalJson'])->name('booking.jadwal-json');
     Route::post('booking', [PelangganBookingController::class, 'store'])->name('booking.store');
     Route::get('booking/{booking}/qr', [PelangganBookingController::class, 'showQr'])->name('booking.qr');
     Route::get('booking/riwayat', [PelangganBookingController::class, 'riwayat'])->name('booking.riwayat');

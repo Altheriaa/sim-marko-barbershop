@@ -7,6 +7,13 @@
             <div class="flex w-full flex-1 flex-col lg:w-1/2">
                 <div class="mx-auto flex w-full max-w-md flex-1 flex-col justify-center">
                     <div>
+                        <!-- Logo Section -->
+                        <div class="mb-6">
+                            <a href="/" class="inline-block">
+                                <img src="{{ asset('images/logo-marko.png') }}" alt="Marko Barbershop" class="h-12 w-auto object-contain" />
+                            </a>
+                        </div>
+
                         <div class="mb-5 sm:mb-8">
                             <h1 class="text-title-sm sm:text-title-md mb-2 font-semibold text-gray-800 dark:text-white/90">
                                 Masuk
@@ -96,7 +103,7 @@
                             <div class="mt-5">
                                 <p class="text-center text-sm font-normal text-gray-700 sm:text-start dark:text-gray-400">
                                     Belum punya akun?
-                                    <a href="{{ route('register') }}" class="text-brand-500 hover:text-brand-600 dark:text-brand-400">Daftar</a>
+                                    <a href="{{ route('register') }}" class="text-brand-500 hover:text-brand-600 dark:text-brand-400 font-semibold">Daftar</a>
                                 </p>
                             </div>
                         </div>
@@ -104,12 +111,14 @@
                 </div>
             </div>
 
+            <!-- Right Brand Panel -->
             <div class="bg-brand-950 relative hidden h-full w-full items-center lg:grid lg:w-1/2 dark:bg-white/5">
                 <div class="z-1 flex items-center justify-center">
                     <x-common.common-grid-shape/>
-                    <div class="flex max-w-xs flex-col items-center">
-                        <h2 class="mb-4 text-2xl font-bold text-white">Marko Barbershop</h2>
-                        <p class="text-center text-gray-400 dark:text-white/60">
+                    <div class="flex max-w-xs flex-col items-center text-center">
+                        <img src="{{ asset('images/logo-marko.png') }}" alt="Marko Barbershop" class="h-16 w-auto object-contain mb-4 filter drop-shadow-md" />
+                        <h2 class="mb-2 text-2xl font-bold text-white">Marko Barbershop</h2>
+                        <p class="text-center text-gray-400 dark:text-white/60 text-sm">
                             Sistem Informasi Manajemen Pelayanan Barbershop & Hair Care
                         </p>
                     </div>
