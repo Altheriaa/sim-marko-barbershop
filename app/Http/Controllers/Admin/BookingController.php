@@ -134,13 +134,14 @@ class BookingController extends Controller
 
         $barberSchedules = $barbers->map(function ($barber) use ($jadwalList) {
             $schedules = $jadwalList->get($barber->id, collect())->map(function ($j) {
-                $booking = $j->bookings->first();
+                $activeBooking = $j->bookings->whereIn('status', ['pending', 'checked-in'])->first();
+                $isPenuh = $j->status === 'penuh' && $activeBooking;
                 return [
                     'id'          => $j->id,
                     'jam_mulai'   => Carbon::parse($j->jam_mulai)->format('H:i'),
                     'jam_selesai' => Carbon::parse($j->jam_selesai)->format('H:i'),
-                    'status'      => $j->status,
-                    'layanan'     => $booking?->layanan?->nama_layanan ?? 'Booked',
+                    'status'      => $isPenuh ? 'penuh' : 'tersedia',
+                    'layanan'     => $activeBooking?->layanan?->nama_layanan ?? 'Booked',
                 ];
             });
 

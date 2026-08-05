@@ -206,8 +206,10 @@
                 {{-- Custom Dynamic Shifts / Schedules --}}
                 @forelse($jadwalList as $item)
                 @php
-                    $bookingInfo = $item->bookings->first();
-                    $isTersedia = $item->status === 'tersedia';
+                    $activeBooking = $item->bookings->whereIn('status', ['pending', 'checked-in'])->first();
+                    $completedBooking = $item->bookings->where('status', 'completed')->first();
+                    $bookingInfo = $activeBooking ?? $completedBooking;
+                    $isTersedia = $item->status === 'tersedia' || !$activeBooking;
                 @endphp
                 <div class="rounded-xl border p-4 transition shadow-xs {{ $isTersedia ? 'border-brand-200 bg-brand-50/20 dark:border-brand-900/30 dark:bg-brand-950/10' : 'border-amber-200 bg-amber-50/20 dark:border-amber-900/30 dark:bg-amber-950/10' }}">
                     <div class="flex flex-wrap items-center justify-between gap-3">
@@ -229,8 +231,10 @@
                                     {{ $bookingInfo?->layanan?->nama_layanan ?? 'Slot Pangkas & Care' }}
                                 </h5>
                                 <span class="text-xs text-gray-500 dark:text-gray-400">
-                                    @if($bookingInfo)
-                                        Pelanggan: <strong class="text-gray-700 dark:text-gray-300">{{ $bookingInfo->user->name ?? 'Walk-in' }}</strong> ({{ ucfirst($bookingInfo->sumber) }})
+                                    @if($activeBooking)
+                                        Pelanggan: <strong class="text-gray-700 dark:text-gray-300">{{ $activeBooking->user->name ?? 'Walk-in' }}</strong> ({{ ucfirst($activeBooking->sumber) }})
+                                    @elseif($completedBooking)
+                                        Pelanggan: <strong class="text-gray-700 dark:text-gray-300">{{ $completedBooking->user->name ?? 'Walk-in' }}</strong> &bull; <span class="text-emerald-600 font-semibold">Pelayanan Selesai</span>
                                     @else
                                         Barber: {{ $item->barber->name }}
                                     @endif
@@ -239,13 +243,17 @@
                         </div>
 
                         <div class="flex items-center gap-3">
-                            @if($isTersedia)
-                            <span class="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-800 dark:bg-green-900/30 dark:text-green-400">
-                                <span class="h-2 w-2 rounded-full bg-green-500"></span> Tersedia
-                            </span>
-                            @else
+                            @if($activeBooking)
                             <span class="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800 dark:bg-amber-900/30 dark:text-amber-400">
                                 <span class="h-2 w-2 rounded-full bg-amber-500"></span> Sibuk (Terisi)
+                            </span>
+                            @elseif($completedBooking)
+                            <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400">
+                                <span class="h-2 w-2 rounded-full bg-emerald-500"></span> Tersedia (Selesai)
+                            </span>
+                            @else
+                            <span class="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                                <span class="h-2 w-2 rounded-full bg-green-500"></span> Tersedia
                             </span>
                             @endif
 

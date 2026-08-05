@@ -96,8 +96,14 @@
                             • Barber: <strong>${data.booking.barber?.name || '-'}</strong><br>
                             • Layanan: <strong>${data.booking.layanan?.nama_layanan || '-'}</strong>
                         </p>
+                        <p class="text-xs text-green-600 dark:text-green-400 mt-2 flex items-center gap-1 font-semibold">
+                            <i class="fa-solid fa-spinner fa-spin"></i> Mengalihkan ke halaman booking...
+                        </p>
                     </div>
                 </div>`;
+                setTimeout(() => {
+                    window.location.href = data.redirect || "{{ route('admin.booking.index') }}";
+                }, 1000);
             } else {
                 resultDiv.className = 'mt-4 rounded-xl p-4 bg-red-50 text-red-700 dark:bg-red-950/30 dark:text-red-400 border border-red-200 dark:border-red-900 text-xs font-semibold';
                 resultDiv.innerHTML = `<strong>❌ ${data.message}</strong>`;

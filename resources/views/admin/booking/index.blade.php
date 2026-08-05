@@ -3,12 +3,14 @@
     <x-common.page-breadcrumb :pageTitle="'Manajemen Reservasi'" />
 
     @if(session('success'))
-        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3500)" x-transition.opacity.duration.500ms
+        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3500)"
+            x-transition.opacity.duration.500ms
             class="mb-5 flex items-center justify-between gap-2 rounded-xl bg-green-50 p-4 text-sm font-semibold text-green-700 dark:bg-green-950/30 dark:text-green-400 border border-green-200 dark:border-green-800/40 shadow-xs">
             <div class="flex items-center gap-2">
                 <i class="fa-solid fa-circle-check"></i> {{ session('success') }}
             </div>
-            <button @click="show = false" type="button" class="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-200 transition">
+            <button @click="show = false" type="button"
+                class="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-200 transition">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
         </div>
@@ -216,7 +218,7 @@
                                     @if(!$booking->transaksi)
                                         <a href="{{ route('admin.transaksi.create', $booking) }}"
                                             class="rounded-xl bg-brand-500 px-4 py-2 text-xs font-bold text-white hover:bg-brand-600 transition">
-                                            <i class="fa-solid fa-credit-card mr-1.5"></i> Catat Bayar
+                                            <i class="fa-solid fa-credit-card mr-1.5"></i> Bayar
                                         </a>
                                     @endif
                                 @endif

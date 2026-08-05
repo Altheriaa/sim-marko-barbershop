@@ -33,9 +33,13 @@ class QrCodeController extends Controller
             'waktu_checkin' => now(),
         ]);
 
+        $pelangganNama = $booking->user ? $booking->user->name : 'Walk-in';
+        session()->flash('success', "Check-in berhasil! Status booking {$booking->kode_booking} ({$pelangganNama}) diubah menjadi Checked-in.");
+
         return response()->json([
             'success' => true,
             'message' => 'Check-in berhasil!',
+            'redirect' => route('admin.booking.index'),
             'booking' => $booking->load('user', 'barber', 'layanan'),
         ]);
     }
@@ -46,6 +50,10 @@ class QrCodeController extends Controller
             'status' => 'completed',
             'waktu_checkout' => now(),
         ]);
+
+        if ($booking->jadwal) {
+            $booking->jadwal->update(['status' => 'tersedia']);
+        }
 
         return redirect()->route('admin.transaksi.create', $booking)
             ->with('info', 'Lanjutkan ke pencatatan pembayaran.');

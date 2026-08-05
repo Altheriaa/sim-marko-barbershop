@@ -62,7 +62,7 @@ class TransaksiController extends Controller
         }
 
         $validated = $request->validate([
-            'metode_pembayaran' => 'required|in:tunai,EDC,transfer',
+            'metode_pembayaran' => 'required|in:tunai,EDC,transfer,qris',
         ]);
 
         $transaksi = Transaksi::create([
@@ -73,6 +73,11 @@ class TransaksiController extends Controller
             'status_pembayaran' => 'lunas',
             'tanggal_bayar' => now(),
         ]);
+
+        $booking->update(['status' => 'completed']);
+        if ($booking->jadwal) {
+            $booking->jadwal->update(['status' => 'tersedia']);
+        }
 
         // Kirim Notifikasi WhatsApp Webhook
         WhatsAppService::sendTransactionReceipt($transaksi);
