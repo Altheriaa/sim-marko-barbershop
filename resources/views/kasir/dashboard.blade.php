@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <x-common.page-breadcrumb :pageTitle="'Dashboard Admin'" />
+    <x-common.page-breadcrumb :pageTitle="'Dashboard Kasir'" />
 
     <!-- Top Stats Cards -->
     <div class="grid grid-cols-1 gap-4 md:gap-6 sm:grid-cols-2 xl:grid-cols-4">
@@ -78,7 +78,7 @@
                         <h3 class="text-base font-bold text-gray-800 dark:text-white/90">Jadwal Shift Barber Hari Ini</h3>
                         <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ now()->translatedFormat('l, d F Y') }}</p>
                     </div>
-                    <a href="{{ route('admin.jadwal.index') }}" class="text-xs font-semibold text-brand-600 hover:text-brand-700 dark:text-brand-400 flex items-center gap-1 transition">
+                    <a href="{{ route('kasir.jadwal.index') }}" class="text-xs font-semibold text-brand-600 hover:text-brand-700 dark:text-brand-400 flex items-center gap-1 transition">
                         Kelola Jadwal <i class="fa-solid fa-arrow-right text-[10px]"></i>
                     </a>
                 </div>
@@ -104,7 +104,7 @@
                         <div class="flex flex-col items-center justify-center py-6 text-gray-500 dark:text-gray-400">
                             <i class="fa-regular fa-calendar-xmark text-2xl text-gray-300 dark:text-gray-600 mb-2"></i>
                             <span class="text-xs">Belum ada jadwal shift barber yang diatur untuk hari ini.</span>
-                            <a href="{{ route('admin.jadwal.create') }}" class="mt-3 text-xs font-bold text-brand-600 hover:underline dark:text-brand-400">+ Atur Shift Baru</a>
+                            <a href="{{ route('kasir.jadwal.create') }}" class="mt-3 text-xs font-bold text-brand-600 hover:underline dark:text-brand-400">+ Atur Shift Baru</a>
                         </div>
                     @endforelse
                 </div>
@@ -183,7 +183,7 @@
                     </svg>
                 </div>
 
-                <a href="{{ route('admin.booking.scan') }}"
+                <a href="{{ route('kasir.booking.scan') }}"
                     class="w-full inline-flex justify-center items-center py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-brand-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                     Buka Pemindai QR
                 </a>

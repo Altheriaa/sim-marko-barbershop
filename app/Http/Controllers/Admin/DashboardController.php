@@ -24,8 +24,8 @@ class DashboardController extends Controller
             ->whereDate('tanggal', today())
             ->get();
 
-        return view('admin.dashboard', compact(
+        return view('kasir.dashboard', compact(
             'todayBookings', 'checkedIn', 'totalBarbers', 'barbers', 'totalLayanan', 'recentBookings', 'todaySchedules'
-        ), ['title' => 'Dashboard Admin']);
+        ), ['title' => 'Dashboard Kasir']);
     }
 }

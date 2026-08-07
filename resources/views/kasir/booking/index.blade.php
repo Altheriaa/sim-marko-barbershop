@@ -23,7 +23,7 @@
             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Daftar antrean & reservasi layanan pelanggan</p>
         </div>
 
-        <form method="GET" action="{{ route('admin.booking.index') }}" class="flex flex-wrap items-center gap-3">
+        <form method="GET" action="{{ route('kasir.booking.index') }}" class="flex flex-wrap items-center gap-3">
             {{-- Filter Periode --}}
             <div class="relative">
                 <select name="periode" onchange="this.form.submit()"
@@ -201,12 +201,12 @@
                                 </button>
 
                                 @if($status === 'pending')
-                                    <a href="{{ route('admin.booking.scan') }}"
+                                    <a href="{{ route('kasir.booking.scan') }}"
                                         class="rounded-xl border border-gray-300 bg-white px-4 py-2 text-xs font-bold text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 transition">
                                         <i class="fa-solid fa-qrcode mr-1"></i> Scan / Check-in
                                     </a>
                                 @elseif($status === 'checked-in')
-                                    <form action="{{ route('admin.booking.checkout', $booking) }}" method="POST" class="inline"
+                                    <form action="{{ route('kasir.booking.checkout', $booking) }}" method="POST" class="inline"
                                         onsubmit="return confirm('Apakah Anda yakin pelayanan untuk pelanggan ini sudah SELESAI?\n\nStatus reservasi akan diubah ke Selesai dan lanjut ke catatan pembayaran.')">
                                         @csrf
                                         <button type="submit"
@@ -216,7 +216,7 @@
                                     </form>
                                 @elseif($status === 'completed')
                                     @if(!$booking->transaksi)
-                                        <a href="{{ route('admin.transaksi.create', $booking) }}"
+                                        <a href="{{ route('kasir.transaksi.create', $booking) }}"
                                             class="rounded-xl bg-brand-500 px-4 py-2 text-xs font-bold text-white hover:bg-brand-600 transition">
                                             <i class="fa-solid fa-credit-card mr-1.5"></i> Bayar
                                         </a>
@@ -225,7 +225,7 @@
 
                                 {{-- Tombol Cetak Struk Invoice jika transaksi sudah ada --}}
                                 @if($booking->transaksi)
-                                    <a href="{{ route('admin.transaksi.invoice', $booking->transaksi) }}" target="_blank"
+                                    <a href="{{ route('kasir.transaksi.invoice', $booking->transaksi) }}" target="_blank"
                                         class="inline-flex items-center gap-1.5 rounded-xl border border-gray-300 bg-white px-3.5 py-2 text-xs font-bold text-gray-700 hover:border-brand-500 hover:bg-brand-50 hover:text-brand-600 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 transition">
                                         <i class="fa-solid fa-receipt text-brand-500"></i> Struk Invoice
                                     </a>
@@ -298,7 +298,7 @@
 
     {{-- Floating Circle Action Button (+) Bottom-Right --}}
     <div class="fixed bottom-8 right-8 z-50">
-        <a href="{{ route('admin.booking.create') }}"
+        <a href="{{ route('kasir.booking.create') }}"
             class="flex h-14 w-14 items-center justify-center rounded-full bg-black text-white shadow-2xl hover:bg-gray-900 dark:bg-white dark:text-black dark:hover:bg-gray-200 transition-all hover:scale-105 active:scale-95"
             title="Buat Booking Walk-in">
             <i class="fa-solid fa-plus text-xl"></i>

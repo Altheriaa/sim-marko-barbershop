@@ -6,61 +6,61 @@ use Illuminate\Support\Facades\Auth;
 
 class MenuHelper
 {
-    public static function getAdminMenu()
+    public static function getKasirMenu()
     {
         return [
             [
                 'icon' => 'dashboard',
                 'name' => 'Dashboard',
-                'path' => '/admin/dashboard',
+                'path' => '/kasir/dashboard',
             ],
             [
                 'icon' => 'user-profile',
                 'name' => 'Kelola User',
-                'path' => '/admin/users',
+                'path' => '/kasir/users',
             ],
             [
                 'icon' => 'user-profile',
                 'name' => 'Barber',
                 'subItems' => [
-                    ['name' => 'Daftar Barber', 'path' => '/admin/barbers'],
-                    ['name' => 'Tambah Barber', 'path' => '/admin/barbers/create'],
+                    ['name' => 'Daftar Barber', 'path' => '/kasir/barbers'],
+                    ['name' => 'Tambah Barber', 'path' => '/kasir/barbers/create'],
                 ],
             ],
             [
                 'icon' => 'forms',
                 'name' => 'Layanan',
                 'subItems' => [
-                    ['name' => 'Daftar Layanan', 'path' => '/admin/layanan'],
-                    ['name' => 'Tambah Layanan', 'path' => '/admin/layanan/create'],
+                    ['name' => 'Daftar Layanan', 'path' => '/kasir/layanan'],
+                    ['name' => 'Tambah Layanan', 'path' => '/kasir/layanan/create'],
                 ],
             ],
             [
                 'icon' => 'calendar',
                 'name' => 'Jadwal Barber',
                 'subItems' => [
-                    ['name' => 'Daftar Jadwal', 'path' => '/admin/jadwal'],
-                    ['name' => 'Tambah Jadwal', 'path' => '/admin/jadwal/create'],
+                    ['name' => 'Daftar Jadwal', 'path' => '/kasir/jadwal'],
+                    ['name' => 'Tambah Jadwal', 'path' => '/kasir/jadwal/create'],
                 ],
             ],
             [
                 'icon' => 'tables',
                 'name' => 'Booking',
                 'subItems' => [
-                    ['name' => 'Daftar Booking', 'path' => '/admin/booking'],
-                    ['name' => 'Booking Walk-in', 'path' => '/admin/booking/create'],
-                    ['name' => 'Scan QR Code', 'path' => '/admin/booking/scan'],
+                    ['name' => 'Daftar Booking', 'path' => '/kasir/booking'],
+                    ['name' => 'Booking Walk-in', 'path' => '/kasir/booking/create'],
+                    ['name' => 'Scan QR Code', 'path' => '/kasir/booking/scan'],
                 ],
             ],
             [
                 'icon' => 'ecommerce',
                 'name' => 'Transaksi',
-                'path' => '/admin/transaksi',
+                'path' => '/kasir/transaksi',
             ],
             [
                 'icon' => 'charts',
                 'name' => 'Laporan',
-                'path' => '/admin/laporan',
+                'path' => '/kasir/laporan',
             ],
             [
                 'icon' => 'user-profile',
@@ -68,6 +68,11 @@ class MenuHelper
                 'path' => '/profile',
             ],
         ];
+    }
+
+    public static function getAdminMenu()
+    {
+        return self::getKasirMenu();
     }
 
     public static function getOwnerMenu()
@@ -129,7 +134,7 @@ class MenuHelper
         }
 
         $items = match ($user->role) {
-            'admin' => self::getAdminMenu(),
+            'kasir', 'admin' => self::getKasirMenu(),
             'owner' => self::getOwnerMenu(),
             'pelanggan' => self::getPelangganMenu(),
             default => [],

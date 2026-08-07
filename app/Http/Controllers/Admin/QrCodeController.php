@@ -10,7 +10,7 @@ class QrCodeController extends Controller
 {
     public function scanForm()
     {
-        return view('admin.scan-qr', ['title' => 'Scan QR Code']);
+        return view('kasir.scan-qr', ['title' => 'Scan QR Code']);
     }
 
     public function checkIn(Request $request)
@@ -39,7 +39,7 @@ class QrCodeController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Check-in berhasil!',
-            'redirect' => route('admin.booking.index'),
+            'redirect' => route('kasir.booking.index'),
             'booking' => $booking->load('user', 'barber', 'layanan'),
         ]);
     }
@@ -55,7 +55,7 @@ class QrCodeController extends Controller
             $booking->jadwal->update(['status' => 'tersedia']);
         }
 
-        return redirect()->route('admin.transaksi.create', $booking)
+        return redirect()->route('kasir.transaksi.create', $booking)
             ->with('info', 'Lanjutkan ke pencatatan pembayaran.');
     }
 }

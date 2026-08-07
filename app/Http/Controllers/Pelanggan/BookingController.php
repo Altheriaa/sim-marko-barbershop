@@ -227,6 +227,6 @@ class BookingController extends Controller
         }
 
         $transaksi->load(['booking.layanan', 'booking.barber', 'booking.user']);
-        return view('admin.transaksi.invoice', compact('transaksi'), ['title' => 'Invoice Pembayaran']);
+        return view('kasir.transaksi.invoice', compact('transaksi'), ['title' => 'Invoice Pembayaran']);
     }
 }

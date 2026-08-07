@@ -155,7 +155,7 @@
                             {{ $trx->tanggal_bayar?->translatedFormat('d M Y, H:i') ?? '-' }}
                         </td>
                         <td class="py-4 px-5 text-center">
-                            <a href="{{ route(auth()->user()->role === 'owner' ? 'owner.transaksi.invoice' : 'admin.transaksi.invoice', $trx) }}" target="_blank"
+                            <a href="{{ route(auth()->user()->role === 'owner' ? 'owner.transaksi.invoice' : 'kasir.transaksi.invoice', $trx) }}" target="_blank"
                                 class="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-brand-50 hover:text-brand-600 hover:border-brand-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 transition">
                                 <i class="fa-solid fa-receipt text-brand-500"></i> Struk
                             </a>

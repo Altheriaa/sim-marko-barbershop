@@ -25,28 +25,30 @@ class UserController extends Controller
             });
         }
 
-        if ($role && in_array($role, ['admin', 'owner', 'pelanggan'])) {
+        if ($role && in_array($role, ['kasir', 'admin', 'owner', 'pelanggan'])) {
             $query->where('role', $role);
         }
 
         $users = $query->latest()->paginate(10)->withQueryString();
 
         $totalUsers     = User::count();
-        $totalAdmin     = User::where('role', 'admin')->count();
+        $totalKasir     = User::whereIn('role', ['kasir', 'admin'])->count();
+        $totalAdmin     = $totalKasir;
         $totalOwner     = User::where('role', 'owner')->count();
         $totalPelanggan = User::where('role', 'pelanggan')->count();
 
-        return view('admin.users.index', compact(
-            'users', 'totalUsers', 'totalAdmin', 'totalOwner', 'totalPelanggan', 'search', 'role'
+        return view('kasir.users.index', compact(
+            'users', 'totalUsers', 'totalKasir', 'totalAdmin', 'totalOwner', 'totalPelanggan', 'search', 'role'
         ), ['title' => 'Kelola User / Pengguna']);
     }
 
     public function create()
     {
-        $hasAdmin = User::where('role', 'admin')->exists();
+        $hasKasir = User::whereIn('role', ['kasir', 'admin'])->exists();
+        $hasAdmin = $hasKasir;
         $hasOwner = User::where('role', 'owner')->exists();
 
-        return view('admin.users.create', compact('hasAdmin', 'hasOwner'), ['title' => 'Tambah User Baru']);
+        return view('kasir.users.create', compact('hasKasir', 'hasAdmin', 'hasOwner'), ['title' => 'Tambah User Baru']);
     }
 
     public function store(Request $request)
@@ -55,12 +57,12 @@ class UserController extends Controller
             'name'     => 'required|string|max:255',
             'email'    => 'required|string|email|max:255|unique:users',
             'phone'    => 'nullable|string|max:20',
-            'role'     => 'required|in:admin,owner,pelanggan',
+            'role'     => 'required|in:kasir,admin,owner,pelanggan',
             'password' => 'required|string|min:6|confirmed',
         ]);
 
-        if ($validated['role'] === 'admin' && User::where('role', 'admin')->exists()) {
-            return back()->withInput()->withErrors(['role' => 'Role Admin hanya diperbolehkan 1 akun saja dan akun Admin sudah ada.']);
+        if (in_array($validated['role'], ['kasir', 'admin']) && User::whereIn('role', ['kasir', 'admin'])->exists()) {
+            return back()->withInput()->withErrors(['role' => 'Role Kasir hanya diperbolehkan 1 akun saja dan akun Kasir sudah ada.']);
         }
 
         if ($validated['role'] === 'owner' && User::where('role', 'owner')->exists()) {
@@ -75,15 +77,16 @@ class UserController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
-        return redirect()->route('admin.users.index')->with('success', 'User berhasil ditambahkan.');
+        return redirect()->route('kasir.users.index')->with('success', 'User berhasil ditambahkan.');
     }
 
     public function edit(User $user)
     {
-        $hasAdmin = User::where('role', 'admin')->where('id', '!=', $user->id)->exists();
+        $hasKasir = User::whereIn('role', ['kasir', 'admin'])->where('id', '!=', $user->id)->exists();
+        $hasAdmin = $hasKasir;
         $hasOwner = User::where('role', 'owner')->where('id', '!=', $user->id)->exists();
 
-        return view('admin.users.edit', compact('user', 'hasAdmin', 'hasOwner'), ['title' => 'Edit User']);
+        return view('kasir.users.edit', compact('user', 'hasKasir', 'hasAdmin', 'hasOwner'), ['title' => 'Edit User']);
     }
 
     public function update(Request $request, User $user)
@@ -92,12 +95,12 @@ class UserController extends Controller
             'name'     => 'required|string|max:255',
             'email'    => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'phone'    => 'nullable|string|max:20',
-            'role'     => 'required|in:admin,owner,pelanggan',
+            'role'     => 'required|in:kasir,admin,owner,pelanggan',
             'password' => 'nullable|string|min:6|confirmed',
         ]);
 
-        if ($validated['role'] === 'admin' && User::where('role', 'admin')->where('id', '!=', $user->id)->exists()) {
-            return back()->withInput()->withErrors(['role' => 'Role Admin hanya diperbolehkan 1 akun saja.']);
+        if (in_array($validated['role'], ['kasir', 'admin']) && User::whereIn('role', ['kasir', 'admin'])->where('id', '!=', $user->id)->exists()) {
+            return back()->withInput()->withErrors(['role' => 'Role Kasir hanya diperbolehkan 1 akun saja.']);
         }
 
         if ($validated['role'] === 'owner' && User::where('role', 'owner')->where('id', '!=', $user->id)->exists()) {
@@ -117,17 +120,17 @@ class UserController extends Controller
 
         $user->update($userData);
 
-        return redirect()->route('admin.users.index')->with('success', 'Data user berhasil diperbarui.');
+        return redirect()->route('kasir.users.index')->with('success', 'Data user berhasil diperbarui.');
     }
 
     public function destroy(User $user)
     {
         if (auth()->id() === $user->id) {
-            return redirect()->route('admin.users.index')->with('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
+            return redirect()->route('kasir.users.index')->with('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
         }
 
         $user->delete();
 
-        return redirect()->route('admin.users.index')->with('success', 'User berhasil dihapus.');
+        return redirect()->route('kasir.users.index')->with('success', 'User berhasil dihapus.');
     }
 }

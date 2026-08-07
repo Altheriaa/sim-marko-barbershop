@@ -61,7 +61,7 @@
             }" @click.outside="open = false" @keydown.escape="open = false"
                 @keydown.cmd.k.window.prevent="$refs.searchInput.focus()"
                 @keydown.ctrl.k.window.prevent="$refs.searchInput.focus()">
-                @if (auth()->user()->role === 'admin')
+                @if (in_array(auth()->user()->role, ['kasir', 'admin']))
                     <div class="relative">
                         <span class="absolute -translate-y-1/2 pointer-events-none left-3.5 top-1/2 text-gray-400">
                             <i class="fa-solid fa-magnifying-glass text-sm"></i>

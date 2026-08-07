@@ -68,7 +68,7 @@ class BookingController extends Controller
 
         $bookings = $query->latest()->paginate(15)->withQueryString();
 
-        return view('admin.booking.index', compact(
+        return view('kasir.booking.index', compact(
             'bookings',
             'barbers',
             'periode',
@@ -117,7 +117,7 @@ class BookingController extends Controller
 
         $formattedTanggal = Carbon::parse($tanggal)->locale('id')->translatedFormat('l, d F Y');
 
-        return view('admin.booking.create', compact('barbers', 'layanan', 'tanggal', 'initialSchedules', 'formattedTanggal'), ['title' => 'Booking Walk-in']);
+        return view('kasir.booking.create', compact('barbers', 'layanan', 'tanggal', 'initialSchedules', 'formattedTanggal'), ['title' => 'Booking Walk-in']);
     }
 
     public function getJadwalJson(Request $request)
@@ -256,6 +256,6 @@ class BookingController extends Controller
         WhatsAppService::sendBookingConfirmation($booking);
         WhatsAppService::sendAdminBookingAlert($booking);
 
-        return redirect()->route('admin.booking.index')->with('success', 'Booking walk-in berhasil dibuat. Kode: ' . $kode);
+        return redirect()->route('kasir.booking.index')->with('success', 'Booking walk-in berhasil dibuat. Kode: ' . $kode);
     }
 }

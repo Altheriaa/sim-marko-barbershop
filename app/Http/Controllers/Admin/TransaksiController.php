@@ -39,7 +39,7 @@ class TransaksiController extends Controller
         $transaksiHariIni  = Transaksi::whereDate('tanggal_bayar', today())->count();
         $pendapatanHariIni = Transaksi::whereDate('tanggal_bayar', today())->sum('total_harga');
 
-        return view('admin.transaksi.index', compact(
+        return view('kasir.transaksi.index', compact(
             'transaksi', 'search', 'metode',
             'totalPendapatan', 'totalTransaksi', 'transaksiHariIni', 'pendapatanHariIni'
         ), ['title' => 'Daftar Transaksi']);
@@ -48,17 +48,17 @@ class TransaksiController extends Controller
     public function create(Booking $booking)
     {
         if ($booking->transaksi) {
-            return redirect()->route('admin.transaksi.index')->with('info', 'Pembayaran untuk booking ini sudah tercatat sebelumnya.');
+            return redirect()->route('kasir.transaksi.index')->with('info', 'Pembayaran untuk booking ini sudah tercatat sebelumnya.');
         }
 
         $booking->load('user', 'barber', 'layanan');
-        return view('admin.transaksi.create', compact('booking'), ['title' => 'Catat Pembayaran']);
+        return view('kasir.transaksi.create', compact('booking'), ['title' => 'Catat Pembayaran']);
     }
 
     public function store(Request $request, Booking $booking)
     {
         if ($booking->transaksi) {
-            return redirect()->route('admin.transaksi.index')->with('error', 'Pembayaran untuk booking ini sudah tercatat sebelumnya.');
+            return redirect()->route('kasir.transaksi.index')->with('error', 'Pembayaran untuk booking ini sudah tercatat sebelumnya.');
         }
 
         $validated = $request->validate([
@@ -82,12 +82,12 @@ class TransaksiController extends Controller
         // Kirim Notifikasi WhatsApp Webhook
         WhatsAppService::sendTransactionReceipt($transaksi);
 
-        return redirect()->route('admin.transaksi.index')->with('success', 'Pembayaran tercatat.');
+        return redirect()->route('kasir.transaksi.index')->with('success', 'Pembayaran tercatat.');
     }
 
     public function invoice(Transaksi $transaksi)
     {
         $transaksi->load(['booking.layanan', 'booking.barber', 'booking.user']);
-        return view('admin.transaksi.invoice', compact('transaksi'), ['title' => 'Invoice Pembayaran']);
+        return view('kasir.transaksi.invoice', compact('transaksi'), ['title' => 'Invoice Pembayaran']);
     }
 }

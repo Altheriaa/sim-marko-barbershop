@@ -3,7 +3,7 @@
 <x-common.page-breadcrumb :pageTitle="'Edit Barber'" />
 <div class="max-w-2xl">
     <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
-        <form action="{{ route('admin.barbers.update', $barber) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('kasir.barbers.update', $barber) }}" method="POST" enctype="multipart/form-data">
             @csrf @method('PUT')
             <div class="space-y-5">
                 <div>
@@ -30,7 +30,7 @@
                 </div>
                 <div class="flex gap-3">
                     <button type="submit" class="rounded-lg bg-brand-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-600 transition">Perbarui</button>
-                    <a href="{{ route('admin.barbers.index') }}" class="rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 transition">Batal</a>
+                    <a href="{{ route('kasir.barbers.index') }}" class="rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 transition">Batal</a>
                 </div>
             </div>
         </form>

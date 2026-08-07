@@ -84,7 +84,7 @@ class LaporanController extends Controller
             ->paginate(15)
             ->withQueryString();
 
-        return view('admin.laporan.index', compact(
+        return view('kasir.laporan.index', compact(
             'totalPendapatan', 'totalTransaksi', 'layananTerlaris',
             'distribusiLayanan', 'totalBookingDistribusi',
             'pendapatanBarber', 'trendHarian', 'transaksi',

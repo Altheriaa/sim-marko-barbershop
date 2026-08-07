@@ -11,12 +11,12 @@ class LayananController extends Controller
     public function index()
     {
         $layanan = Layanan::with(['subLayanan'])->withCount('subLayanan')->latest()->paginate(10);
-        return view('admin.layanan.index', compact('layanan'), ['title' => 'Kelola Layanan']);
+        return view('kasir.layanan.index', compact('layanan'), ['title' => 'Kelola Layanan']);
     }
 
     public function create()
     {
-        return view('admin.layanan.create', ['title' => 'Tambah Layanan']);
+        return view('kasir.layanan.create', ['title' => 'Tambah Layanan']);
     }
 
     public function store(Request $request)
@@ -43,13 +43,13 @@ class LayananController extends Controller
             }
         }
 
-        return redirect()->route('admin.layanan.index')->with('success', 'Layanan berhasil ditambahkan.');
+        return redirect()->route('kasir.layanan.index')->with('success', 'Layanan berhasil ditambahkan.');
     }
 
     public function edit(Layanan $layanan)
     {
         $layanan->load('subLayanan');
-        return view('admin.layanan.edit', compact('layanan'), ['title' => 'Edit Layanan']);
+        return view('kasir.layanan.edit', compact('layanan'), ['title' => 'Edit Layanan']);
     }
 
     public function update(Request $request, Layanan $layanan)
@@ -78,16 +78,16 @@ class LayananController extends Controller
             }
         }
 
-        return redirect()->route('admin.layanan.index')->with('success', 'Layanan berhasil diperbarui.');
+        return redirect()->route('kasir.layanan.index')->with('success', 'Layanan berhasil diperbarui.');
     }
 
     public function destroy(Layanan $layanan)
     {
         if ($layanan->bookings()->exists()) {
-            return redirect()->route('admin.layanan.index')->with('error', 'Layanan tidak dapat dihapus karena sedang digunakan dalam data transaksi.');
+            return redirect()->route('kasir.layanan.index')->with('error', 'Layanan tidak dapat dihapus karena sedang digunakan dalam data transaksi.');
         }
 
         $layanan->delete();
-        return redirect()->route('admin.layanan.index')->with('success', 'Layanan berhasil dihapus.');
+        return redirect()->route('kasir.layanan.index')->with('success', 'Layanan berhasil dihapus.');
     }
 }

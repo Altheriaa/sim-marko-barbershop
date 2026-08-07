@@ -19,10 +19,10 @@ class DatabaseSeeder extends Seeder
     {
         // ============ USERS ============
         User::create([
-            'name' => 'Admin Marko',
-            'email' => 'admin@gmail.com',
+            'name' => 'Kasir Marko',
+            'email' => 'kasir@gmail.com',
             'phone' => '081234567890',
-            'role' => 'admin',
+            'role' => 'kasir',
             'password' => Hash::make('password'),
         ]);
 

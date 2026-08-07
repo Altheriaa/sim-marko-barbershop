@@ -38,7 +38,7 @@
         </div>
 
         {{-- Date Picker Jump --}}
-        <form method="GET" action="{{ route('admin.jadwal.index') }}" class="flex items-center gap-2">
+        <form method="GET" action="{{ route('kasir.jadwal.index') }}" class="flex items-center gap-2">
             <input type="hidden" name="barber_id" value="{{ $selectedBarber?->id }}" />
             <input type="date" name="tanggal" value="{{ $tanggal->toDateString() }}" onchange="this.form.submit()"
                    class="h-10 rounded-xl border border-gray-300 bg-transparent px-3 py-2 text-sm font-medium text-gray-800 dark:border-gray-700 dark:bg-gray-900 dark:text-white" />
@@ -91,7 +91,7 @@
             </div>
 
             <div class="mt-5 pt-3 border-t border-dashed border-gray-200 dark:border-gray-800">
-                <a href="{{ route('admin.barbers.create') }}" class="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-300 py-3 text-xs font-bold uppercase tracking-wider text-gray-600 hover:border-brand-500 hover:text-brand-600 dark:border-gray-700 dark:text-gray-400 dark:hover:border-brand-500 transition">
+                <a href="{{ route('kasir.barbers.create') }}" class="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-300 py-3 text-xs font-bold uppercase tracking-wider text-gray-600 hover:border-brand-500 hover:text-brand-600 dark:border-gray-700 dark:text-gray-400 dark:hover:border-brand-500 transition">
                     <i class="fa-solid fa-plus"></i> Tambah Barber
                 </a>
             </div>
@@ -135,7 +135,7 @@
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <a href="{{ route('admin.jadwal.create', ['barber_id' => $selectedBarber?->id, 'tanggal' => $tanggal->toDateString()]) }}" 
+                    <a href="{{ route('kasir.jadwal.create', ['barber_id' => $selectedBarber?->id, 'tanggal' => $tanggal->toDateString()]) }}" 
                        class="inline-flex items-center gap-2 rounded-xl bg-brand-500 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-theme-xs hover:bg-brand-600 transition">
                         <i class="fa-solid fa-plus"></i> Tambah Shift
                     </a>
@@ -259,10 +259,10 @@
 
                             {{-- Actions --}}
                             <div class="flex items-center gap-1">
-                                <a href="{{ route('admin.jadwal.edit', $item) }}" class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 hover:bg-brand-50 hover:text-brand-600 transition" title="Edit Jadwal">
+                                <a href="{{ route('kasir.jadwal.edit', $item) }}" class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 hover:bg-brand-50 hover:text-brand-600 transition" title="Edit Jadwal">
                                     <i class="fa-solid fa-pen-to-square text-sm"></i>
                                 </a>
-                                <form action="{{ route('admin.jadwal.destroy', $item) }}" method="POST" onsubmit="return confirm('Yakin hapus jadwal ini?')" class="inline">
+                                <form action="{{ route('kasir.jadwal.destroy', $item) }}" method="POST" onsubmit="return confirm('Yakin hapus jadwal ini?')" class="inline">
                                     @csrf @method('DELETE')
                                     <button type="submit" class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 hover:bg-red-50 hover:text-red-600 transition" title="Hapus Jadwal">
                                         <i class="fa-solid fa-trash-can text-sm"></i>
@@ -280,7 +280,7 @@
                     </div>
                     <h4 class="mt-3 text-sm font-semibold text-gray-700 dark:text-gray-300">Belum ada shift jadwal khusus pada tanggal ini</h4>
                     <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Jadwal otomatis dibuat saat booking, atau Anda dapat menambah shift secara manual.</p>
-                    <a href="{{ route('admin.jadwal.create', ['barber_id' => $selectedBarber?->id, 'tanggal' => $tanggal->toDateString()]) }}" class="mt-4 inline-flex items-center gap-2 rounded-xl bg-brand-500 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white hover:bg-brand-600 transition">
+                    <a href="{{ route('kasir.jadwal.create', ['barber_id' => $selectedBarber?->id, 'tanggal' => $tanggal->toDateString()]) }}" class="mt-4 inline-flex items-center gap-2 rounded-xl bg-brand-500 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white hover:bg-brand-600 transition">
                         <i class="fa-solid fa-plus"></i> Tambah Shift Baru
                     </a>
                 </div>

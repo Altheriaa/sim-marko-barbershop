@@ -27,7 +27,7 @@ class ProfileController extends Controller
         if ($user->role === 'pelanggan') {
             $stats['total_booking']   = Booking::where('user_id', $user->id)->count();
             $stats['booking_selesai'] = Booking::where('user_id', $user->id)->where('status', 'completed')->count();
-        } elseif ($user->role === 'admin') {
+        } elseif (in_array($user->role, ['kasir', 'admin'])) {
             $stats['total_booking']   = Booking::count();
             $stats['total_transaksi'] = Transaksi::count();
         } elseif ($user->role === 'owner') {

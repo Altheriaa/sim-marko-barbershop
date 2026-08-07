@@ -108,7 +108,7 @@
 
                 {{-- Back button link --}}
                 <div class="mt-5">
-                    <a href="{{ route('admin.booking.index') }}" class="inline-flex items-center gap-2 text-xs font-semibold text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white transition">
+                    <a href="{{ route('kasir.booking.index') }}" class="inline-flex items-center gap-2 text-xs font-semibold text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white transition">
                         <i class="fa-solid fa-arrow-left"></i> Kembali ke Daftar Booking
                     </a>
                 </div>
@@ -117,7 +117,7 @@
 
         {{-- Right Column: Kasir Cashier Card (Aligned to Website Theme) --}}
         <div class="lg:col-span-5">
-            <form action="{{ route('admin.transaksi.store', $booking) }}" method="POST">
+            <form action="{{ route('kasir.transaksi.store', $booking) }}" method="POST">
                 @csrf
                 <input type="hidden" name="metode_pembayaran" :value="metode">
 

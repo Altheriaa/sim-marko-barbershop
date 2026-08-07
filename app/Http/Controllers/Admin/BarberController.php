@@ -11,12 +11,12 @@ class BarberController extends Controller
     public function index()
     {
         $barbers = Barber::latest()->paginate(10);
-        return view('admin.barber.index', compact('barbers'), ['title' => 'Kelola Barber']);
+        return view('kasir.barber.index', compact('barbers'), ['title' => 'Kelola Barber']);
     }
 
     public function create()
     {
-        return view('admin.barber.create', ['title' => 'Tambah Barber']);
+        return view('kasir.barber.create', ['title' => 'Tambah Barber']);
     }
 
     public function store(Request $request)
@@ -34,12 +34,12 @@ class BarberController extends Controller
 
         Barber::create($validated);
 
-        return redirect()->route('admin.barbers.index')->with('success', 'Barber berhasil ditambahkan.');
+        return redirect()->route('kasir.barbers.index')->with('success', 'Barber berhasil ditambahkan.');
     }
 
     public function edit(Barber $barber)
     {
-        return view('admin.barber.edit', compact('barber'), ['title' => 'Edit Barber']);
+        return view('kasir.barber.edit', compact('barber'), ['title' => 'Edit Barber']);
     }
 
     public function update(Request $request, Barber $barber)
@@ -57,20 +57,20 @@ class BarberController extends Controller
 
         $barber->update($validated);
 
-        return redirect()->route('admin.barbers.index')->with('success', 'Barber berhasil diperbarui.');
+        return redirect()->route('kasir.barbers.index')->with('success', 'Barber berhasil diperbarui.');
     }
 
     public function destroy(Barber $barber)
     {
         if ($barber->bookings()->exists()) {
-            return redirect()->route('admin.barbers.index')->with('error', 'Barber tidak bisa dihapus karena memiliki riwayat booking. Silakan ubah status barber sebagai gantinya.');
+            return redirect()->route('kasir.barbers.index')->with('error', 'Barber tidak bisa dihapus karena memiliki riwayat booking. Silakan ubah status barber sebagai gantinya.');
         }
 
         // Hapus jadwal terkait jika ada
         $barber->jadwal()->delete();
         
         $barber->delete();
-        return redirect()->route('admin.barbers.index')->with('success', 'Barber berhasil dihapus.');
+        return redirect()->route('kasir.barbers.index')->with('success', 'Barber berhasil dihapus.');
     }
 
     public function toggleStatus(Request $request, Barber $barber)

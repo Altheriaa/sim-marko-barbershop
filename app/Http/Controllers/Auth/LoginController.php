@@ -27,7 +27,7 @@ class LoginController extends Controller
 
             // Redirect berdasarkan role
             return match (Auth::user()->role) {
-                'admin' => redirect()->route('admin.dashboard'),
+                'kasir', 'admin' => redirect()->route('kasir.dashboard'),
                 'owner' => redirect()->route('owner.dashboard'),
                 default => redirect()->route('pelanggan.dashboard'),
             };

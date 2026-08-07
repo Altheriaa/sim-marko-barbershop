@@ -27,7 +27,7 @@ Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [LoginController::class, 'login']);
     Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-    Route::post('/register', [RegisterController::class, 'register']);
+    Route::post('/register', [RegisterController::class, 'register'])->middleware('throttle:5,60');
 });
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
@@ -52,7 +52,7 @@ Route::get('/', function () {
     }
 
     return match (auth()->user()->role) {
-        'admin' => redirect()->route('admin.dashboard'),
+        'kasir', 'admin' => redirect()->route('kasir.dashboard'),
         'owner' => redirect()->route('owner.dashboard'),
         default => redirect()->route('pelanggan.dashboard'),
     };
@@ -60,10 +60,10 @@ Route::get('/', function () {
 
 /*
 |--------------------------------------------------------------------------
-| Admin Routes
+| Kasir Routes
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'role:kasir,admin'])->prefix('kasir')->name('kasir.')->group(function () {
     // Dashboard
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 

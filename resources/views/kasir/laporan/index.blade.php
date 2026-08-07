@@ -23,7 +23,7 @@
                 class="h-10 inline-flex items-center rounded-lg border border-gray-300 px-5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 transition">
                 Reset
             </a>
-            <a href="{{ route(auth()->user()->role === 'owner' ? 'owner.laporan.cetak' : 'admin.laporan.cetak', ['start_date' => $startDate, 'end_date' => $endDate]) }}" target="_blank"
+            <a href="{{ route(auth()->user()->role === 'owner' ? 'owner.laporan.cetak' : 'kasir.laporan.cetak', ['start_date' => $startDate, 'end_date' => $endDate]) }}" target="_blank"
                 class="h-10 inline-flex items-center gap-2 rounded-xl border border-gray-300 bg-white px-4 text-xs font-bold text-gray-800 shadow-theme-xs hover:border-brand-500 hover:bg-brand-50 hover:text-brand-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:border-brand-500 dark:hover:bg-brand-950/40 dark:hover:text-brand-400 transition-all ml-auto">
                 <i class="fa-solid fa-print text-brand-500"></i> Cetak Laporan
             </a>

@@ -39,7 +39,7 @@ class JadwalBarberController extends Controller
             ->when($selectedBarber, fn($q) => $q->where('barber_id', $selectedBarber->id))
             ->count();
 
-        return view('admin.jadwal.index', compact(
+        return view('kasir.jadwal.index', compact(
             'tanggal',
             'barbers',
             'selectedBarber',
@@ -52,7 +52,7 @@ class JadwalBarberController extends Controller
     public function create()
     {
         $barbers = Barber::where('status', 'masuk')->get();
-        return view('admin.jadwal.create', compact('barbers'), ['title' => 'Tambah Jadwal']);
+        return view('kasir.jadwal.create', compact('barbers'), ['title' => 'Tambah Jadwal']);
     }
 
     public function store(Request $request)
@@ -88,7 +88,7 @@ class JadwalBarberController extends Controller
             'status' => 'tersedia',
         ]);
 
-        return redirect()->route('admin.jadwal.index', [
+        return redirect()->route('kasir.jadwal.index', [
             'barber_id' => $validated['barber_id'],
             'tanggal' => $validated['tanggal']
         ])->with('success', 'Jadwal berhasil ditambahkan.');
@@ -97,7 +97,7 @@ class JadwalBarberController extends Controller
     public function edit(JadwalBarber $jadwal)
     {
         $barbers = Barber::all();
-        return view('admin.jadwal.edit', compact('jadwal', 'barbers'), ['title' => 'Edit Jadwal']);
+        return view('kasir.jadwal.edit', compact('jadwal', 'barbers'), ['title' => 'Edit Jadwal']);
     }
 
     public function update(Request $request, JadwalBarber $jadwal)
@@ -112,7 +112,7 @@ class JadwalBarberController extends Controller
 
         $jadwal->update($validated);
 
-        return redirect()->route('admin.jadwal.index', [
+        return redirect()->route('kasir.jadwal.index', [
             'barber_id' => $validated['barber_id'],
             'tanggal' => $validated['tanggal']
         ])->with('success', 'Jadwal berhasil diperbarui.');
@@ -124,7 +124,7 @@ class JadwalBarberController extends Controller
         $tanggal = $jadwal->tanggal->format('Y-m-d');
         $jadwal->delete();
 
-        return redirect()->route('admin.jadwal.index', [
+        return redirect()->route('kasir.jadwal.index', [
             'barber_id' => $barberId,
             'tanggal' => $tanggal
         ])->with('success', 'Jadwal berhasil dihapus.');

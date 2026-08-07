@@ -37,7 +37,7 @@ class TransaksiController extends Controller
         $transaksiHariIni  = Transaksi::whereDate('tanggal_bayar', today())->count();
         $pendapatanHariIni = Transaksi::whereDate('tanggal_bayar', today())->sum('total_harga');
 
-        return view('admin.transaksi.index', compact(
+        return view('kasir.transaksi.index', compact(
             'transaksi', 'search', 'metode',
             'totalPendapatan', 'totalTransaksi', 'transaksiHariIni', 'pendapatanHariIni'
         ), ['title' => 'Daftar Transaksi']);
@@ -46,6 +46,6 @@ class TransaksiController extends Controller
     public function invoice(Transaksi $transaksi)
     {
         $transaksi->load(['booking.layanan', 'booking.barber', 'booking.user']);
-        return view('admin.transaksi.invoice', compact('transaksi'), ['title' => 'Invoice Pembayaran']);
+        return view('kasir.transaksi.invoice', compact('transaksi'), ['title' => 'Invoice Pembayaran']);
     }
 }

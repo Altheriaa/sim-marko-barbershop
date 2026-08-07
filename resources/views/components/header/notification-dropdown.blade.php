@@ -158,7 +158,7 @@
 
         <!-- View All Button -->
         <a
-            href="{{ auth()->user()?->role === 'owner' ? route('owner.transaksi.index') : route('admin.booking.index') }}"
+            href="{{ auth()->user()?->role === 'owner' ? route('owner.transaksi.index') : route('kasir.booking.index') }}"
             class="mt-3 flex justify-center rounded-lg border border-gray-300 bg-white p-2.5 text-xs font-semibold text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-white/[0.03]"
         >
             Lihat Semua Reservasi

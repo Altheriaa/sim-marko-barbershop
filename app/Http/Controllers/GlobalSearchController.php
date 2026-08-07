@@ -33,7 +33,7 @@ class GlobalSearchController extends Controller
                 'type'     => 'Booking',
                 'title'    => $b->qr_code . ' — ' . ($b->user->name ?? 'Walk-in'),
                 'subtitle' => ($b->layanan->nama_layanan ?? '-') . ' • Barber: ' . ($b->barber->name ?? '-'),
-                'url'      => route('admin.booking.index', ['status' => $b->status]),
+                'url'      => route('kasir.booking.index', ['status' => $b->status]),
                 'icon'     => 'fa-calendar-check',
             ];
         }
@@ -49,7 +49,7 @@ class GlobalSearchController extends Controller
                 'type'     => 'Barber',
                 'title'    => $barber->name,
                 'subtitle' => 'No. HP: ' . $barber->phone . ' (' . ($barber->status ? 'Aktif' : 'Non-aktif') . ')',
-                'url'      => route('admin.barbers.index'),
+                'url'      => route('kasir.barbers.index'),
                 'icon'     => 'fa-user-nurse',
             ];
         }
@@ -65,7 +65,7 @@ class GlobalSearchController extends Controller
                 'type'     => 'Layanan',
                 'title'    => $layanan->nama_layanan,
                 'subtitle' => 'Rp ' . number_format($layanan->harga, 0, ',', '.') . ' • Durasi ' . $layanan->durasi_menit . ' menit',
-                'url'      => route('admin.layanan.index'),
+                'url'      => route('kasir.layanan.index'),
                 'icon'     => 'fa-scissors',
             ];
         }
@@ -82,7 +82,7 @@ class GlobalSearchController extends Controller
                 'type'     => 'Transaksi',
                 'title'    => 'Resi #' . str_pad($trx->id, 4, '0', STR_PAD_LEFT) . ' — Rp ' . number_format($trx->total_harga, 0, ',', '.'),
                 'subtitle' => ($trx->booking->layanan->nama_layanan ?? '-') . ' • ' . ($trx->booking->user->name ?? 'Walk-in'),
-                'url'      => route('admin.transaksi.invoice', $trx->id),
+                'url'      => route('kasir.transaksi.invoice', $trx->id),
                 'icon'     => 'fa-receipt',
             ];
         }

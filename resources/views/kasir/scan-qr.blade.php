@@ -75,7 +75,7 @@
         resultDiv.classList.remove('hidden');
         resultDiv.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Memproses check-in...';
 
-        fetch("{{ route('admin.booking.checkin') }}", {
+        fetch("{{ route('kasir.booking.checkin') }}", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -102,7 +102,7 @@
                     </div>
                 </div>`;
                 setTimeout(() => {
-                    window.location.href = data.redirect || "{{ route('admin.booking.index') }}";
+                    window.location.href = data.redirect || "{{ route('kasir.booking.index') }}";
                 }, 1000);
             } else {
                 resultDiv.className = 'mt-4 rounded-xl p-4 bg-red-50 text-red-700 dark:bg-red-950/30 dark:text-red-400 border border-red-200 dark:border-red-900 text-xs font-semibold';

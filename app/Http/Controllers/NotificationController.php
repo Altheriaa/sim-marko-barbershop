@@ -10,7 +10,7 @@ class NotificationController extends Controller
     public function unread(Request $request)
     {
         $user = auth()->user();
-        $role = $user?->role ?? 'admin';
+        $role = $user?->role ?? 'kasir';
 
         $query = Booking::with(['user', 'layanan', 'barber']);
 
@@ -28,7 +28,7 @@ class NotificationController extends Controller
             $targetUrl = match ($role) {
                 'owner'     => route('owner.transaksi.index'),
                 'pelanggan' => route('pelanggan.booking.riwayat'),
-                default     => route('admin.booking.index'),
+                default     => route('kasir.booking.index'),
             };
 
             return [

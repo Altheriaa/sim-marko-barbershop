@@ -28,7 +28,7 @@
                     <i class="fa-solid fa-mug-hot text-amber-500 mr-1"></i> Istirahat: <strong class="text-gray-700 dark:text-gray-300">13:00–14:00</strong> &amp; <strong class="text-gray-700 dark:text-gray-300">18:00–19:30</strong>
                 </p>
 
-                <form action="{{ route('admin.booking.store') }}" method="POST">@csrf
+                <form action="{{ route('kasir.booking.store') }}" method="POST">@csrf
                     <div class="space-y-5">
 
                         {{-- Nama Pelanggan --}}
@@ -115,7 +115,7 @@
                                 class="flex-1 rounded-xl bg-brand-500 px-5 py-3 text-sm font-bold text-white shadow-theme-xs hover:bg-brand-600 transition">
                                 <i class="fa-solid fa-plus mr-1"></i> Buat Booking Walk-in
                             </button>
-                            <a href="{{ route('admin.booking.index') }}"
+                            <a href="{{ route('kasir.booking.index') }}"
                                 class="rounded-xl border border-gray-300 px-5 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 transition">Batal</a>
                         </div>
                     </div>
@@ -399,7 +399,7 @@
             loadingSpinner.classList.remove('hidden');
 
             try {
-                const response = await fetch(`{{ route('admin.booking.jadwal-json') }}?tanggal=${tanggalVal}`);
+                const response = await fetch(`{{ route('kasir.booking.jadwal-json') }}?tanggal=${tanggalVal}`);
                 if (response.ok) {
                     const data = await response.json();
                     currentSchedulesData = data.barbers;

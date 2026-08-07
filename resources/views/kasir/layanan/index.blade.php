@@ -31,7 +31,7 @@
         <h2 class="text-base font-bold text-gray-800 dark:text-white/90 flex items-center gap-2">
             <i class="fa-solid fa-scissors text-brand-500"></i> Daftar Layanan Aktif
         </h2>
-        <a href="{{ route('admin.layanan.create') }}"
+        <a href="{{ route('kasir.layanan.create') }}"
             class="inline-flex items-center gap-2 rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-800 shadow-theme-xs hover:border-brand-500 hover:bg-brand-50 hover:text-brand-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:border-brand-500 dark:hover:bg-brand-950/40 dark:hover:text-brand-400 transition-all">
             <i class="fa-solid fa-plus text-brand-500"></i> Tambah Layanan
         </a>
@@ -90,12 +90,12 @@
                             </td>
                             <td class="py-4 px-5">
                                 <div class="flex items-center justify-center gap-2">
-                                    <a href="{{ route('admin.layanan.edit', $item) }}"
+                                    <a href="{{ route('kasir.layanan.edit', $item) }}"
                                         class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 hover:bg-brand-50 hover:text-brand-600 hover:border-brand-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 transition"
                                         title="Edit Layanan">
                                         <i class="fa-solid fa-pen-to-square text-sm"></i>
                                     </a>
-                                    <form action="{{ route('admin.layanan.destroy', $item) }}" method="POST"
+                                    <form action="{{ route('kasir.layanan.destroy', $item) }}" method="POST"
                                         onsubmit="return confirm('Yakin hapus layanan ini?')" class="inline">
                                         @csrf @method('DELETE')
                                         <button type="submit"
@@ -113,7 +113,7 @@
                                 <div class="flex flex-col items-center gap-2 text-gray-400 dark:text-gray-600">
                                     <i class="fa-solid fa-scissors text-3xl"></i>
                                     <span class="text-sm">Belum ada data layanan.</span>
-                                    <a href="{{ route('admin.layanan.create') }}"
+                                    <a href="{{ route('kasir.layanan.create') }}"
                                         class="mt-1 text-xs font-bold text-brand-600 hover:underline dark:text-brand-400">+
                                         Tambah Layanan Baru</a>
                                 </div>

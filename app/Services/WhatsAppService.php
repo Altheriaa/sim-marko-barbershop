@@ -184,10 +184,10 @@ class WhatsAppService
         $jamMulai    = $booking->jadwal?->jam_mulai ?? '-';
         $jamSelesai  = $booking->jadwal?->jam_selesai ?? '-';
 
-        $adminBookingUrl = route('admin.booking.index');
+        $adminBookingUrl = route('kasir.booking.index');
 
         $message = "*MARKO BARBERSHOP - BOOKING BARU MASUK!* \n\n"
-            . "Halo Admin,\n"
+            . "Halo Kasir,\n"
             . "Pelanggan *{$namaUser}* ({$phoneUser}) telah membuat booking baru:\n\n"
             . "*Kode Booking:* {$kodeBooking}\n"
             . "*Barber:* {$namaBarber}\n"

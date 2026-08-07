@@ -19,7 +19,7 @@
     <h2 class="text-base font-bold text-gray-800 dark:text-white/90 flex items-center gap-2">
         <i class="fa-solid fa-user-group text-brand-500"></i> Tim Barber
     </h2>
-    <a href="{{ route('admin.barbers.create') }}"
+    <a href="{{ route('kasir.barbers.create') }}"
         class="inline-flex items-center gap-2 rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-800 shadow-theme-xs hover:border-brand-500 hover:bg-brand-50 hover:text-brand-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:border-brand-500 dark:hover:bg-brand-950/40 dark:hover:text-brand-400 transition-all">
         <i class="fa-solid fa-plus text-brand-500"></i> Tambah Barber
     </a>
@@ -82,21 +82,21 @@
                                         <i class="fa-solid fa-chevron-down text-[10px]"></i>
                                     </button>
                                     <div x-show="dropdownOpen" @click.outside="dropdownOpen = false" x-transition class="absolute left-0 mt-1 w-32 rounded-xl border border-gray-200 bg-white p-1 shadow-lg dark:border-gray-800 dark:bg-gray-900 z-20">
-                                        <form action="{{ route('admin.barbers.toggle-status', $barber) }}" method="POST">
+                                        <form action="{{ route('kasir.barbers.toggle-status', $barber) }}" method="POST">
                                             @csrf @method('PATCH')
                                             <input type="hidden" name="status" value="masuk">
                                             <button type="submit" class="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-gray-700 hover:bg-green-50 hover:text-green-700 dark:text-gray-300 dark:hover:bg-green-950/30 dark:hover:text-green-400">
                                                 <span class="h-2 w-2 rounded-full bg-green-500"></span> Masuk
                                             </button>
                                         </form>
-                                        <form action="{{ route('admin.barbers.toggle-status', $barber) }}" method="POST">
+                                        <form action="{{ route('kasir.barbers.toggle-status', $barber) }}" method="POST">
                                             @csrf @method('PATCH')
                                             <input type="hidden" name="status" value="cuti">
                                             <button type="submit" class="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-gray-700 hover:bg-amber-50 hover:text-amber-700 dark:text-gray-300 dark:hover:bg-amber-950/30 dark:hover:text-amber-400">
                                                 <span class="h-2 w-2 rounded-full bg-amber-500"></span> Cuti
                                             </button>
                                         </form>
-                                        <form action="{{ route('admin.barbers.toggle-status', $barber) }}" method="POST">
+                                        <form action="{{ route('kasir.barbers.toggle-status', $barber) }}" method="POST">
                                             @csrf @method('PATCH')
                                             <input type="hidden" name="status" value="nonaktif">
                                             <button type="submit" class="flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-gray-700 hover:bg-red-50 hover:text-red-700 dark:text-gray-300 dark:hover:bg-red-950/30 dark:hover:text-red-400">
@@ -109,11 +109,11 @@
                         </td>
                         <td class="py-4 px-5">
                             <div class="flex items-center justify-center gap-2">
-                                <a href="{{ route('admin.barbers.edit', $barber) }}"
+                                <a href="{{ route('kasir.barbers.edit', $barber) }}"
                                     class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 hover:bg-brand-50 hover:text-brand-600 hover:border-brand-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 transition" title="Edit Barber">
                                     <i class="fa-solid fa-pen-to-square text-sm"></i>
                                 </a>
-                                <form action="{{ route('admin.barbers.destroy', $barber) }}" method="POST"
+                                <form action="{{ route('kasir.barbers.destroy', $barber) }}" method="POST"
                                     onsubmit="return confirm('Yakin hapus barber {{ $barber->name }}?')" class="inline">
                                     @csrf @method('DELETE')
                                     <button type="submit"
@@ -130,7 +130,7 @@
                             <div class="flex flex-col items-center gap-2 text-gray-400 dark:text-gray-600">
                                 <i class="fa-solid fa-user-slash text-3xl"></i>
                                 <span class="text-sm">Belum ada data barber.</span>
-                                <a href="{{ route('admin.barbers.create') }}" class="mt-1 text-xs font-bold text-brand-600 hover:underline dark:text-brand-400">+ Tambah Barber Baru</a>
+                                <a href="{{ route('kasir.barbers.create') }}" class="mt-1 text-xs font-bold text-brand-600 hover:underline dark:text-brand-400">+ Tambah Barber Baru</a>
                             </div>
                         </td>
                     </tr>
