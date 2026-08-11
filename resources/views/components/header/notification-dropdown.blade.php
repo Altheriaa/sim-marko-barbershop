@@ -15,14 +15,19 @@
             if (!res.ok) return;
             const data = await res.json();
             
-            if (this.lastId > 0 && data.latest_id > this.lastId) {
+            const lastReadId = parseInt(localStorage.getItem('last_read_id') || '0');
+            
+            if (data.latest_id > lastReadId) {
                 this.notifying = true;
-            } else if (data.unread_count > 0 && this.lastId === 0) {
-                this.notifying = true;
+                // Hanya hitung booking baru yang dibuat setelah lastReadId
+                const newItemsCount = data.items.filter(i => i.id > lastReadId).length;
+                this.unreadCount = newItemsCount > 0 ? newItemsCount : data.unread_count;
+            } else {
+                this.notifying = false;
+                this.unreadCount = 0;
             }
             
             this.lastId = data.latest_id;
-            this.unreadCount = data.unread_count;
             this.items = data.items;
         } catch (e) {
             console.error('Notification fetch error:', e);
@@ -32,6 +37,8 @@
         this.dropdownOpen = !this.dropdownOpen;
         if (this.dropdownOpen) {
             this.notifying = false;
+            this.unreadCount = 0;
+            localStorage.setItem('last_read_id', this.lastId);
         }
     },
     closeDropdown() {

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <x-common.page-breadcrumb :pageTitle="'Kelola Jadwal Barber'" />
+    <x-common.page-breadcrumb :pageTitle="'Jadwal Barber'" />
 
     @if(session('success'))
         <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3500)"
@@ -144,7 +144,7 @@
                         </div>
                         <div>
                             <h3 class="text-lg font-bold text-gray-800 dark:text-white/90">
-                                Jadwal Shift: {{ $selectedBarber?->name ?? 'Pilih Barber' }}
+                                Jadwal : {{ $selectedBarber?->name ?? 'Pilih Barber' }}
                             </h3>
                             <span class="text-xs text-gray-500 dark:text-gray-400">Shift kerja & slot pemesanan</span>
                         </div>
@@ -316,12 +316,7 @@
                             </div>
                             <h4 class="mt-3 text-sm font-semibold text-gray-700 dark:text-gray-300">Belum ada shift jadwal
                                 khusus pada tanggal ini</h4>
-                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Jadwal otomatis dibuat saat booking, atau
-                                Anda dapat menambah shift secara manual.</p>
-                            <a href="{{ route('kasir.jadwal.create', ['barber_id' => $selectedBarber?->id, 'tanggal' => $tanggal->toDateString()]) }}"
-                                class="mt-4 inline-flex items-center gap-2 rounded-xl bg-brand-500 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white hover:bg-brand-600 transition">
-                                <i class="fa-solid fa-plus"></i> Tambah Shift Baru
-                            </a>
+                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Jadwal otomatis dibuat saat booking</p>
                         </div>
                     @endforelse
 

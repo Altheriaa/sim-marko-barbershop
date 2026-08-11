@@ -58,7 +58,6 @@
         {{-- Item Details --}}
         @php
             $subtotal = $transaksi->total_harga;
-            $ppn = round($subtotal * 0.11);
             $total = $subtotal;
         @endphp
         <div class="text-xs pb-4 mb-4 border-b border-dashed border-gray-300">
@@ -76,10 +75,6 @@
             <div class="flex justify-between text-gray-600">
                 <span>Subtotal</span>
                 <span class="font-semibold text-gray-900">Rp {{ number_format($subtotal, 0, ',', '.') }}</span>
-            </div>
-            <div class="flex justify-between text-gray-600">
-                <span>PPN (11% Termasuk)</span>
-                <span class="font-semibold text-gray-900">Rp {{ number_format($ppn, 0, ',', '.') }}</span>
             </div>
         </div>
 

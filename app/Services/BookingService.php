@@ -13,7 +13,7 @@ class BookingService
 {
     // Jam operasional & istirahat
     const JAM_BUKA   = '10:00';
-    const JAM_TUTUP  = '23:00';
+    const JAM_TUTUP  = '23:45';
     const ISTIRAHAT  = [
         ['mulai' => '13:00', 'selesai' => '14:00', 'label' => 'istirahat makan siang (13:00–14:00)'],
         ['mulai' => '18:00', 'selesai' => '19:30', 'label' => 'istirahat maghrib (18:00–19:30)'],
@@ -103,10 +103,14 @@ class BookingService
         // Buat jadwal & booking dalam transaction dengan lock untuk mencegah race condition
         try {
             $booking = DB::transaction(function () use ($data, $layanan, $jamMulaiStr, $jamSelesaiStr) {
-                // Lock rows pada jadwal barber untuk tanggal & barber yang sama
-                // Ini mencegah dua request concurrent dari melewati cek konflik secara bersamaan
+                // Cek konflik: Hanya dianggap bentrok jika ada jadwal_barber berstatus 'penuh'
+                // atau memiliki relasi booking berstatus 'pending' / 'checked-in'
                 $konflik = JadwalBarber::where('barber_id', $data['barber_id'])
                     ->where('tanggal', $data['tanggal'])
+                    ->where('status', 'penuh')
+                    ->whereHas('bookings', function ($bQuery) {
+                        $bQuery->whereIn('status', ['pending', 'checked-in']);
+                    })
                     ->lockForUpdate()
                     ->where(function ($q) use ($jamMulaiStr, $jamSelesaiStr) {
                         $q->where('jam_mulai', '<', $jamSelesaiStr)
@@ -167,13 +171,60 @@ class BookingService
         DB::transaction(function () use ($booking) {
             $booking->update(['status' => 'cancelled']);
 
-            // Bebaskan slot jadwal barber
+            // Bebaskan slot jadwal barber menjadi 'tersedia'
             if ($booking->jadwal) {
                 $booking->jadwal->update(['status' => 'tersedia']);
             }
         });
 
         return ['success' => true, 'message' => 'Booking berhasil dibatalkan.'];
+    }
+
+    /**
+     * Otomatis membatalkan booking pending yang sudah melewati jam_mulai + 30 menit toleransi (No-Show).
+     * Membebaskan slot jadwal barber menjadi 'tersedia'.
+     *
+     * @return int Jumlah booking yang dibatalkan
+     */
+    public static function autoCancelExpiredBookings(): int
+    {
+        $now = now();
+        $cancelledCount = 0;
+
+        // Ambil booking pending beserta relasi jadwalnya
+        $pendingBookings = Booking::with('jadwal')
+            ->where('status', 'pending')
+            ->get();
+
+        foreach ($pendingBookings as $booking) {
+            if (!$booking->jadwal) {
+                continue;
+            }
+
+            // Gabungkan tanggal dan jam_mulai dari jadwal
+            $tanggalStr = $booking->jadwal->tanggal ? $booking->jadwal->tanggal->format('Y-m-d') : null;
+            $jamMulaiStr = $booking->jadwal->jam_mulai;
+
+            if (!$tanggalStr || !$jamMulaiStr) {
+                continue;
+            }
+
+            $waktuBookingMulai = Carbon::parse("{$tanggalStr} {$jamMulaiStr}");
+            $batasToleransi = $waktuBookingMulai->copy()->addMinutes(30);
+
+            // Jika waktu sekarang sudah melewati jam_mulai + 30 menit
+            if ($now->greaterThanOrEqualTo($batasToleransi)) {
+                DB::transaction(function () use ($booking) {
+                    $booking->update(['status' => 'cancelled']);
+                    if ($booking->jadwal) {
+                        $booking->jadwal->update(['status' => 'tersedia']);
+                    }
+                });
+                $cancelledCount++;
+            }
+        }
+
+        return $cancelledCount;
     }
 
     /**

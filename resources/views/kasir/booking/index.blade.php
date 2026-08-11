@@ -110,6 +110,10 @@
                 class="inline-flex items-center gap-1.5 text-xs font-semibold {{ $statusFilter === 'completed' ? 'text-black font-bold underline dark:text-white' : 'text-gray-500 hover:text-gray-800 dark:text-gray-400' }}">
                 <span class="h-2 w-2 rounded-full bg-green-500"></span> Selesai
             </a>
+            <a href="?periode={{ $periode }}&barber_id={{ $barberId }}&status=cancelled"
+                class="inline-flex items-center gap-1.5 text-xs font-semibold {{ $statusFilter === 'cancelled' ? 'text-black font-bold underline dark:text-white' : 'text-gray-500 hover:text-gray-800 dark:text-gray-400' }}">
+                <span class="h-2 w-2 rounded-full bg-red-500"></span> Dibatalkan
+            </a>
         </div>
 
         {{-- Timeline Cards List --}}
@@ -168,6 +172,10 @@
                                             <span class="text-xs font-semibold text-green-700 dark:text-green-400">
                                                 Selesai
                                             </span>
+                                        @elseif($status === 'cancelled')
+                                            <span class="text-xs font-semibold text-red-600 dark:text-red-400">
+                                                Dibatalkan
+                                            </span>
                                         @endif
                                     </div>
 
@@ -205,6 +213,16 @@
                                         class="rounded-xl border border-gray-300 bg-white px-4 py-2 text-xs font-bold text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 transition">
                                         <i class="fa-solid fa-qrcode mr-1"></i> Scan / Check-in
                                     </a>
+
+                                    {{-- Tombol Batalkan Reservasi oleh Kasir --}}
+                                    <form action="{{ route('kasir.booking.cancel', $booking) }}" method="POST" class="inline"
+                                        onsubmit="return confirm('Apakah Anda yakin ingin MEMBATALKAN reservasi ini?\n\nSlot jadwal barber akan otomatis dibebaskan kembali.')">
+                                        @csrf
+                                        <button type="submit"
+                                            class="rounded-xl border border-red-200 bg-red-50 px-3.5 py-2 text-xs font-bold text-red-600 hover:bg-red-100 dark:border-red-900/40 dark:bg-red-950/30 dark:text-red-400 transition">
+                                            <i class="fa-solid fa-ban mr-1"></i> Batalkan
+                                        </button>
+                                    </form>
                                 @elseif($status === 'checked-in')
                                     <form action="{{ route('kasir.booking.checkout', $booking) }}" method="POST" class="inline"
                                         onsubmit="return confirm('Apakah Anda yakin pelayanan untuk pelanggan ini sudah SELESAI?\n\nStatus reservasi akan diubah ke Selesai dan lanjut ke catatan pembayaran.')">
@@ -212,6 +230,16 @@
                                         <button type="submit"
                                             class="rounded-xl border border-gray-300 bg-white px-4 py-2 text-xs font-bold text-gray-800 hover:border-brand-500 hover:bg-brand-50 hover:text-brand-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 transition">
                                             Selesai & Bayar
+                                        </button>
+                                    </form>
+
+                                    {{-- Tombol Batalkan Reservasi oleh Kasir --}}
+                                    <form action="{{ route('kasir.booking.cancel', $booking) }}" method="POST" class="inline"
+                                        onsubmit="return confirm('Apakah Anda yakin ingin MEMBATALKAN reservasi ini?\n\nSlot jadwal barber akan otomatis dibebaskan kembali.')">
+                                        @csrf
+                                        <button type="submit"
+                                            class="rounded-xl border border-red-200 bg-red-50 px-3.5 py-2 text-xs font-bold text-red-600 hover:bg-red-100 dark:border-red-900/40 dark:bg-red-950/30 dark:text-red-400 transition">
+                                            <i class="fa-solid fa-ban mr-1"></i> Batalkan
                                         </button>
                                     </form>
                                 @elseif($status === 'completed')

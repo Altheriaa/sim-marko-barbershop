@@ -29,7 +29,7 @@
                 <p
                     class="text-xs text-gray-500 dark:text-gray-400 mb-5 rounded-xl bg-gray-50 dark:bg-gray-800/50 p-3 border border-gray-100 dark:border-gray-800">
                     <i class="fa-solid fa-clock text-brand-500 mr-1"></i> Jam operasional: <strong
-                        class="text-gray-700 dark:text-gray-300">10:00 – 23:00</strong><br>
+                        class="text-gray-700 dark:text-gray-300">10:00 – 23:45</strong><br>
                     <i class="fa-solid fa-mug-hot text-amber-500 mr-1 mt-1"></i> Istirahat: <strong
                         class="text-gray-700 dark:text-gray-300">13:00–14:00</strong> &amp; <strong
                         class="text-gray-700 dark:text-gray-300">18:00–19:30</strong>

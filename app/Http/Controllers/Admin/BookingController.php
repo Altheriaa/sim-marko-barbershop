@@ -18,6 +18,9 @@ class BookingController extends Controller
 {
     public function index(Request $request)
     {
+        // Otomatis batalkan booking yang telat > 30 menit (No-Show)
+        BookingService::autoCancelExpiredBookings();
+
         $periode = $request->input('periode', 'today'); // 'today', 'all'
         $barberId = $request->input('barber_id');
         $statusFilter = $request->input('status');
@@ -86,16 +89,21 @@ class BookingController extends Controller
             ->groupBy('barber_id');
 
         $initialSchedules = $barbers->map(function ($barber) use ($jadwalList) {
-            $schedules = $jadwalList->get($barber->id, collect())->map(function ($j) {
-                $booking = $j->bookings->first();
-                return [
-                    'id'          => $j->id,
-                    'jam_mulai'   => Carbon::parse($j->jam_mulai)->format('H:i'),
-                    'jam_selesai' => Carbon::parse($j->jam_selesai)->format('H:i'),
-                    'status'      => $j->status,
-                    'layanan'     => $booking?->layanan?->nama_layanan ?? 'Booked',
-                ];
-            });
+            $schedules = $jadwalList->get($barber->id, collect())
+                ->filter(function ($j) {
+                    $activeBooking = $j->bookings->whereIn('status', ['pending', 'checked-in'])->first();
+                    return $j->status === 'penuh' && $activeBooking;
+                })
+                ->map(function ($j) {
+                    $booking = $j->bookings->whereIn('status', ['pending', 'checked-in'])->first();
+                    return [
+                        'id'          => $j->id,
+                        'jam_mulai'   => Carbon::parse($j->jam_mulai)->format('H:i'),
+                        'jam_selesai' => Carbon::parse($j->jam_selesai)->format('H:i'),
+                        'status'      => 'penuh',
+                        'layanan'     => $booking?->layanan?->nama_layanan ?? 'Booked',
+                    ];
+                });
 
             return [
                 'id'            => $barber->id,
@@ -114,6 +122,8 @@ class BookingController extends Controller
 
     public function getJadwalJson(Request $request)
     {
+        BookingService::autoCancelExpiredBookings();
+
         $tanggal = $request->input('tanggal', date('Y-m-d'));
 
         $barbers = Barber::where('status', 'masuk')->get();
@@ -125,17 +135,21 @@ class BookingController extends Controller
             ->groupBy('barber_id');
 
         $barberSchedules = $barbers->map(function ($barber) use ($jadwalList) {
-            $schedules = $jadwalList->get($barber->id, collect())->map(function ($j) {
-                $activeBooking = $j->bookings->whereIn('status', ['pending', 'checked-in'])->first();
-                $isPenuh = $j->status === 'penuh' && $activeBooking;
-                return [
-                    'id'          => $j->id,
-                    'jam_mulai'   => Carbon::parse($j->jam_mulai)->format('H:i'),
-                    'jam_selesai' => Carbon::parse($j->jam_selesai)->format('H:i'),
-                    'status'      => $isPenuh ? 'penuh' : 'tersedia',
-                    'layanan'     => $activeBooking?->layanan?->nama_layanan ?? 'Booked',
-                ];
-            });
+            $schedules = $jadwalList->get($barber->id, collect())
+                ->filter(function ($j) {
+                    $activeBooking = $j->bookings->whereIn('status', ['pending', 'checked-in'])->first();
+                    return $j->status === 'penuh' && $activeBooking;
+                })
+                ->map(function ($j) {
+                    $activeBooking = $j->bookings->whereIn('status', ['pending', 'checked-in'])->first();
+                    return [
+                        'id'          => $j->id,
+                        'jam_mulai'   => Carbon::parse($j->jam_mulai)->format('H:i'),
+                        'jam_selesai' => Carbon::parse($j->jam_selesai)->format('H:i'),
+                        'status'      => 'penuh',
+                        'layanan'     => $activeBooking?->layanan?->nama_layanan ?? 'Booked',
+                    ];
+                });
 
             return [
                 'id'            => $barber->id,
