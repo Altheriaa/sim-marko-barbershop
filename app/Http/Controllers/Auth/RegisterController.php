@@ -22,7 +22,7 @@ class RegisterController extends Controller
         // Limit IP: Maksimal 5 kali pendaftaran dari IP yang sama per 1 jam
         $key = 'register-ip:' . $request->ip();
 
-        if (RateLimiter::tooManyAttempts($key, 5)) {
+        if (RateLimiter::tooManyAttempts($key, 1)) {
             $seconds = RateLimiter::availableIn($key);
             $minutes = ceil($seconds / 60);
 

@@ -46,16 +46,18 @@ class QrCodeController extends Controller
 
     public function checkOut(Booking $booking)
     {
+        if ($booking->status !== 'checked-in') {
+            return redirect()->route('kasir.booking.index')
+                ->with('error', 'Booking harus berstatus checked-in untuk di-checkout.');
+        }
+
+        // Catat waktu checkout saja, TIDAK set completed.
+        // Status tetap checked-in sampai pembayaran tercatat di TransaksiController.
         $booking->update([
-            'status' => 'completed',
             'waktu_checkout' => now(),
         ]);
 
-        if ($booking->jadwal) {
-            $booking->jadwal->update(['status' => 'tersedia']);
-        }
-
         return redirect()->route('kasir.transaksi.create', $booking)
-            ->with('info', 'Lanjutkan ke pencatatan pembayaran.');
+            ->with('info', 'Layanan selesai. Lanjutkan ke pencatatan pembayaran.');
     }
 }

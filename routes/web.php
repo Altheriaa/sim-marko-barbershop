@@ -27,7 +27,7 @@ Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [LoginController::class, 'login']);
     Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-    Route::post('/register', [RegisterController::class, 'register'])->middleware('throttle:5,60');
+    Route::post('/register', [RegisterController::class, 'register'])->middleware('throttle:1,60');
 });
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
@@ -85,6 +85,7 @@ Route::middleware(['auth', 'role:kasir,admin'])->prefix('kasir')->name('kasir.')
     Route::get('booking/create', [AdminBookingController::class, 'create'])->name('booking.create');
     Route::get('booking/jadwal-json', [AdminBookingController::class, 'getJadwalJson'])->name('booking.jadwal-json');
     Route::post('booking', [AdminBookingController::class, 'store'])->name('booking.store');
+    Route::post('booking/{booking}/cancel', [AdminBookingController::class, 'cancel'])->name('booking.cancel');
 
     // QR Code Scanner
     Route::get('booking/scan', [QrCodeController::class, 'scanForm'])->name('booking.scan');
@@ -134,6 +135,7 @@ Route::middleware(['auth', 'role:pelanggan'])->prefix('pelanggan')->name('pelang
     Route::get('booking/create', [PelangganBookingController::class, 'create'])->name('booking.create');
     Route::get('booking/jadwal-json', [PelangganBookingController::class, 'getJadwalJson'])->name('booking.jadwal-json');
     Route::post('booking', [PelangganBookingController::class, 'store'])->name('booking.store');
+    Route::post('booking/{booking}/cancel', [PelangganBookingController::class, 'cancel'])->name('booking.cancel');
     Route::get('booking/{booking}/qr', [PelangganBookingController::class, 'showQr'])->name('booking.qr');
     Route::get('booking/riwayat', [PelangganBookingController::class, 'riwayat'])->name('booking.riwayat');
     Route::get('transaksi/{transaksi}/invoice', [PelangganBookingController::class, 'invoice'])->name('transaksi.invoice');

@@ -61,6 +61,10 @@ class TransaksiController extends Controller
             return redirect()->route('kasir.transaksi.index')->with('error', 'Pembayaran untuk booking ini sudah tercatat sebelumnya.');
         }
 
+        if ($booking->status !== 'checked-in') {
+            return redirect()->route('kasir.booking.index')->with('error', 'Booking harus berstatus checked-in sebelum bisa dibayar. Status saat ini: ' . $booking->status);
+        }
+
         $validated = $request->validate([
             'metode_pembayaran' => 'required|in:tunai,EDC,transfer,qris',
         ]);
@@ -74,6 +78,7 @@ class TransaksiController extends Controller
             'tanggal_bayar' => now(),
         ]);
 
+        // Satu-satunya tempat yang set status completed & bebaskan jadwal
         $booking->update(['status' => 'completed']);
         if ($booking->jadwal) {
             $booking->jadwal->update(['status' => 'tersedia']);
