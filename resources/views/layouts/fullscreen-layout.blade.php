@@ -75,7 +75,7 @@
         });
     </script>
 
-    <!-- Apply dark mode immediately to prevent flash -->
+    <!-- Apply dark mode immediately to prevent flash & handle toggle reliably -->
     <script>
         (function() {
             const savedTheme = localStorage.getItem('theme');
@@ -83,10 +83,8 @@
             const theme = savedTheme || systemTheme;
             if (theme === 'dark') {
                 document.documentElement.classList.add('dark');
-                document.body.classList.add('dark', 'bg-gray-900');
             } else {
                 document.documentElement.classList.remove('dark');
-                document.body.classList.remove('dark', 'bg-gray-900');
             }
         })();
     </script>
