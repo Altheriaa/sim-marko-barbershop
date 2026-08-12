@@ -3,7 +3,8 @@
     <x-common.page-breadcrumb :pageTitle="'Booking Walk-in'" />
 
     @if(session('error'))
-        <div class="mb-4 rounded-xl bg-red-50 p-4 text-sm font-semibold text-red-600 dark:bg-red-950/30 dark:text-red-400 border border-red-200 dark:border-red-900/40">
+        <div
+            class="mb-4 rounded-xl bg-red-50 p-4 text-sm font-semibold text-red-600 dark:bg-red-950/30 dark:text-red-400 border border-red-200 dark:border-red-900/40">
             <i class="fa-solid fa-triangle-exclamation mr-1.5"></i> {{ session('error') }}
         </div>
     @endif
@@ -16,16 +17,22 @@
                 <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100 dark:border-gray-800">
                     <div>
                         <h3 class="text-lg font-bold text-gray-800 dark:text-white/90">Buat Booking Walk-in</h3>
-                        <p class="text-xs text-gray-500 dark:text-gray-400">Input transaksi/booking pelanggan di tempat (walk-in)</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Input transaksi/booking pelanggan di tempat
+                            (walk-in)</p>
                     </div>
-                    <span class="inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 dark:bg-brand-950/50 dark:text-brand-300">
+                    <span
+                        class="inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 dark:bg-brand-950/50 dark:text-brand-300">
                         <i class="fa-solid fa-[#000] fa-walking"></i> Walk-in Desk
                     </span>
                 </div>
 
-                <p class="text-xs text-gray-500 dark:text-gray-400 mb-5 rounded-xl bg-gray-50 dark:bg-gray-800/50 p-3 border border-gray-100 dark:border-gray-800">
-                    <i class="fa-solid fa-clock text-brand-500 mr-1"></i> Jam operasional: <strong class="text-gray-700 dark:text-gray-300">10:00 – 23:00</strong> &bull;
-                    <i class="fa-solid fa-mug-hot text-amber-500 mr-1"></i> Istirahat: <strong class="text-gray-700 dark:text-gray-300">13:00–14:00</strong> &amp; <strong class="text-gray-700 dark:text-gray-300">18:00–19:30</strong>
+                <p
+                    class="text-xs text-gray-500 dark:text-gray-400 mb-5 rounded-xl bg-gray-50 dark:bg-gray-800/50 p-3 border border-gray-100 dark:border-gray-800">
+                    <i class="fa-solid fa-clock text-brand-500 mr-1"></i> Jam operasional: <strong
+                        class="text-gray-700 dark:text-gray-300">10:00 – 23:00</strong> <br>
+                    <i class="fa-solid fa-mug-hot text-amber-500 mr-1"></i> Istirahat: <strong
+                        class="text-gray-700 dark:text-gray-300">13:00–14:00</strong> &amp; <strong
+                        class="text-gray-700 dark:text-gray-300">18:00–19:30</strong>
                 </p>
 
                 <form action="{{ route('kasir.booking.store') }}" method="POST">@csrf
@@ -38,17 +45,19 @@
                             <input type="text" name="nama_pelanggan" value="{{ old('nama_pelanggan') }}" required
                                 placeholder="Contoh: Ahmad / Budi"
                                 class="h-11 w-full rounded-xl border border-gray-300 bg-transparent px-4 py-2.5 text-sm font-medium text-gray-800 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:border-brand-500 focus:ring-1 focus:ring-brand-500" />
-                            @error('nama_pelanggan') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
+                            @error('nama_pelanggan')
+                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
                         </div>
 
                         {{-- No. WhatsApp --}}
                         <div>
-                            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">No. WhatsApp / HP
+                            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">No. WhatsApp /
+                                HP
                                 <span class="text-xs text-gray-400">(Opsional - untuk kirim bukti/struk WA)</span></label>
-                            <input type="text" name="no_hp" value="{{ old('no_hp') }}"
-                                placeholder="Contoh: 081234567890"
+                            <input type="text" name="no_hp" value="{{ old('no_hp') }}" placeholder="Contoh: 081234567890"
                                 class="h-11 w-full rounded-xl border border-gray-300 bg-transparent px-4 py-2.5 text-sm font-medium text-gray-800 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:border-brand-500 focus:ring-1 focus:ring-brand-500" />
-                            @error('no_hp') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
+                            @error('no_hp')
+                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
                         </div>
 
                         {{-- Pilih Barber --}}
@@ -60,10 +69,12 @@
                                 <option value="">-- Pilih Barber --</option>
                                 @foreach($barbers as $barber)
                                     <option value="{{ $barber->id }}" {{ old('barber_id') == $barber->id ? 'selected' : '' }}>
-                                        {{ $barber->name }}</option>
+                                        {{ $barber->name }}
+                                    </option>
                                 @endforeach
                             </select>
-                            @error('barber_id') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
+                            @error('barber_id')
+                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
                         </div>
 
                         {{-- Pilih Layanan --}}
@@ -80,7 +91,8 @@
                                     </option>
                                 @endforeach
                             </select>
-                            @error('layanan_id') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
+                            @error('layanan_id')
+                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
                         </div>
 
                         {{-- Tanggal --}}
@@ -90,7 +102,8 @@
                             <input type="date" name="tanggal" id="tanggal" value="{{ old('tanggal', $tanggal) }}" required
                                 min="{{ date('Y-m-d') }}"
                                 class="h-11 w-full rounded-xl border border-gray-300 bg-transparent px-4 py-2.5 text-sm font-medium text-gray-800 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:border-brand-500 focus:ring-1 focus:ring-brand-500" />
-                            @error('tanggal') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
+                            @error('tanggal')
+                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
                         </div>
 
                         {{-- Jam Mulai --}}
@@ -100,7 +113,8 @@
                             <input type="time" name="jam_mulai" id="jam_mulai" value="{{ old('jam_mulai') }}" required
                                 min="10:00" max="23:00"
                                 class="h-11 w-full rounded-xl border border-gray-300 bg-transparent px-4 py-2.5 text-sm font-medium text-gray-800 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:border-brand-500 focus:ring-1 focus:ring-brand-500" />
-                            @error('jam_mulai') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
+                            @error('jam_mulai')
+                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
                         </div>
 
                         {{-- Preview Jam Selesai --}}
@@ -126,9 +140,10 @@
         {{-- Right Column: Interactive Schedule & Package Catalog --}}
         <div class="lg:col-span-6 space-y-4">
             <div class="rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-white/[0.03]">
-                
+
                 {{-- Navigation Tabs --}}
-                <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-gray-200 dark:border-gray-800 mb-4">
+                <div
+                    class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-gray-200 dark:border-gray-800 mb-4">
                     <div class="flex items-center gap-1.5 p-1 bg-gray-100 dark:bg-gray-800/80 rounded-xl">
                         <button type="button" id="tab-btn-jadwal" onclick="switchRightTab('jadwal')"
                             class="flex items-center gap-2 px-3.5 py-2 text-xs font-bold rounded-lg transition-all text-white bg-brand-500 shadow-xs">
@@ -142,37 +157,46 @@
                         </button>
                     </div>
 
-                    <span id="header-badge" class="rounded-lg bg-gray-100 dark:bg-gray-800 px-2.5 py-1 text-xs font-bold text-gray-600 dark:text-gray-300">
-                        <i class="fa-solid fa-calendar-day text-brand-500 mr-1"></i> <span id="schedule-date-title">{{ $formattedTanggal }}</span>
+                    <span id="header-badge"
+                        class="rounded-lg bg-gray-100 dark:bg-gray-800 px-2.5 py-1 text-xs font-bold text-gray-600 dark:text-gray-300">
+                        <i class="fa-solid fa-calendar-day text-brand-500 mr-1"></i> <span
+                            id="schedule-date-title">{{ $formattedTanggal }}</span>
                     </span>
                 </div>
 
                 {{-- TAB CONTENT 1: JADWAL BARBER --}}
                 <div id="tab-content-jadwal" class="space-y-4">
-                    
+
                     {{-- Quick Date Selector Pills --}}
-                    <div class="flex items-center justify-between gap-2 bg-gray-50 dark:bg-gray-800/40 p-2.5 rounded-xl border border-gray-100 dark:border-gray-800">
+                    <div
+                        class="flex items-center justify-between gap-2 bg-gray-50 dark:bg-gray-800/40 p-2.5 rounded-xl border border-gray-100 dark:border-gray-800">
                         <div class="flex items-center gap-1.5 overflow-x-auto text-xs scrollbar-none py-0.5">
-                            <span class="font-bold text-gray-500 dark:text-gray-400 mr-1 shrink-0 text-[11px] uppercase tracking-wider hidden sm:inline">Pilihan:</span>
-                            
-                            <button type="button" data-date="{{ date('Y-m-d') }}" onclick="quickSelectDate('{{ date('Y-m-d') }}')"
+                            <span
+                                class="font-bold text-gray-500 dark:text-gray-400 mr-1 shrink-0 text-[11px] uppercase tracking-wider hidden sm:inline">Pilihan:</span>
+
+                            <button type="button" data-date="{{ date('Y-m-d') }}"
+                                onclick="quickSelectDate('{{ date('Y-m-d') }}')"
                                 class="date-pill-btn shrink-0 px-3 py-1.5 rounded-lg font-bold transition-all border text-white bg-brand-500 border-brand-500 shadow-xs">
                                 Hari Ini <span class="text-[10px] opacity-80">({{ date('d/m') }})</span>
                             </button>
-                            
-                            <button type="button" data-date="{{ date('Y-m-d', strtotime('+1 day')) }}" onclick="quickSelectDate('{{ date('Y-m-d', strtotime('+1 day')) }}')"
+
+                            <button type="button" data-date="{{ date('Y-m-d', strtotime('+1 day')) }}"
+                                onclick="quickSelectDate('{{ date('Y-m-d', strtotime('+1 day')) }}')"
                                 class="date-pill-btn shrink-0 px-3 py-1.5 rounded-lg font-semibold transition-all border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:border-brand-400">
                                 Besok <span class="text-[10px] opacity-80">({{ date('d/m', strtotime('+1 day')) }})</span>
                             </button>
-                            
-                            <button type="button" data-date="{{ date('Y-m-d', strtotime('+2 days')) }}" onclick="quickSelectDate('{{ date('Y-m-d', strtotime('+2 days')) }}')"
+
+                            <button type="button" data-date="{{ date('Y-m-d', strtotime('+2 days')) }}"
+                                onclick="quickSelectDate('{{ date('Y-m-d', strtotime('+2 days')) }}')"
                                 class="date-pill-btn shrink-0 px-3 py-1.5 rounded-lg font-semibold transition-all border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:border-brand-400">
                                 Lusa <span class="text-[10px] opacity-80">({{ date('d/m', strtotime('+2 days')) }})</span>
                             </button>
-                            
-                            <button type="button" data-date="{{ date('Y-m-d', strtotime('+3 days')) }}" onclick="quickSelectDate('{{ date('Y-m-d', strtotime('+3 days')) }}')"
+
+                            <button type="button" data-date="{{ date('Y-m-d', strtotime('+3 days')) }}"
+                                onclick="quickSelectDate('{{ date('Y-m-d', strtotime('+3 days')) }}')"
                                 class="date-pill-btn shrink-0 px-3 py-1.5 rounded-lg font-semibold transition-all border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:border-brand-400">
-                                +3 Hari <span class="text-[10px] opacity-80">({{ date('d/m', strtotime('+3 days')) }})</span>
+                                +3 Hari <span
+                                    class="text-[10px] opacity-80">({{ date('d/m', strtotime('+3 days')) }})</span>
                             </button>
                         </div>
 
@@ -182,7 +206,8 @@
                     </div>
 
                     <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 px-1">
-                        <span><i class="fa-solid fa-circle-info text-brand-500 mr-1"></i> Cek jam terisi barber untuk menghindari waktu bentrok</span>
+                        <span><i class="fa-solid fa-circle-info text-brand-500 mr-1"></i> Cek jam terisi barber untuk
+                            menghindari waktu bentrok</span>
                     </div>
 
                     <div id="barber-schedules-container" class="space-y-4 max-h-[520px] overflow-y-auto pr-1">
@@ -198,7 +223,8 @@
 
                             <div class="flex items-start justify-between gap-3">
                                 <div class="flex items-center gap-3">
-                                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 dark:bg-brand-950/40 text-brand-600 dark:text-brand-400">
+                                    <div
+                                        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 dark:bg-brand-950/40 text-brand-600 dark:text-brand-400">
                                         <i class="fa-solid fa-scissors text-base"></i>
                                     </div>
                                     <div>
@@ -307,11 +333,11 @@
         function renderSchedules(barbersData) {
             if (!barbersData || barbersData.length === 0) {
                 schedulesContainer.innerHTML = `
-                    <div class="text-center py-8 text-gray-400 dark:text-gray-500">
-                        <i class="fa-solid fa-user-slash text-3xl mb-2"></i>
-                        <p class="text-sm font-medium">Tidak ada barber bertugas pada tanggal ini.</p>
-                    </div>
-                `;
+                                <div class="text-center py-8 text-gray-400 dark:text-gray-500">
+                                    <i class="fa-solid fa-user-slash text-3xl mb-2"></i>
+                                    <p class="text-sm font-medium">Tidak ada barber bertugas pada tanggal ini.</p>
+                                </div>
+                            `;
                 return;
             }
 
@@ -322,71 +348,65 @@
                 const isSelected = selectedBarberId && selectedBarberId == b.id;
                 const borderClass = isSelected ? 'border-brand-500 ring-2 ring-brand-500/20 bg-brand-50/20' : 'border-gray-200 dark:border-gray-800';
 
-                const photoHtml = b.photo_url 
+                const photoHtml = b.photo_url
                     ? `<img src="${b.photo_url}" alt="${b.name}" class="h-10 w-10 rounded-xl object-cover">`
                     : `<div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-500 font-bold text-sm">${b.name.charAt(0)}</div>`;
 
                 let slotsHtml = '';
-                
+
                 // Istirahat indicators
                 const istirahatHtml = `
-                    <div class="inline-flex items-center gap-1 rounded-lg bg-amber-50 dark:bg-amber-950/40 px-2.5 py-1 text-[11px] font-semibold text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-900/50">
-                        <i class="fa-solid fa-mug-hot text-[10px]"></i> 13:00–14:00 (Istirahat)
-                    </div>
-                    <div class="inline-flex items-center gap-1 rounded-lg bg-amber-50 dark:bg-amber-950/40 px-2.5 py-1 text-[11px] font-semibold text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-900/50">
-                        <i class="fa-solid fa-mug-hot text-[10px]"></i> 18:00–19:30 (Istirahat)
-                    </div>
-                `;
+                                <div class="inline-flex items-center gap-1 rounded-lg bg-amber-50 dark:bg-amber-950/40 px-2.5 py-1 text-[11px] font-semibold text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-900/50">
+                                    <i class="fa-solid fa-mug-hot text-[10px]"></i> 13:00–14:00 (Istirahat)
+                                </div>
+                                <div class="inline-flex items-center gap-1 rounded-lg bg-amber-50 dark:bg-amber-950/40 px-2.5 py-1 text-[11px] font-semibold text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-900/50">
+                                    <i class="fa-solid fa-mug-hot text-[10px]"></i> 18:00–19:30 (Istirahat)
+                                </div>
+                            `;
 
                 if (b.schedules && b.schedules.length > 0) {
                     b.schedules.forEach(s => {
                         slotsHtml += `
-                            <div class="inline-flex items-center gap-1.5 rounded-lg bg-red-50 dark:bg-red-950/40 px-2.5 py-1 text-[11px] font-semibold text-red-700 dark:text-red-400 border border-red-200 dark:border-red-900/50" title="${s.layanan}">
-                                <i class="fa-solid fa-clock text-[10px]"></i> ${s.jam_mulai} – ${s.jam_selesai} <span class="opacity-75">(${s.layanan})</span>
-                            </div>
-                        `;
+                                        <div class="inline-flex items-center gap-1.5 rounded-lg bg-red-50 dark:bg-red-950/40 px-2.5 py-1 text-[11px] font-semibold text-red-700 dark:text-red-400 border border-red-200 dark:border-red-900/50" title="${s.layanan}">
+                                            <i class="fa-solid fa-clock text-[10px]"></i> ${s.jam_mulai} – ${s.jam_selesai} <span class="opacity-75">(${s.layanan})</span>
+                                        </div>
+                                    `;
                     });
-                } else {
-                    slotsHtml += `
-                        <div class="w-full text-[11px] font-medium text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 px-3 py-1.5 rounded-lg border border-emerald-200 dark:border-emerald-900/40 flex items-center gap-1.5">
-                            <i class="fa-solid fa-circle-check text-emerald-500"></i> Belum ada booking terisi. Semua jam operasional tersedia!
-                        </div>
-                    `;
                 }
 
                 html += `
-                    <div data-barber-id="${b.id}" class="barber-schedule-card rounded-xl border p-4 transition-all hover:border-brand-400 dark:hover:border-brand-500 ${borderClass}">
-                        <div class="flex items-center justify-between gap-3 mb-3">
-                            <div class="flex items-center gap-3">
-                                <div class="relative shrink-0">
-                                    ${photoHtml}
-                                    <span class="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white dark:border-gray-900 bg-emerald-500"></span>
-                                </div>
-                                <div>
-                                    <h4 class="text-sm font-bold text-gray-800 dark:text-white flex items-center gap-1.5">
-                                        ${b.name}
-                                    </h4>
-                                    <span class="text-[11px] text-gray-500 dark:text-gray-400 font-medium">
-                                        ${b.total_booking > 0 ? `<strong class="text-brand-600 dark:text-brand-400">${b.total_booking}</strong> jadwal terisi` : 'Semua jam tersedia'}
-                                    </span>
-                                </div>
-                            </div>
+                                <div data-barber-id="${b.id}" class="barber-schedule-card rounded-xl border p-4 transition-all hover:border-brand-400 dark:hover:border-brand-500 ${borderClass}">
+                                    <div class="flex items-center justify-between gap-3 mb-3">
+                                        <div class="flex items-center gap-3">
+                                            <div class="relative shrink-0">
+                                                ${photoHtml}
+                                                <span class="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white dark:border-gray-900 bg-emerald-500"></span>
+                                            </div>
+                                            <div>
+                                                <h4 class="text-sm font-bold text-gray-800 dark:text-white flex items-center gap-1.5">
+                                                    ${b.name}
+                                                </h4>
+                                                <span class="text-[11px] text-gray-500 dark:text-gray-400 font-medium">
+                                                    ${b.total_booking > 0 ? `<strong class="text-brand-600 dark:text-brand-400">${b.total_booking}</strong> jadwal terisi` : 'Semua jam tersedia'}
+                                                </span>
+                                            </div>
+                                        </div>
 
-                            <button type="button" onclick="selectBarber(${b.id})" 
-                                class="px-3 py-1.5 text-xs font-bold rounded-lg border border-brand-500 text-brand-600 hover:bg-brand-500 hover:text-white dark:text-brand-400 dark:hover:bg-brand-500 dark:hover:text-white transition-all">
-                                Pilih Barber
-                            </button>
-                        </div>
+                                        <button type="button" onclick="selectBarber(${b.id})" 
+                                            class="px-3 py-1.5 text-xs font-bold rounded-lg border border-brand-500 text-brand-600 hover:bg-brand-500 hover:text-white dark:text-brand-400 dark:hover:bg-brand-500 dark:hover:text-white transition-all">
+                                            Pilih Barber
+                                        </button>
+                                    </div>
 
-                        <div class="pt-2 border-t border-gray-100 dark:border-gray-800">
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400 block mb-1.5">Status Jam Terisi & Istirahat:</span>
-                            <div class="flex flex-wrap gap-1.5">
-                                ${istirahatHtml}
-                                ${slotsHtml}
-                            </div>
-                        </div>
-                    </div>
-                `;
+                                    <div class="pt-2 border-t border-gray-100 dark:border-gray-800">
+                                        <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400 block mb-1.5">Status Jam Terisi & Istirahat:</span>
+                                        <div class="flex flex-wrap gap-1.5">
+                                            ${istirahatHtml}
+                                            ${slotsHtml}
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
             });
 
             schedulesContainer.innerHTML = html;

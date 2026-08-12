@@ -99,19 +99,29 @@ class UserController extends Controller
             'password' => 'nullable|string|min:6|confirmed',
         ]);
 
-        if (in_array($validated['role'], ['kasir', 'admin']) && User::whereIn('role', ['kasir', 'admin'])->where('id', '!=', $user->id)->exists()) {
-            return back()->withInput()->withErrors(['role' => 'Role Kasir hanya diperbolehkan 1 akun saja.']);
+        // Jika pengguna yang login bukan Owner (misal: Kasir), kunci role agar tetap memakai role asli user yang diedit
+        $currentUser = auth()->user();
+        $targetRole  = $validated['role'];
+
+        if ($currentUser->role !== 'owner') {
+            $targetRole = $user->role; // Paksa role tidak berubah
         }
 
-        if ($validated['role'] === 'owner' && User::where('role', 'owner')->where('id', '!=', $user->id)->exists()) {
-            return back()->withInput()->withErrors(['role' => 'Role Owner hanya diperbolehkan 1 akun saja.']);
+        if ($targetRole !== $user->role) {
+            if (in_array($targetRole, ['kasir', 'admin']) && User::whereIn('role', ['kasir', 'admin'])->where('id', '!=', $user->id)->exists()) {
+                return back()->withInput()->withErrors(['role' => 'Role Kasir hanya diperbolehkan 1 akun saja.']);
+            }
+
+            if ($targetRole === 'owner' && User::where('role', 'owner')->where('id', '!=', $user->id)->exists()) {
+                return back()->withInput()->withErrors(['role' => 'Role Owner hanya diperbolehkan 1 akun saja.']);
+            }
         }
 
         $userData = [
             'name'  => $validated['name'],
             'email' => $validated['email'],
             'phone' => $validated['phone'],
-            'role'  => $validated['role'],
+            'role'  => $targetRole,
         ];
 
         if (!empty($validated['password'])) {

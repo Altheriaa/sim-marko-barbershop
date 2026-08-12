@@ -37,16 +37,23 @@
                 {{-- Role --}}
                 <div>
                     <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Role / Hak Akses <span class="text-error-500">*</span></label>
-                    <select name="role" required
-                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
-                        <option value="pelanggan" {{ old('role', $user->role) === 'pelanggan' ? 'selected' : '' }}>Pelanggan</option>
-                        <option value="kasir" {{ ($hasKasir ?? $hasAdmin) && !in_array($user->role, ['kasir', 'admin']) ? 'disabled' : '' }} {{ in_array(old('role', $user->role), ['kasir', 'admin']) ? 'selected' : '' }}>
-                            Kasir {{ ($hasKasir ?? $hasAdmin) && !in_array($user->role, ['kasir', 'admin']) ? '(Maksimal 1 Akun - Sudah Ada)' : '' }}
-                        </option>
-                        <option value="owner" {{ $hasOwner && $user->role !== 'owner' ? 'disabled' : '' }} {{ old('role', $user->role) === 'owner' ? 'selected' : '' }}>
-                            Owner {{ $hasOwner && $user->role !== 'owner' ? '(Maksimal 1 Akun - Sudah Ada)' : '' }}
-                        </option>
-                    </select>
+                    @if(auth()->user()->role === 'owner')
+                        <select name="role" required
+                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
+                            <option value="pelanggan" {{ old('role', $user->role) === 'pelanggan' ? 'selected' : '' }}>Pelanggan</option>
+                            <option value="kasir" {{ ($hasKasir ?? $hasAdmin) && !in_array($user->role, ['kasir', 'admin']) ? 'disabled' : '' }} {{ in_array(old('role', $user->role), ['kasir', 'admin']) ? 'selected' : '' }}>
+                                Kasir {{ ($hasKasir ?? $hasAdmin) && !in_array($user->role, ['kasir', 'admin']) ? '(Maksimal 1 Akun - Sudah Ada)' : '' }}
+                            </option>
+                            <option value="owner" {{ $hasOwner && $user->role !== 'owner' ? 'disabled' : '' }} {{ old('role', $user->role) === 'owner' ? 'selected' : '' }}>
+                                Owner {{ $hasOwner && $user->role !== 'owner' ? '(Maksimal 1 Akun - Sudah Ada)' : '' }}
+                            </option>
+                        </select>
+                    @else
+                        <input type="text" value="{{ ucfirst($user->role) }}" disabled readonly
+                            class="h-11 w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-sm font-semibold text-gray-600 dark:border-gray-800 dark:bg-gray-800/60 dark:text-gray-400 cursor-not-allowed" />
+                        <input type="hidden" name="role" value="{{ $user->role }}" />
+                        <p class="mt-1 text-xs text-gray-400"><i class="fa-solid fa-lock text-amber-500 mr-1"></i> Role pengguna dikunci dan hanya dapat diubah oleh Owner.</p>
+                    @endif
                     @error('role') <p class="mt-1 text-sm text-red-500">{{ $message }}</p> @enderror
                 </div>
 

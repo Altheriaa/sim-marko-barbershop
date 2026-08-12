@@ -21,9 +21,18 @@
                             <h2 class="text-xl font-bold text-gray-800 dark:text-white">{{ $user->name }}</h2>
                             @php
                                 $roleBadge = match ($user->role) {
-                                    'kasir', 'admin' => ['bg' => 'bg-purple-50 dark:bg-purple-950/50 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800', 'label' => '💳 Kasir'],
-                                    'owner' => ['bg' => 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800', 'label' => '💼 Owner'],
-                                    default => ['bg' => 'bg-brand-50 dark:bg-brand-950/50 text-brand-700 dark:text-brand-300 border-brand-200 dark:border-brand-800', 'label' => '✂️ Pelanggan'],
+                                    'kasir', 'admin' => [
+                                        'bg' => 'dark:bg-purple-950/50 dark:text-purple-300 border-purple-200 dark:border-purple-800',
+                                        'label' => 'Kasir',
+                                    ],
+                                    'owner' => [
+                                        'bg' => 'dark:bg-amber-950/50 dark:text-amber-300 border-amber-200 dark:border-amber-800',
+                                        'label' => 'Owner',
+                                    ],
+                                    default => [
+                                        'bg' => 'dark:bg-brand-950/50 dark:text-brand-300 border-brand-200 dark:border-brand-800',
+                                        'label' => 'Pelanggan',
+                                    ],
                                 };
                             @endphp
                             <span

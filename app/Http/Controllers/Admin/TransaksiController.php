@@ -28,7 +28,7 @@ class TransaksiController extends Controller
             });
         }
 
-        if ($metode && in_array($metode, ['tunai', 'EDC', 'transfer'])) {
+        if ($metode && in_array($metode, ['tunai', 'transfer'])) {
             $query->where('metode_pembayaran', $metode);
         }
 
@@ -66,12 +66,12 @@ class TransaksiController extends Controller
         }
 
         $validated = $request->validate([
-            'metode_pembayaran' => 'required|in:tunai,EDC,transfer,qris',
+            'metode_pembayaran' => 'required|in:tunai,transfer,qris',
         ]);
 
         $transaksi = Transaksi::create([
             'booking_id' => $booking->id,
-            'user_id'           => $booking->user_id, // null jika booking walk-in
+            'user_id' => $booking->user_id,
             'total_harga' => $booking->layanan->harga,
             'metode_pembayaran' => $validated['metode_pembayaran'],
             'status_pembayaran' => 'lunas',

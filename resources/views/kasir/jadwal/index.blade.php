@@ -239,7 +239,8 @@
                                 <div class="flex items-center gap-4">
                                     <div>
                                         <h4 class="text-base font-bold text-gray-800 dark:text-white">{{ $item->jam_mulai }} -
-                                            {{ $item->jam_selesai }}</h4>
+                                            {{ $item->jam_selesai }}
+                                        </h4>
                                         <span class="text-xs font-medium text-gray-500">
                                             @if($item->jam_mulai < '12:00') Sesi Pagi
                                             @elseif($item->jam_mulai < '18:00') Sesi Siang
@@ -288,22 +289,15 @@
                                     @endif
 
                                     {{-- Actions --}}
-                                    <div class="flex items-center gap-1">
-                                        <a href="{{ route('kasir.jadwal.edit', $item) }}"
-                                            class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 hover:bg-brand-50 hover:text-brand-600 transition"
-                                            title="Edit Jadwal">
-                                            <i class="fa-solid fa-pen-to-square text-sm"></i>
-                                        </a>
-                                        <form action="{{ route('kasir.jadwal.destroy', $item) }}" method="POST"
-                                            onsubmit="return confirm('Yakin hapus jadwal ini?')" class="inline">
-                                            @csrf @method('DELETE')
-                                            <button type="submit"
-                                                class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 hover:bg-red-50 hover:text-red-600 transition"
-                                                title="Hapus Jadwal">
-                                                <i class="fa-solid fa-trash-can text-sm"></i>
-                                            </button>
-                                        </form>
-                                    </div>
+                                    @if($activeBooking || !$completedBooking)
+                                        <div class="flex items-center gap-1">
+                                            <a href="{{ route('kasir.jadwal.edit', $item) }}"
+                                                class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 hover:bg-brand-50 hover:text-brand-600 transition"
+                                                title="Edit Jadwal">
+                                                <i class="fa-solid fa-pen-to-square text-sm"></i>
+                                            </a>
+                                        </div>
+                                    @endif
                                 </div>
 
                             </div>
@@ -314,7 +308,7 @@
                                 class="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-gray-100 text-gray-400 dark:bg-gray-800">
                                 <i class="fa-solid fa-calendar-xmark text-xl"></i>
                             </div>
-                            <h4 class="mt-3 text-sm font-semibold text-gray-700 dark:text-gray-300">Belum ada shift jadwal
+                            <h4 class="mt-3 text-sm font-semibold text-gray-700 dark:text-gray-300">Belum ada jadwal
                                 khusus pada tanggal ini</h4>
                             <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Jadwal otomatis dibuat saat booking</p>
                         </div>

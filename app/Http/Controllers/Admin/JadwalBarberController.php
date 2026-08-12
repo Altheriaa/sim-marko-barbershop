@@ -21,21 +21,25 @@ class JadwalBarberController extends Controller
 
         $jadwalList = collect();
         if ($selectedBarber) {
-            $jadwalList = JadwalBarber::with(['barber', 'bookings.layanan', 'bookings.user'])
-                ->where('barber_id', $selectedBarber->id)
+            $jadwalList = JadwalBarber::where('barber_id', $selectedBarber->id)
                 ->whereDate('tanggal', $tanggal->toDateString())
+                ->whereHas('bookings', function ($q) {
+                    $q->whereIn('status', ['pending', 'checked-in', 'completed']);
+                })
+                ->with(['barber', 'bookings' => function ($q) {
+                    $q->whereIn('status', ['pending', 'checked-in', 'completed'])->with(['layanan', 'user']);
+                }])
                 ->orderBy('jam_mulai')
                 ->get();
         }
 
-        // Summary status hari ini untuk barber terpilih (atau keseluruhan)
-        $totalTersedia = JadwalBarber::whereDate('tanggal', $tanggal->toDateString())
-            ->where('status', 'tersedia')
-            ->when($selectedBarber, fn($q) => $q->where('barber_id', $selectedBarber->id))
-            ->count();
+        // Summary status hari ini
+        $totalTersedia = 0;
 
         $totalSibuk = JadwalBarber::whereDate('tanggal', $tanggal->toDateString())
-            ->where('status', 'penuh')
+            ->whereHas('bookings', function ($q) {
+                $q->whereIn('status', ['pending', 'checked-in']);
+            })
             ->when($selectedBarber, fn($q) => $q->where('barber_id', $selectedBarber->id))
             ->count();
 
@@ -49,50 +53,50 @@ class JadwalBarberController extends Controller
         ), ['title' => 'Kelola Jadwal Barber']);
     }
 
-    public function create()
-    {
-        $barbers = Barber::where('status', 'masuk')->get();
-        return view('kasir.jadwal.create', compact('barbers'), ['title' => 'Tambah Jadwal']);
-    }
+    // public function create()
+    // {
+    //     $barbers = Barber::where('status', 'masuk')->get();
+    //     return view('kasir.jadwal.create', compact('barbers'), ['title' => 'Tambah Jadwal']);
+    // }
 
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'barber_id' => 'required|exists:barbers,id',
-            'tanggal' => 'required|date|after_or_equal:today',
-            'jam_mulai' => 'required|date_format:H:i',
-            'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
-        ]);
+    // public function store(Request $request)
+    // {
+    //     $validated = $request->validate([
+    //         'barber_id' => 'required|exists:barbers,id',
+    //         'tanggal' => 'required|date|after_or_equal:today',
+    //         'jam_mulai' => 'required|date_format:H:i',
+    //         'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
+    //     ]);
 
-        // Cek apakah jadwal dengan barber, tanggal, dan jam yang sama sudah ada
-        $duplikat = JadwalBarber::where('barber_id', $validated['barber_id'])
-            ->where('tanggal', $validated['tanggal'])
-            ->where(function ($query) use ($validated) {
-                $query->whereBetween('jam_mulai', [$validated['jam_mulai'], $validated['jam_selesai']])
-                      ->orWhereBetween('jam_selesai', [$validated['jam_mulai'], $validated['jam_selesai']])
-                      ->orWhere(function ($q) use ($validated) {
-                          $q->where('jam_mulai', '<=', $validated['jam_mulai'])
-                            ->where('jam_selesai', '>=', $validated['jam_selesai']);
-                      });
-            })
-            ->exists();
+    //     // Cek apakah jadwal dengan barber, tanggal, dan jam yang sama sudah ada
+    //     $duplikat = JadwalBarber::where('barber_id', $validated['barber_id'])
+    //         ->where('tanggal', $validated['tanggal'])
+    //         ->where(function ($query) use ($validated) {
+    //             $query->whereBetween('jam_mulai', [$validated['jam_mulai'], $validated['jam_selesai']])
+    //                   ->orWhereBetween('jam_selesai', [$validated['jam_mulai'], $validated['jam_selesai']])
+    //                   ->orWhere(function ($q) use ($validated) {
+    //                       $q->where('jam_mulai', '<=', $validated['jam_mulai'])
+    //                         ->where('jam_selesai', '>=', $validated['jam_selesai']);
+    //                   });
+    //         })
+    //         ->exists();
 
-        if ($duplikat) {
-            return back()->withInput()->withErrors([
-                'jam_mulai' => 'Jadwal barber ini sudah ada pada waktu tersebut. Pilih waktu yang berbeda.',
-            ]);
-        }
+    //     if ($duplikat) {
+    //         return back()->withInput()->withErrors([
+    //             'jam_mulai' => 'Jadwal barber ini sudah ada pada waktu tersebut. Pilih waktu yang berbeda.',
+    //         ]);
+    //     }
 
-        JadwalBarber::create([
-            ...$validated,
-            'status' => 'tersedia',
-        ]);
+    //     JadwalBarber::create([
+    //         ...$validated,
+    //         'status' => 'tersedia',
+    //     ]);
 
-        return redirect()->route('kasir.jadwal.index', [
-            'barber_id' => $validated['barber_id'],
-            'tanggal' => $validated['tanggal']
-        ])->with('success', 'Jadwal berhasil ditambahkan.');
-    }
+    //     return redirect()->route('kasir.jadwal.index', [
+    //         'barber_id' => $validated['barber_id'],
+    //         'tanggal' => $validated['tanggal']
+    //     ])->with('success', 'Jadwal berhasil ditambahkan.');
+    // }
 
     public function edit(JadwalBarber $jadwal)
     {
@@ -118,15 +122,15 @@ class JadwalBarberController extends Controller
         ])->with('success', 'Jadwal berhasil diperbarui.');
     }
 
-    public function destroy(JadwalBarber $jadwal)
-    {
-        $barberId = $jadwal->barber_id;
-        $tanggal = $jadwal->tanggal->format('Y-m-d');
-        $jadwal->delete();
+    // public function destroy(JadwalBarber $jadwal)
+    // {
+    //     $barberId = $jadwal->barber_id;
+    //     $tanggal = $jadwal->tanggal->format('Y-m-d');
+    //     $jadwal->delete();
 
-        return redirect()->route('kasir.jadwal.index', [
-            'barber_id' => $barberId,
-            'tanggal' => $tanggal
-        ])->with('success', 'Jadwal berhasil dihapus.');
-    }
+    //     return redirect()->route('kasir.jadwal.index', [
+    //         'barber_id' => $barberId,
+    //         'tanggal' => $tanggal
+    //     ])->with('success', 'Jadwal berhasil dihapus.');
+    // }
 }
