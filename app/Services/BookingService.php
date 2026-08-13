@@ -181,7 +181,7 @@ class BookingService
     }
 
     /**
-     * Otomatis membatalkan booking pending yang sudah melewati jam_mulai + 30 menit toleransi (No-Show).
+     * Otomatis membatalkan booking pending yang sudah melewati jam_mulai + 15 menit toleransi (No-Show).
      * Membebaskan slot jadwal barber menjadi 'tersedia'.
      *
      * @return int Jumlah booking yang dibatalkan
@@ -210,9 +210,9 @@ class BookingService
             }
 
             $waktuBookingMulai = Carbon::parse("{$tanggalStr} {$jamMulaiStr}");
-            $batasToleransi = $waktuBookingMulai->copy()->addMinutes(30);
+            $batasToleransi = $waktuBookingMulai->copy()->addMinutes(15);
 
-            // Jika waktu sekarang sudah melewati jam_mulai + 30 menit
+            // Jika waktu sekarang sudah melewati jam_mulai + 15 menit toleransi
             if ($now->greaterThanOrEqualTo($batasToleransi)) {
                 DB::transaction(function () use ($booking) {
                     $booking->update(['status' => 'cancelled']);
