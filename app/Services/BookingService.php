@@ -212,7 +212,7 @@ class BookingService
             $waktuBookingMulai = Carbon::parse("{$tanggalStr} {$jamMulaiStr}");
             $batasToleransi = $waktuBookingMulai->copy()->addMinutes(15);
 
-            // Jika waktu sekarang sudah melewati jam_mulai + 15 menit toleransi
+            // 
             if ($now->greaterThanOrEqualTo($batasToleransi)) {
                 DB::transaction(function () use ($booking) {
                     $booking->update(['status' => 'cancelled']);
