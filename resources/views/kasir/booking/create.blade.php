@@ -29,7 +29,7 @@
                 <p
                     class="text-xs text-gray-500 dark:text-gray-400 mb-5 rounded-xl bg-gray-50 dark:bg-gray-800/50 p-3 border border-gray-100 dark:border-gray-800">
                     <i class="fa-solid fa-clock text-brand-500 mr-1"></i> Jam operasional: <strong
-                        class="text-gray-700 dark:text-gray-300">10:00 – 23:00</strong> <br>
+                        class="text-gray-700 dark:text-gray-300">10:00 – 23:45</strong> <br>
                     <i class="fa-solid fa-mug-hot text-amber-500 mr-1"></i> Istirahat: <strong
                         class="text-gray-700 dark:text-gray-300">13:00–14:00</strong> &amp; <strong
                         class="text-gray-700 dark:text-gray-300">18:00–19:30</strong>
@@ -111,7 +111,7 @@
                             <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Jam Mulai <span
                                     class="text-red-500">*</span></label>
                             <input type="time" name="jam_mulai" id="jam_mulai" value="{{ old('jam_mulai') }}" required
-                                min="10:00" max="23:00"
+                                min="10:00" max="23:45"
                                 class="h-11 w-full rounded-xl border border-gray-300 bg-transparent px-4 py-2.5 text-sm font-medium text-gray-800 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:border-brand-500 focus:ring-1 focus:ring-brand-500" />
                             @error('jam_mulai')
                             <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
@@ -333,11 +333,11 @@
         function renderSchedules(barbersData) {
             if (!barbersData || barbersData.length === 0) {
                 schedulesContainer.innerHTML = `
-                                <div class="text-center py-8 text-gray-400 dark:text-gray-500">
-                                    <i class="fa-solid fa-user-slash text-3xl mb-2"></i>
-                                    <p class="text-sm font-medium">Tidak ada barber bertugas pada tanggal ini.</p>
-                                </div>
-                            `;
+                                                <div class="text-center py-8 text-gray-400 dark:text-gray-500">
+                                                    <i class="fa-solid fa-user-slash text-3xl mb-2"></i>
+                                                    <p class="text-sm font-medium">Tidak ada barber bertugas pada tanggal ini.</p>
+                                                </div>
+                                            `;
                 return;
             }
 
@@ -356,57 +356,57 @@
 
                 // Istirahat indicators
                 const istirahatHtml = `
-                                <div class="inline-flex items-center gap-1 rounded-lg bg-amber-50 dark:bg-amber-950/40 px-2.5 py-1 text-[11px] font-semibold text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-900/50">
-                                    <i class="fa-solid fa-mug-hot text-[10px]"></i> 13:00–14:00 (Istirahat)
-                                </div>
-                                <div class="inline-flex items-center gap-1 rounded-lg bg-amber-50 dark:bg-amber-950/40 px-2.5 py-1 text-[11px] font-semibold text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-900/50">
-                                    <i class="fa-solid fa-mug-hot text-[10px]"></i> 18:00–19:30 (Istirahat)
-                                </div>
-                            `;
+                                                <div class="inline-flex items-center gap-1 rounded-lg bg-amber-50 dark:bg-amber-950/40 px-2.5 py-1 text-[11px] font-semibold text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-900/50">
+                                                    <i class="fa-solid fa-mug-hot text-[10px]"></i> 13:00–14:00 (Istirahat)
+                                                </div>
+                                                <div class="inline-flex items-center gap-1 rounded-lg bg-amber-50 dark:bg-amber-950/40 px-2.5 py-1 text-[11px] font-semibold text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-900/50">
+                                                    <i class="fa-solid fa-mug-hot text-[10px]"></i> 18:00–19:30 (Istirahat)
+                                                </div>
+                                            `;
 
                 if (b.schedules && b.schedules.length > 0) {
                     b.schedules.forEach(s => {
                         slotsHtml += `
-                                        <div class="inline-flex items-center gap-1.5 rounded-lg bg-red-50 dark:bg-red-950/40 px-2.5 py-1 text-[11px] font-semibold text-red-700 dark:text-red-400 border border-red-200 dark:border-red-900/50" title="${s.layanan}">
-                                            <i class="fa-solid fa-clock text-[10px]"></i> ${s.jam_mulai} – ${s.jam_selesai} <span class="opacity-75">(${s.layanan})</span>
-                                        </div>
-                                    `;
+                                                        <div class="inline-flex items-center gap-1.5 rounded-lg bg-red-50 dark:bg-red-950/40 px-2.5 py-1 text-[11px] font-semibold text-red-700 dark:text-red-400 border border-red-200 dark:border-red-900/50" title="${s.layanan}">
+                                                            <i class="fa-solid fa-clock text-[10px]"></i> ${s.jam_mulai} – ${s.jam_selesai} <span class="opacity-75">(${s.layanan})</span>
+                                                        </div>
+                                                    `;
                     });
                 }
 
                 html += `
-                                <div data-barber-id="${b.id}" class="barber-schedule-card rounded-xl border p-4 transition-all hover:border-brand-400 dark:hover:border-brand-500 ${borderClass}">
-                                    <div class="flex items-center justify-between gap-3 mb-3">
-                                        <div class="flex items-center gap-3">
-                                            <div class="relative shrink-0">
-                                                ${photoHtml}
-                                                <span class="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white dark:border-gray-900 bg-emerald-500"></span>
-                                            </div>
-                                            <div>
-                                                <h4 class="text-sm font-bold text-gray-800 dark:text-white flex items-center gap-1.5">
-                                                    ${b.name}
-                                                </h4>
-                                                <span class="text-[11px] text-gray-500 dark:text-gray-400 font-medium">
-                                                    ${b.total_booking > 0 ? `<strong class="text-brand-600 dark:text-brand-400">${b.total_booking}</strong> jadwal terisi` : 'Semua jam tersedia'}
-                                                </span>
-                                            </div>
-                                        </div>
+                                                <div data-barber-id="${b.id}" class="barber-schedule-card rounded-xl border p-4 transition-all hover:border-brand-400 dark:hover:border-brand-500 ${borderClass}">
+                                                    <div class="flex items-center justify-between gap-3 mb-3">
+                                                        <div class="flex items-center gap-3">
+                                                            <div class="relative shrink-0">
+                                                                ${photoHtml}
+                                                                <span class="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white dark:border-gray-900 bg-emerald-500"></span>
+                                                            </div>
+                                                            <div>
+                                                                <h4 class="text-sm font-bold text-gray-800 dark:text-white flex items-center gap-1.5">
+                                                                    ${b.name}
+                                                                </h4>
+                                                                <span class="text-[11px] text-gray-500 dark:text-gray-400 font-medium">
+                                                                    ${b.total_booking > 0 ? `<strong class="text-brand-600 dark:text-brand-400">${b.total_booking}</strong> jadwal terisi` : 'Semua jam tersedia'}
+                                                                </span>
+                                                            </div>
+                                                        </div>
 
-                                        <button type="button" onclick="selectBarber(${b.id})" 
-                                            class="px-3 py-1.5 text-xs font-bold rounded-lg border border-brand-500 text-brand-600 hover:bg-brand-500 hover:text-white dark:text-brand-400 dark:hover:bg-brand-500 dark:hover:text-white transition-all">
-                                            Pilih Barber
-                                        </button>
-                                    </div>
+                                                        <button type="button" onclick="selectBarber(${b.id})" 
+                                                            class="px-3 py-1.5 text-xs font-bold rounded-lg border border-brand-500 text-brand-600 hover:bg-brand-500 hover:text-white dark:text-brand-400 dark:hover:bg-brand-500 dark:hover:text-white transition-all">
+                                                            Pilih Barber
+                                                        </button>
+                                                    </div>
 
-                                    <div class="pt-2 border-t border-gray-100 dark:border-gray-800">
-                                        <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400 block mb-1.5">Status Jam Terisi & Istirahat:</span>
-                                        <div class="flex flex-wrap gap-1.5">
-                                            ${istirahatHtml}
-                                            ${slotsHtml}
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
+                                                    <div class="pt-2 border-t border-gray-100 dark:border-gray-800">
+                                                        <span class="text-[10px] font-bold uppercase tracking-wider text-gray-400 block mb-1.5">Status Jam Terisi & Istirahat:</span>
+                                                        <div class="flex flex-wrap gap-1.5">
+                                                            ${istirahatHtml}
+                                                            ${slotsHtml}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            `;
             });
 
             schedulesContainer.innerHTML = html;
