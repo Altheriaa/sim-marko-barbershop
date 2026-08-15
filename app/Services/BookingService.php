@@ -64,11 +64,11 @@ class BookingService
     }
 
     /**
-     * Buat jadwal + booking dalam satu transaksi database dengan lock untuk mencegah race condition.
+     * 
      *
-     * @param array $data Keys: barber_id, layanan_id, tanggal, jam_mulai, user_id (nullable),
-     *                     nama_pelanggan (nullable), no_hp (nullable), sumber, dibuat_oleh (nullable)
-     * @return array ['success' => bool, 'booking' => Booking|null, 'error' => string|null]
+     * @param array $data 
+     *                    
+     * @return array
      */
     public static function createBooking(array $data): array
     {
@@ -155,9 +155,9 @@ class BookingService
     }
 
     /**
-     * Batalkan booking. Hanya bisa dibatalkan jika status pending.
+     * Batalkan booking.
      *
-     * @return array ['success' => bool, 'message' => string]
+     * @return array 
      */
     public static function cancelBooking(Booking $booking): array
     {
@@ -181,10 +181,10 @@ class BookingService
     }
 
     /**
-     * Otomatis membatalkan booking pending yang sudah melewati jam_mulai + 15 menit toleransi (No-Show).
-     * Membebaskan slot jadwal barber menjadi 'tersedia'.
+     * 
+     * 
      *
-     * @return int Jumlah booking yang dibatalkan
+     * @return int 
      */
     public static function autoCancelExpiredBookings(): int
     {
