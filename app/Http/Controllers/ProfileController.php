@@ -32,7 +32,7 @@ class ProfileController extends Controller
             $stats['total_transaksi'] = Transaksi::count();
         } elseif ($user->role === 'owner') {
             $stats['total_transaksi']  = Transaksi::count();
-            $stats['total_pendapatan'] = Transaksi::sum('total_bayar');
+            $stats['total_pendapatan'] = Transaksi::sum('total_harga');
         }
 
         return view('pages.profile', compact('user', 'stats'), ['title' => 'Profil Saya']);

@@ -35,14 +35,7 @@ class MenuHelper
                     ['name' => 'Tambah Layanan', 'path' => '/kasir/layanan/create'],
                 ],
             ],
-            // [
-            //     'icon' => 'calendar',
-            //     'name' => 'Jadwal Barber',
-            //     'subItems' => [
-            //         ['name' => 'Daftar Jadwal', 'path' => '/kasir/jadwal'],
-            //         ['name' => 'Tambah Jadwal', 'path' => '/kasir/jadwal/create'],
-            //     ],
-            // ],
+
             [
                 'icon' => 'calendar',
                 'name' => 'Jadwal Barber',
