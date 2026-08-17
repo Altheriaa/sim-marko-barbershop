@@ -103,11 +103,7 @@ class WhatsAppService
         $jamMulai    = $booking->jadwal?->jam_mulai ?? '-';
         $jamSelesai  = $booking->jadwal?->jam_selesai ?? '-';
 
-        // Hanya kirim link QR jika booking online (pelanggan punya akun)
-        $isOnline = !is_null($booking->user_id);
-        $qrLine   = $isOnline
-            ? "Tunjukkan QR Code berikut saat Anda tiba di lokasi:\n" . route('pelanggan.booking.qr', $booking) . "\n\n"
-            : "Tunjukkan kode booking *{$kodeBooking}* saat Anda tiba di lokasi.\n\n";
+        $qrLink = route('pelanggan.booking.qr', $booking);
 
         $message = "*MARKO BARBERSHOP - BOOKING BERHASIL* \n\n"
             . "Halo *{$namaUser}*,\n"
@@ -116,8 +112,10 @@ class WhatsAppService
             . "*Barber:* {$namaBarber}\n"
             . "*Layanan:* {$namaLayanan}\n"
             . "*Tanggal:* {$tanggal} ({$jamMulai} - {$jamSelesai})\n\n"
-            . $qrLine
-            . "Terima kasih atas kunjungan Anda! 🙌";
+            . "Link Barcode / QR Code:\n"
+            . "{$qrLink}\n\n"
+            . "*Catatan:* Mohon datang 15 menit sebelum waktu yang sudah dijadwalkan ({$jamMulai}) dan tunjukkan QR Code / kode booking ke kasir.\n\n"
+            . "Terima kasih atas kunjungan Anda! ";
 
         return self::sendMessage($phone, $message);
     }
@@ -143,11 +141,7 @@ class WhatsAppService
         $totalHarga = number_format($transaksi->total_harga, 0, ',', '.');
         $metode     = strtoupper($transaksi->metode_pembayaran);
 
-        // Link invoice hanya untuk pelanggan online (punya akun)
-        $isOnline    = !is_null($booking?->user_id);
-        $invoiceLine = $isOnline
-            ? "Lihat / Cetak Struk:\n" . route('pelanggan.transaksi.invoice', $transaksi) . "\n\n"
-            : '';
+        $invoiceUrl = route('transaksi.invoice.public', $transaksi);
 
         $message = "*MARKO BARBERSHOP - BUKTI PEMBAYARAN* \n\n"
             . "Halo *{$namaUser}*,\n"
@@ -156,8 +150,9 @@ class WhatsAppService
             . "*Barber:* {$namaBarber}\n"
             . "*Layanan:* {$namaLayanan}\n"
             . "*Total Bayar:* Rp {$totalHarga} ({$metode})\n\n"
-            . $invoiceLine
-            . "Terima kasih telah mempercayai Marko Barbershop! ✨";
+            . "Lihat / Cetak Struk:\n"
+            . "{$invoiceUrl}\n\n"
+            . "Terima kasih telah mempercayai Marko Barbershop! ";
 
         return self::sendMessage($phone, $message);
     }
@@ -195,6 +190,49 @@ class WhatsAppService
             . "*Tanggal:* {$tanggal} ({$jamMulai} - {$jamSelesai})\n\n"
             . "Kelola Reservasi di Dashboard:\n"
             . "{$adminBookingUrl}";
+
+        return self::sendMessage($adminPhone, $message);
+    }
+
+    /**
+     * Kirim notifikasi WA status booking/transaksi selesai ke Admin.
+     */
+    public static function sendAdminBookingCompleted(Transaksi $transaksi): bool
+    {
+        $adminPhone = config('services.whatsapp.admin_phone', env('WA_ADMIN_PHONE', ''));
+
+        if (empty($adminPhone)) {
+            return false;
+        }
+
+        $transaksi->loadMissing(['booking.user', 'booking.barber', 'booking.layanan', 'booking.jadwal']);
+
+        $booking     = $transaksi->booking;
+        $namaUser    = $booking?->customer_name ?? 'Pelanggan';
+        $phoneUser   = $booking?->customer_phone ?? '-';
+        $kodeBooking = $booking?->qr_code ?? '-';
+        $resiNo      = str_pad($transaksi->id, 4, '0', STR_PAD_LEFT);
+        $namaBarber  = $booking?->barber?->name ?? '-';
+        $namaLayanan = $booking?->layanan?->nama_layanan ?? '-';
+        $totalHarga  = number_format($transaksi->total_harga, 0, ',', '.');
+        $metode      = strtoupper($transaksi->metode_pembayaran);
+        $waktuBayar  = $transaksi->tanggal_bayar ? $transaksi->tanggal_bayar->format('d/m/Y H:i') : now()->format('d/m/Y H:i');
+
+        $adminTrxUrl = route('kasir.transaksi.index');
+
+        $message = "*MARKO BARBERSHOP - LAYANAN & PEMBAYARAN SELESAI* \n\n"
+            . "Halo Kasir,\n"
+            . "Booking dan pembayaran berikut telah selesai diproses:\n\n"
+            . "*No. Resi:* #{$resiNo}\n"
+            . "*Kode Booking:* {$kodeBooking}\n"
+            . "*Pelanggan:* {$namaUser} ({$phoneUser})\n"
+            . "*Barber:* {$namaBarber}\n"
+            . "*Layanan:* {$namaLayanan}\n"
+            . "*Total Bayar:* Rp {$totalHarga} ({$metode})\n"
+            . "*Waktu Selesai:* {$waktuBayar}\n"
+            . "*Status:* Selesai (Completed)\n\n"
+            . "Kelola Transaksi di Dashboard:\n"
+            . "{$adminTrxUrl}";
 
         return self::sendMessage($adminPhone, $message);
     }

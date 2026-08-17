@@ -41,6 +41,12 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password');
 });
 
+// Public Invoice Route for WhatsApp receipts
+Route::get('/invoice/{transaksi}', function (\App\Models\Transaksi $transaksi) {
+    $transaksi->load(['booking.layanan', 'booking.barber', 'booking.user']);
+    return view('kasir.transaksi.invoice', compact('transaksi'), ['title' => 'Invoice #' . $transaksi->id]);
+})->name('transaksi.invoice.public');
+
 /*
 |--------------------------------------------------------------------------
 | Dashboard Redirect (root)

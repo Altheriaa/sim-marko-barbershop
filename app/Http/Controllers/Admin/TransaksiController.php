@@ -84,8 +84,9 @@ class TransaksiController extends Controller
             $booking->jadwal->update(['status' => 'tersedia']);
         }
 
-        // Kirim Notifikasi WhatsApp Webhook
+        // Kirim Notifikasi WhatsApp Webhook (Pelanggan & Admin)
         WhatsAppService::sendTransactionReceipt($transaksi);
+        WhatsAppService::sendAdminBookingCompleted($transaksi);
 
         return redirect()->route('kasir.transaksi.index')->with('success', 'Pembayaran tercatat.');
     }
