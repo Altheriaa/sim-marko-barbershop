@@ -149,7 +149,7 @@
                                         <i class="fa-solid fa-pen-to-square text-sm"></i>
                                     </a>
                                     @if(auth()->id() !== $user->id)
-                                        <form method="POST" action="{{ route('kasir.users.destroy', $user) }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus user ini?')">
+                                        <form method="POST" action="{{ route('kasir.users.destroy', $user) }}" data-confirm="Apakah Anda yakin ingin menghapus user {{ $user->name }}? Data akun ini akan dihapus secara permanen." data-confirm-title="Hapus User" data-confirm-type="danger" data-confirm-btn="Ya, Hapus">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 dark:border-red-900/50 dark:bg-red-900/20 dark:text-red-400 transition" title="Hapus User">

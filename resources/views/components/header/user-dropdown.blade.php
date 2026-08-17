@@ -76,7 +76,11 @@
         </ul>
 
         <!-- Sign Out -->
-        <form method="POST" action="{{ route('logout') }}">
+        <form method="POST" action="{{ route('logout') }}"
+            data-confirm="Apakah Anda yakin ingin keluar dari sistem Marko Barbershop?"
+            data-confirm-title="Keluar Akun"
+            data-confirm-type="danger"
+            data-confirm-btn="Ya, Keluar">
             @csrf
             <button type="submit"
                 class="flex items-center w-full gap-3 px-3 py-2 mt-2 font-medium text-red-600 rounded-lg group text-theme-sm hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/30 transition"

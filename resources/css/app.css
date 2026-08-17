@@ -880,3 +880,204 @@ pre[class*='language-'] {
     margin-right: -60px !important;
   }
 }
+
+/* ==========================================================================
+   SweetAlert2 Custom Theme for Marko Barbershop
+   ========================================================================== */
+
+.swal2-container {
+  z-index: 9999999 !important;
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+  background: rgba(16, 24, 40, 0.5) !important;
+}
+
+.swal2-container.swal2-backdrop-show {
+  background: rgba(16, 24, 40, 0.5) !important;
+}
+
+.marko-swal-popup {
+  font-family: var(--font-outfit, 'Outfit', sans-serif) !important;
+  border-radius: 1.25rem !important;
+  padding: 1.75rem 1.5rem !important;
+  border: 1px solid #e4dfd6 !important;
+  background: #ffffff !important;
+  box-shadow: 0px 20px 24px -4px rgba(16, 24, 40, 0.12), 0px 8px 8px -4px rgba(16, 24, 40, 0.04) !important;
+  max-width: 26rem !important;
+  width: 90% !important;
+}
+
+.dark .marko-swal-popup,
+html.dark .marko-swal-popup {
+  background: #29211a !important;
+  border-color: #42382e !important;
+  color: #f3f0eb !important;
+  box-shadow: 0px 20px 24px -4px rgba(0, 0, 0, 0.4), 0px 8px 8px -4px rgba(0, 0, 0, 0.2) !important;
+}
+
+.marko-swal-title {
+  font-family: var(--font-outfit, 'Outfit', sans-serif) !important;
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+  color: #29211a !important;
+  padding: 0 !important;
+  margin-top: 0.5rem !important;
+}
+
+.dark .marko-swal-title,
+html.dark .marko-swal-title {
+  color: #f3f0eb !important;
+}
+
+.marko-swal-html {
+  font-family: var(--font-outfit, 'Outfit', sans-serif) !important;
+  font-size: 0.875rem !important;
+  line-height: 1.5 !important;
+  color: #786b5b !important;
+  margin-top: 0.5rem !important;
+  padding: 0 !important;
+}
+
+.dark .marko-swal-html,
+html.dark .marko-swal-html {
+  color: #b5a999 !important;
+}
+
+.marko-swal-actions {
+  margin-top: 1.5rem !important;
+  gap: 0.625rem !important;
+  width: 100% !important;
+  justify-content: center !important;
+}
+
+.marko-swal-btn-primary {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: #bf8133 !important;
+  color: #ffffff !important;
+  font-family: var(--font-outfit, 'Outfit', sans-serif) !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  padding: 0.625rem 1.25rem !important;
+  border-radius: 0.75rem !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s ease, transform 0.1s ease !important;
+  box-shadow: 0 1px 2px 0 rgba(16, 24, 40, 0.05) !important;
+}
+
+.marko-swal-btn-primary:hover {
+  background-color: #a66729 !important;
+}
+
+.marko-swal-btn-primary:active {
+  transform: scale(0.98);
+}
+
+.marko-swal-btn-danger {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: #d92d20 !important;
+  color: #ffffff !important;
+  font-family: var(--font-outfit, 'Outfit', sans-serif) !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  padding: 0.625rem 1.25rem !important;
+  border-radius: 0.75rem !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s ease, transform 0.1s ease !important;
+  box-shadow: 0 1px 2px 0 rgba(16, 24, 40, 0.05) !important;
+}
+
+.marko-swal-btn-danger:hover {
+  background-color: #b42318 !important;
+}
+
+.marko-swal-btn-danger:active {
+  transform: scale(0.98);
+}
+
+.marko-swal-btn-cancel {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: #faf9f7 !important;
+  color: #5c5144 !important;
+  border: 1px solid #e4dfd6 !important;
+  font-family: var(--font-outfit, 'Outfit', sans-serif) !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  padding: 0.625rem 1.25rem !important;
+  border-radius: 0.75rem !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease !important;
+}
+
+.marko-swal-btn-cancel:hover {
+  background-color: #f0e1c2 !important;
+  color: #42382e !important;
+}
+
+.marko-swal-btn-cancel:active {
+  transform: scale(0.98);
+}
+
+.dark .marko-swal-btn-cancel,
+html.dark .marko-swal-btn-cancel {
+  background-color: #322820 !important;
+  color: #d1c8bb !important;
+  border-color: #42382e !important;
+}
+
+.dark .marko-swal-btn-cancel:hover,
+html.dark .marko-swal-btn-cancel:hover {
+  background-color: #42382e !important;
+  color: #f3f0eb !important;
+}
+
+/* SweetAlert2 Icon Harmonization */
+.swal2-icon {
+  margin: 0.75rem auto 0.5rem auto !important;
+  width: 3.5rem !important;
+  height: 3.5rem !important;
+}
+
+.swal2-icon.swal2-warning {
+  border-color: #bf8133 !important;
+  color: #bf8133 !important;
+}
+
+.swal2-icon.swal2-error {
+  border-color: #f04438 !important;
+  color: #f04438 !important;
+}
+
+.swal2-icon.swal2-error [class^='swal2-x-mark-line'] {
+  background-color: #f04438 !important;
+}
+
+.swal2-icon.swal2-success {
+  border-color: #12b76a !important;
+  color: #12b76a !important;
+}
+
+.swal2-icon.swal2-success [class^='swal2-success-line'] {
+  background-color: #12b76a !important;
+}
+
+.swal2-icon.swal2-success .swal2-success-ring {
+  border-color: rgba(18, 183, 106, 0.3) !important;
+}
+
+.swal2-icon.swal2-info {
+  border-color: #0ba5ec !important;
+  color: #0ba5ec !important;
+}
+
+.swal2-icon.swal2-question {
+  border-color: #bf8133 !important;
+  color: #bf8133 !important;
+}

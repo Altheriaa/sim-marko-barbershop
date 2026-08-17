@@ -216,7 +216,10 @@
 
                                     {{-- Tombol Batalkan Reservasi oleh Kasir --}}
                                     <form action="{{ route('kasir.booking.cancel', $booking) }}" method="POST" class="inline"
-                                        onsubmit="return confirm('Apakah Anda yakin ingin MEMBATALKAN reservasi ini?\n\nSlot jadwal barber akan otomatis dibebaskan kembali.')">
+                                        data-confirm="Apakah Anda yakin ingin membatalkan reservasi pelanggan {{ $booking->nama_pelanggan }}? Slot jadwal barber akan otomatis dibebaskan kembali."
+                                        data-confirm-title="Batalkan Reservasi"
+                                        data-confirm-type="danger"
+                                        data-confirm-btn="Ya, Batalkan">
                                         @csrf
                                         <button type="submit"
                                             class="rounded-xl border border-red-200 bg-red-50 px-3.5 py-2 text-xs font-bold text-red-600 hover:bg-red-100 dark:border-red-900/40 dark:bg-red-950/30 dark:text-red-400 transition">
@@ -225,7 +228,10 @@
                                     </form>
                                 @elseif($status === 'checked-in')
                                     <form action="{{ route('kasir.booking.checkout', $booking) }}" method="POST" class="inline"
-                                        onsubmit="return confirm('Apakah Anda yakin pelayanan untuk pelanggan ini sudah SELESAI?\n\nStatus reservasi akan diubah ke Selesai dan lanjut ke catatan pembayaran.')">
+                                        data-confirm="Apakah pelayanan untuk pelanggan {{ $booking->nama_pelanggan }} sudah selesai? Status reservasi akan diubah ke Selesai dan diarahkan ke kasir pembayaran."
+                                        data-confirm-title="Konfirmasi Selesai"
+                                        data-confirm-type="warning"
+                                        data-confirm-btn="Ya, Selesai & Bayar">
                                         @csrf
                                         <button type="submit"
                                             class="rounded-xl border border-gray-300 bg-white px-4 py-2 text-xs font-bold text-gray-800 hover:border-brand-500 hover:bg-brand-50 hover:text-brand-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 transition">
@@ -235,7 +241,10 @@
 
                                     {{-- Tombol Batalkan Reservasi oleh Kasir --}}
                                     <form action="{{ route('kasir.booking.cancel', $booking) }}" method="POST" class="inline"
-                                        onsubmit="return confirm('Apakah Anda yakin ingin MEMBATALKAN reservasi ini?\n\nSlot jadwal barber akan otomatis dibebaskan kembali.')">
+                                        data-confirm="Apakah Anda yakin ingin membatalkan reservasi pelanggan {{ $booking->nama_pelanggan }}? Slot jadwal barber akan otomatis dibebaskan kembali."
+                                        data-confirm-title="Batalkan Reservasi"
+                                        data-confirm-type="danger"
+                                        data-confirm-btn="Ya, Batalkan">
                                         @csrf
                                         <button type="submit"
                                             class="rounded-xl border border-red-200 bg-red-50 px-3.5 py-2 text-xs font-bold text-red-600 hover:bg-red-100 dark:border-red-900/40 dark:bg-red-950/30 dark:text-red-400 transition">

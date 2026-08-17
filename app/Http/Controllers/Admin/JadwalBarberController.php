@@ -107,19 +107,43 @@ class JadwalBarberController extends Controller
     public function update(Request $request, JadwalBarber $jadwal)
     {
         $validated = $request->validate([
-            'barber_id' => 'required|exists:barbers,id',
-            'tanggal' => 'required|date',
             'jam_mulai' => 'required|date_format:H:i',
-            'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
-            'status' => 'in:tersedia,penuh',
         ]);
 
-        $jadwal->update($validated);
+        $jamMulai = Carbon::parse($validated['jam_mulai'])->format('H:i');
+        
+        // Hitung durasi asli dari jadwal / layanan terkait
+        $durasi = Carbon::parse($jadwal->jam_mulai)->diffInMinutes(Carbon::parse($jadwal->jam_selesai));
+        if ($durasi <= 0) {
+            $durasi = $jadwal->bookings->first()?->layanan?->durasi_menit ?? 45;
+        }
+        $jamSelesai = Carbon::parse($jamMulai)->addMinutes($durasi)->format('H:i');
+
+        // Cek apakah ada jadwal lain yang bentrok untuk barber & tanggal yang sama
+        $bentrok = JadwalBarber::where('barber_id', $jadwal->barber_id)
+            ->whereDate('tanggal', $jadwal->tanggal->toDateString())
+            ->where('id', '!=', $jadwal->id)
+            ->where(function ($q) use ($jamMulai, $jamSelesai) {
+                $q->where('jam_mulai', '<', $jamSelesai)
+                  ->where('jam_selesai', '>', $jamMulai);
+            })
+            ->exists();
+
+        if ($bentrok) {
+            return back()->withInput()->withErrors([
+                'jam_mulai' => 'Waktu ini bentrok dengan jadwal lain untuk barber yang bersangkutan (' . $jadwal->barber->name . ').',
+            ]);
+        }
+
+        $jadwal->update([
+            'jam_mulai' => $jamMulai,
+            'jam_selesai' => $jamSelesai,
+        ]);
 
         return redirect()->route('kasir.jadwal.index', [
-            'barber_id' => $validated['barber_id'],
-            'tanggal' => $validated['tanggal']
-        ])->with('success', 'Jadwal berhasil diperbarui.');
+            'barber_id' => $jadwal->barber_id,
+            'tanggal' => $jadwal->tanggal->format('Y-m-d')
+        ])->with('success', 'Waktu jadwal berhasil diperbarui.');
     }
 
     // public function destroy(JadwalBarber $jadwal)

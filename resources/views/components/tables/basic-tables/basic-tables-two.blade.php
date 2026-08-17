@@ -91,8 +91,16 @@
         };
         return classes[status] || '';
     },
-    deleteRow(id) {
-        if (confirm('Are you sure you want to delete this order?')) {
+    async deleteRow(id) {
+        const confirmed = await window.confirmAction({
+            title: 'Delete Order',
+            text: 'Are you sure you want to delete this order?',
+            icon: 'warning',
+            isDanger: true,
+            confirmButtonText: 'Yes, Delete',
+            cancelButtonText: 'Cancel'
+        });
+        if (confirmed) {
             this.tableRowData = this.tableRowData.filter(row => row.id !== id);
             this.selectedRows = this.selectedRows.filter(rowId => rowId !== id);
         }

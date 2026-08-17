@@ -114,7 +114,11 @@
                                     <i class="fa-solid fa-pen-to-square text-sm"></i>
                                 </a>
                                 <form action="{{ route('kasir.barbers.destroy', $barber) }}" method="POST"
-                                    onsubmit="return confirm('Yakin hapus barber {{ $barber->name }}?')" class="inline">
+                                    data-confirm="Apakah Anda yakin ingin menghapus barber {{ $barber->name }}? Seluruh riwayat dan jadwal terkait barber ini akan terpengaruh."
+                                    data-confirm-title="Hapus Barber"
+                                    data-confirm-type="danger"
+                                    data-confirm-btn="Ya, Hapus"
+                                    class="inline">
                                     @csrf @method('DELETE')
                                     <button type="submit"
                                         class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 dark:border-red-900/50 dark:bg-red-900/20 dark:text-red-400 transition" title="Hapus Barber">
