@@ -116,7 +116,7 @@
             <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
                 @foreach($pendapatanBarber as $pb)
                     <div class="rounded-xl border border-gray-100 dark:border-gray-800 p-4 text-center">
-                        <p class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $pb->booking->barber->name ?? '—' }}</p>
+                        <p class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $pb->barber_name ?? $pb->booking?->barber?->name ?? '—' }}</p>
                         <p class="mt-1 text-lg font-bold text-brand-600 dark:text-brand-400">Rp
                             {{ number_format($pb->total, 0, ',', '.') }}</p>
                     </div>

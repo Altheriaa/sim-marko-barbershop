@@ -53,13 +53,13 @@ class LaporanController extends Controller
         $totalBookingDistribusi = $distribusiLayanan->sum('total') ?: 1;
 
         // Pendapatan per barber
-        $pendapatanBarber = Transaksi::select('booking.barber_id', DB::raw('sum(transaksi.total_harga) as total'))
-            ->join('booking', 'booking.id', '=', 'transaksi.booking_id')
-            ->with('booking.barber')
+        $pendapatanBarber = Transaksi::join('booking', 'booking.id', '=', 'transaksi.booking_id')
+            ->join('barbers', 'barbers.id', '=', 'booking.barber_id')
+            ->select('barbers.id', 'barbers.name as barber_name', DB::raw('sum(transaksi.total_harga) as total'))
             ->where('transaksi.status_pembayaran', 'lunas')
             ->whereDate('transaksi.tanggal_bayar', '>=', $startDate)
             ->whereDate('transaksi.tanggal_bayar', '<=', $endDate)
-            ->groupBy('booking.barber_id')
+            ->groupBy('barbers.id', 'barbers.name')
             ->orderByDesc('total')
             ->get();
 
