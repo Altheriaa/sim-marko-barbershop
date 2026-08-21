@@ -2,10 +2,10 @@
 
 @section('content')
     <div class="relative z-1 bg-white p-6 sm:p-0 dark:bg-gray-900">
-        <div class="flex h-screen w-full flex-col justify-center sm:p-0 lg:flex-row dark:bg-gray-900">
+        <div class="flex h-screen w-full flex-col sm:p-0 lg:flex-row dark:bg-gray-900">
             <!-- Form -->
-            <div class="flex w-full flex-1 flex-col lg:w-1/2">
-                <div class="mx-auto flex w-full max-w-md flex-1 flex-col justify-center">
+            <div class="flex w-full flex-1 flex-col overflow-y-auto lg:w-1/2">
+                <div class="mx-auto flex w-full max-w-md flex-1 flex-col justify-center py-8">
                     <!-- Logo Section -->
                     <div class="mb-6">
                         <a href="/" class="inline-block">
