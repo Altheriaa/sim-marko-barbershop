@@ -12,22 +12,27 @@ use Illuminate\Support\Facades\RateLimiter;
 
 class RegisterController extends Controller
 {
-    public function showRegistrationForm()
+    public function showRegistrationForm(Request $request)
     {
-        return view('pages.auth.signup', ['title' => 'Daftar Akun']);
+        $deviceId = $request->cookie('device_id') ?? (string) \Illuminate\Support\Str::uuid();
+
+        return response()
+            ->view('pages.auth.signup', ['title' => 'Daftar Akun'])
+            ->cookie('device_id', $deviceId, 60 * 24 * 365); // 1 tahun
     }
 
     public function register(Request $request)
     {
-        // Limit IP: Maksimal 5 kali pendaftaran dari IP yang sama per 1 jam
-        $key = 'register-ip:' . $request->ip();
+        $deviceId = $request->cookie('device_id') ?? md5($request->userAgent() . '|' . $request->ip());
+        $key = 'register-device:' . $deviceId;
 
+        // Maksimal 1 kali percobaan / registrasi per perangkat dalam 1 jam
         if (RateLimiter::tooManyAttempts($key, 1)) {
             $seconds = RateLimiter::availableIn($key);
             $minutes = ceil($seconds / 60);
 
             return back()->withInput($request->except('password', 'password_confirmation'))->withErrors([
-                'email' => "Terlalu banyak percobaan registrasi dari perangkat/IP Anda untuk mencegah spam. Silakan coba lagi dalam {$minutes} menit.",
+                'email' => "Terlalu banyak percobaan registrasi dari perangkat Anda. Silakan coba lagi dalam {$minutes} menit.",
             ]);
         }
 
